@@ -1,8 +1,11 @@
 import { parse } from 'query-string';
 import Immutable from 'immutable';
+import monk from 'monk';
 import reshaper from 'reshaper';
 import Smolder from 'smolder';
 import Jutsu from 'jutsu'; // Imports d3 and nv as globals
+import {remote as electron} from 'electron';
+import fs from 'fs';
 
 import { extractMarkdownFromHTML } from './util';
 import { gistUrl, gistApi } from './config';
@@ -33,6 +36,7 @@ export const UPDATE_GRAPH_BLOCK_PROPERTY = 'UPDATE_GRAPH_BLOCK_PROPERTY';
 export const UPDATE_GRAPH_BLOCK_HINT = 'UPDATE_GRAPH_BLOCK_HINT';
 export const UPDATE_GRAPH_BLOCK_LABEL = 'UPDATE_GRAPH_BLOCK_LABEL';
 export const CLEAR_GRAPH_BLOCK_DATA = 'CLEAR_GRAPH_BLOCK_DATA';
+export const FILE_SAVED = 'FILE_SAVED';
 
 function checkStatus (response) {
     if (response.status >= 200 && response.status < 300) {
@@ -41,6 +45,33 @@ function checkStatus (response) {
         throw new Error(response.statusText);
     }
 }
+
+export function openFile () {
+    return (dispatch, getState) => {
+        return new Promise((resolve) => {
+            electron.dialog.showOpenDialog({
+                title: 'Open notebook',
+                filters: [
+                    {name: 'Notebooks', extensions: ['md']}
+                ],
+                properties: ['openFile']
+            }, resolve)
+        }).then((filename) => {
+            if (!filename || !filename[0]) { throw new Error('no filename'); }
+            return new Promise((resolve, reject) => {
+                fs.readFile(filename[0], 'utf8', (err, markdown) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(markdown);
+                });
+            })
+        }).then((markdown) => dispatch({
+            type: LOAD_MARKDOWN,
+            markdown
+        })).then(() => dispatch(fetchData()))
+    };
+};
 
 export function loadMarkdown() {
     const queryParams = parse(location.search);
@@ -81,6 +112,11 @@ export function executeCodeBlock (id) {
         const executionState = getState().execution;
         const context = executionState.get('executionContext').toJS();
         const data = executionState.get('data').toJS();
+        Object.keys(data).forEach((k) => {
+          if (data[k] && data[k].__type === 'mongodb') {
+            data[k] = monk(data[k].url.split('mongodb://')[1])
+          }
+        });
         const jutsu = Smolder(Jutsu(graphElement));
 
         return new Promise((resolve, reject) => {
@@ -153,13 +189,20 @@ export function fetchData() {
         getState().notebook.getIn(['metadata', 'datasources']).forEach(
             (url, name) => {
                 if (!currentData.has(name)) {
-                    proms.push(
-                        fetch(url, {
-                            method: 'get'
-                        })
-                        .then(response => response.json())
-                        .then(j => dispatch(receivedData(name, j)))
-                    );
+                    if (url.indexOf('mongodb://') === 0) {
+                      proms.push(Promise.resolve({
+                        __type: 'mongodb',
+                        url
+                      }).then(j => dispatch(receivedData(name, j))))
+                    } else {
+                      proms.push(
+                          fetch(url, {
+                              method: 'get'
+                          })
+                          .then(response => response.json())
+                          .then(j => dispatch(receivedData(name, j)))
+                      );
+                    }
                 }
             }
         );
@@ -279,6 +322,13 @@ function gistCreated(id) {
     };
 }
 
+function fileSaved(filename) {
+    return {
+        type: FILE_SAVED,
+        filename
+    }
+}
+
 export function saveGist (title, markdown) {
     return (dispatch, getState) => {
         return fetch(gistApi, {
@@ -299,6 +349,30 @@ export function saveGist (title, markdown) {
         })
         .then(response => response.json())
         .then(gist => dispatch(gistCreated(gist.id)));
+    };
+};
+
+export function saveFile (path, markdown) {
+    return (dispatch, getState) => {
+        return new Promise((resolve) => {
+            electron.dialog.showSaveDialog({
+                title: 'Save notebook',
+                defaultPath: path,
+                filters: [
+                    {name: 'Notebooks', extensions: ['md']}
+                ]
+            }, resolve)
+        }).then((filename) => {
+            if (!filename) { throw new Error('no filename'); }
+            return new Promise((resolve, reject) => {
+                fs.writeFile(filename, markdown, 'utf8', (err) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(filename);
+                });
+            })
+        }).then((filename) => dispatch(fileSaved(filename)))
     };
 };
 

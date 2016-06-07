@@ -5,7 +5,7 @@ import Header from './components/Header';
 import Content from './components/Content';
 import Footer from './components/Footer';
 import SaveDialog from './components/SaveDialog';
-import { loadMarkdown, fetchData, editBlock } from './actions';
+import { openFile, fetchData, editBlock } from './actions';
 import { editorSelector } from './selectors';
 
 class Notebook extends Component {
@@ -16,7 +16,7 @@ class Notebook extends Component {
     }
 
     componentWillMount() {
-        this.props.dispatch(loadMarkdown());
+        global.openFile = () => this.props.dispatch(openFile());
     }
 
     componentDidMount() {

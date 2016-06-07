@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import bindStoreToMenu from './bindStoreToMenu';
 
 import NotebookReducer from './reducers';
 import Notebook from './Notebook';
@@ -11,6 +12,8 @@ import Notebook from './Notebook';
 const store = compose(
     applyMiddleware(thunk)
 )(createStore)(NotebookReducer);
+
+bindStoreToMenu(store);
 
 render(
     <Provider store={store}>

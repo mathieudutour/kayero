@@ -5,7 +5,7 @@ import { saveSelector } from '../selectors';
 import { render } from '../markdown';
 import { toggleSave } from '../actions';
 import { renderHTML } from '../util';
-import { saveGist } from '../actions';
+import { saveGist, saveFile } from '../actions';
 
 class SaveDialog extends Component {
 
@@ -60,6 +60,11 @@ class SaveDialog extends Component {
                 this.props.notebook.getIn(['metadata', 'title']),
                 render(this.props.notebook)
             ));
+        } else if (newMode === 'file') {
+            this.props.dispatch(saveFile(
+                this.props.notebook.getIn(['metadata', 'path']),
+                render(this.props.notebook)
+            ));
         }
     }
 
@@ -108,6 +113,9 @@ class SaveDialog extends Component {
                 </span>
                 <span className={this.getCssClass('gist')} onClick={() => this.setMode('gist')}>
                     <i className="fa fa-github"></i> Export to Gist
+                </span>
+                <span className={this.getCssClass('file')} onClick={() => this.setMode('file')}>
+                    <i className="fa fa-file-code-o"></i> Export to file
                 </span>
                 {this.state.mode === 'gist' ? gistContent : textContent}
                 <div className="footer">&nbsp;</div>
