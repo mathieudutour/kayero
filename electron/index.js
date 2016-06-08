@@ -135,7 +135,7 @@ app.on('ready', () => {
       }]
     }, {
       label: 'View',
-      submenu: (process.env.NODE_ENV === 'development') ? [{
+      submenu: [{
         label: 'Reload',
         accelerator: 'Command+R',
         click() {
@@ -152,12 +152,6 @@ app.on('ready', () => {
         accelerator: 'Alt+Command+I',
         click() {
           mainWindow.toggleDevTools();
-        }
-      }] : [{
-        label: 'Toggle Full Screen',
-        accelerator: 'Ctrl+Command+F',
-        click() {
-          mainWindow.setFullScreen(!mainWindow.isFullScreen());
         }
       }]
     }, {

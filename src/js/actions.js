@@ -1,11 +1,12 @@
+import fs from 'fs';
+import monk from 'monk';
+
 import { parse } from 'query-string';
 import Immutable from 'immutable';
-import monk from 'monk';
 import reshaper from 'reshaper';
 import Smolder from 'smolder';
 import Jutsu from 'jutsu'; // Imports d3 and nv as globals
 import {remote as electron} from 'electron';
-import fs from 'fs';
 
 import { extractMarkdownFromHTML, arrayToCSV } from './util';
 import { gistUrl, gistApi } from './config';
@@ -38,14 +39,6 @@ export const UPDATE_GRAPH_BLOCK_HINT = 'UPDATE_GRAPH_BLOCK_HINT';
 export const UPDATE_GRAPH_BLOCK_LABEL = 'UPDATE_GRAPH_BLOCK_LABEL';
 export const CLEAR_GRAPH_BLOCK_DATA = 'CLEAR_GRAPH_BLOCK_DATA';
 export const FILE_SAVED = 'FILE_SAVED';
-
-function checkStatus (response) {
-    if (response.status >= 200 && response.status < 300) {
-        return response;
-    } else {
-        throw new Error(response.statusText);
-    }
-}
 
 export function readFileName (filename) {
   return new Promise((resolve, reject) => {
@@ -92,37 +85,6 @@ export function openFile () {
         })).then(() => dispatch(fetchData()))
     };
 };
-
-export function loadMarkdown() {
-    const queryParams = parse(location.search);
-    if (queryParams.id) {
-        const url = gistUrl + queryParams.id + '/raw';
-        return (dispatch, getState) => {
-            return fetch(url, {
-                method: 'get'
-            })
-            .then(checkStatus)
-            .then(response => response.text())
-            .then(md => dispatch({
-                type: LOAD_MARKDOWN,
-                markdown: md
-            }))
-            .then(() => dispatch(fetchData()))
-            .catch(() => {
-                dispatch(loadMarkdownFromHTML());
-                dispatch(fetchData());
-            })
-        };
-    }
-    return loadMarkdownFromHTML();
-}
-
-function loadMarkdownFromHTML() {
-    return {
-        type: LOAD_MARKDOWN,
-        markdown: extractMarkdownFromHTML()
-    };
-}
 
 export function executeCodeBlock (id) {
     return (dispatch, getState) => {

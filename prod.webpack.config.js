@@ -9,12 +9,15 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'src','dist'),
     filename: 'bundle.js',
-    publicPath: '/dist/'
+    publicPath: '../src/dist/'
   },
   plugins: [
     new ExternalsPlugin('commonjs', [
       'monk',
-    ])
+    ]),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"production"'
+    }),
   ],
   module: {
     loaders: [

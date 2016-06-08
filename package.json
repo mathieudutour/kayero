@@ -12,9 +12,6 @@
     "notebook"
   ],
   "preferGlobal": true,
-  "bin": {
-    "kajero": "bin/cmd.js"
-  },
   "author": "Joel Auterson <joel.auterson@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -73,6 +70,8 @@
     "sass-loader": "3.2.0",
     "sinon": "^1.17.3",
     "style-loader": "0.13.1",
+    "stylelint": "6.5.1",
+    "stylelint-config-standard": "8.0.0",
     "url-loader": "0.5.7",
     "webpack": "1.13.1",
     "webpack-dev-server": "1.14.1",
@@ -85,6 +84,6 @@
     "start": "electron .",
     "watch": "node server.js",
     "electron-rebuild": "electron-rebuild",
-    "build": "webpack --config prod.webpack.config.js -p && electron-packager . --all --overwrite --prune --out=release --extend-info=electron/kajero.plist"
+    "build": "webpack --config prod.webpack.config.js -p --progress --colors && electron-packager . --all --overwrite --prune --out=release --extend-info=electron/kajero.plist"
   }
 }

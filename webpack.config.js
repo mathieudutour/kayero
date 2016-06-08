@@ -4,7 +4,7 @@ var ExternalsPlugin = webpack.ExternalsPlugin;
 var WriteFilePlugin = require('write-file-webpack-plugin');
 
 module.exports = {
-  devtool: 'eval',
+  devtool: 'eval-source-map',
   entry: [
     'webpack-dev-server/client?http://localhost:3002',
     'webpack/hot/only-dev-server',
