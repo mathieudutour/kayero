@@ -1,60 +1,77 @@
 # Kayero
 
-[![npm](https://img.shields.io/npm/v/kayero.svg?maxAge=2592000)](https://www.npmjs.com/package/kayero) [![Join the chat at https://gitter.im/mathieudutour/kayero](https://badges.gitter.im/mathieudutour/kayero.svg)](https://gitter.im/mathieudutour/kayero?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/mathieudutour/kayero.svg?branch=master)](https://travis-ci.org/mathieudutour/kayero)
+[![Dependency Status](https://david-dm.org/mathieudutour/kayero.svg)](https://david-dm.org/mathieudutour/kayero)
 
-Interactive JavaScript notebooks with clever graphing.
+Kayero is an interactive JavaScript notebooks editor, built on [Electron](https://github.com/atom/electron) and [Kajero](https://github.com/JoelOtter/kajero).
 
-You can view a sample notebook [here](http://www.joelotter.com/kayero).
+You can view an online sample notebook [here](http://www.joelotter.com/kajero).
 
 ![](https://raw.githubusercontent.com/mathieudutour/kayero/master/doc/screenshot.png)
 
 ## Features
 
 - It's just Markdown - a Kayero notebook is just a Markdown document with a script attached.
-- Every notebook is fully editable in the browser, and can be saved as Markdown or HTML.
+- Every notebook is fully editable and can be saved as a Markdown file.
 - Notebooks can also be published as Gists, generating a unique URL for your notebook.
 - JavaScript code blocks can be executed. They're treated as functions, with their return value visualised. Kayero can visualise arrays and objects, similar to the Chrome object inspector.
     - Code blocks can be set to run automatically when the notebook loads. They can also be set to hidden, so that only the result is visible.
-- Data sources can be defined. These will be automatically fetched when the notebook is loaded, and made available for use inside code blocks.
+- Data sources can be defined. These will be automatically fetched when the notebook is loaded, and made available for use inside code blocks. A datasource can be either:
+    - a url returning a json object
+    - a mongodb URL (the db will be available as a [monk](https://github.com/Automattic/monk) instance)
 - Includes [Reshaper](https://github.com/JoelOtter/reshaper), for automatic reshaping of structured data.
 - Includes D3, NVD3 and [Jutsu](https://github.com/JoelOtter/jutsu), a very simple graphing library which uses Reshaper to transform arbitrary data into a form that can be graphed.
 
-### Related projects
 
-- [Reshaper](https://github.com/JoelOtter/reshaper) - reshape data to match a schema
-- [Smolder](https://github.com/JoelOtter/smolder) - a library wrapper that attempts to reshape data going into your functions, using Reshaper
-- [Jutsu](https://github.com/JoelOtter/jutsu) - a simple graphing library, with support for Smolder
+## Installing
 
-## Note on contributions
+### OS X
 
-Kayero is part of my master's project at Imperial College London. Please do file issues if you have feedback or find bugs. However, as it needs to be my own work, I won't be able to merge any pull requests until the end of June. Apologies for the inconvenience!
+Download the latest [Kayero release](https://github.com/mathieudutour/kayero/releases/latest).
 
-## Command-line tools
+Atom will automatically update when a new release is available.
 
-Kayero includes a couple of simple command-line tools for users who don't want to use the inline editor to create their notebooks.
+### Windows
 
-### Installation
+Download the latest [KayeroSetup.exe installer](https://github.com/mathieudutour/kayero/releases/latest).
 
-`npm install -g kayero`, or clone this repository.
+Atom will automatically update when a new release is available.
 
-You can build the JS library by running `npm install`, followed by `gulp`. For a production build, `NODE_ENV=production gulp`.
+### Debian Linux (Ubuntu)
 
-### Commands
+Currently only a 64-bit version is available.
 
-You can generate new notebooks directly from Markdown files without using the web editor.
+1. Download `kayero-amd64.deb` from the [Kayero releases page](https://github.com/mathieudutour/kayero/releases/latest).
+2. Run `sudo dpkg --install kayero-amd64.deb` on the downloaded package.
+3. Launch Atom using the installed `kayero` command.
 
-- `kayero html [file.md]`
+The Linux version does not currently automatically update so you will need to
+repeat these steps to upgrade to future releases.
 
-Will output generated HTML of a new notebook. You can pipe it to a file like this:
+### Red Hat Linux (Fedora 21 and under, CentOS, Red Hat)
 
-`kayero html [file.md] > output.html`
+Currently only a 64-bit version is available.
 
-- `kayero publish [file.md]`
+1. Download `kayero.x86_64.rpm` from the [Kayero releases page](https://github.com/mathieudutour/kayero/releases/latest).
+2. Run `sudo yum localinstall kayero.x86_64.rpm` on the downloaded package.
+3. Launch Atom using the installed `kayero` command.
 
-Will publish your notebook as a gist, and return a unique URL to your new notebook. You don't need to build the JS library for these scripts to work.
+The Linux version does not currently automatically update so you will need to
+repeat these steps to upgrade to future releases.
 
-### Running tests
+### Fedora 22+
 
-Run the unit tests with `npm test`.
+Currently only a 64-bit version is available.
 
-For coverage reporting, run with `npm run test-cov`. Note that the coverage percentages may not be exactly correct - this is because Istanbul runs over the compiled ES5 code, rather than the ES6 source.
+1. Download `kayero.x86_64.rpm` from the [Atom releases page](https://github.com/mathieudutour/kayero/releases/latest).
+2. Run `sudo dnf install ./kayero.x86_64.rpm` on the downloaded package.
+3. Launch Atom using the installed `kayero` command.
+
+The Linux version does not currently automatically update so you will need to
+repeat these steps to upgrade to future releases.
+
+## Building your own version
+
+1. Clone the repository
+2. Install the dependencies with `npm i`
+2. Run `npm run build` to build the app.
