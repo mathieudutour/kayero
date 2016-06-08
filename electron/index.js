@@ -14,13 +14,21 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
+function execOnMainWindow(...args) {
+  if (!mainWindow) {
+    return initNewWindow(() => {
+      mainWindow.webContents.send(...args);
+    })
+  }
+  mainWindow.webContents.send(...args);
+}
+
 app.on('open-file', function(event, pathToOpen) {
   event.preventDefault();
-  mainWindow.webContents.send('open-filename', pathToOpen);
+  execOnMainWindow('open-filename', pathToOpen);
 })
 
-
-app.on('ready', () => {
+function initNewWindow(callback) {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
@@ -32,6 +40,9 @@ app.on('ready', () => {
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show();
     mainWindow.focus();
+    if (callback) {
+      callback();
+    }
   });
 
   mainWindow.on('closed', () => {
@@ -41,31 +52,37 @@ app.on('ready', () => {
   if (process.env.NODE_ENV === 'development') {
     mainWindow.openDevTools();
   }
+}
+
+
+app.on('ready', () => {
+  initNewWindow();
 
   if (process.platform === 'darwin') {
     template = [{
       label: 'Kajero',
       submenu: [{
         label: 'About Kajero',
-        selector: 'orderFrontStandardAboutPanel:'
+        role: 'about'
       }, {
         type: 'separator'
       }, {
         label: 'Services',
+        role: 'services',
         submenu: []
       }, {
         type: 'separator'
       }, {
         label: 'Hide Kajero',
         accelerator: 'Command+H',
-        selector: 'hide:'
+        role: 'hide'
       }, {
         label: 'Hide Others',
         accelerator: 'Command+Shift+H',
-        selector: 'hideOtherApplications:'
+        role: 'hideothers'
       }, {
         label: 'Show All',
-        selector: 'unhideAllApplications:'
+        role: 'unhide'
       }, {
         type: 'separator'
       }, {
@@ -81,13 +98,13 @@ app.on('ready', () => {
         label: 'New File',
         accelerator: 'Command+N',
         click() {
-          mainWindow.webContents.send('new-file');
+          execOnMainWindow('new-file');
         }
       }, {
         label: 'Open...',
         accelerator: 'Command+O',
         click() {
-          mainWindow.webContents.send('open-file');
+          execOnMainWindow('open-file');
         }
       }, {
         type: 'separator'
@@ -95,13 +112,13 @@ app.on('ready', () => {
         label: 'Save',
         accelerator: 'Command+S',
         click() {
-          mainWindow.webContents.send('save-file');
+          execOnMainWindow('save-file');
         }
       }, {
         label: 'Save As...',
         accelerator: 'Shift+Command+S',
         click() {
-          mainWindow.webContents.send('save-as-file');
+          execOnMainWindow('save-as-file');
         }
       }]
     }, {
@@ -109,61 +126,68 @@ app.on('ready', () => {
       submenu: [{
         label: 'Undo',
         accelerator: 'Command+Z',
-        selector: 'undo:'
+        role: 'undo'
       }, {
         label: 'Redo',
         accelerator: 'Shift+Command+Z',
-        selector: 'redo:'
+        role: 'redo'
       }, {
         type: 'separator'
       }, {
         label: 'Cut',
         accelerator: 'Command+X',
-        selector: 'cut:'
+        role: 'cut'
       }, {
         label: 'Copy',
         accelerator: 'Command+C',
-        selector: 'copy:'
+        role: 'copy'
       }, {
         label: 'Paste',
         accelerator: 'Command+V',
-        selector: 'paste:'
+        role: 'paste'
       }, {
         label: 'Select All',
         accelerator: 'Command+A',
-        selector: 'selectAll:'
+        role: 'selectall'
       }]
     }, {
       label: 'View',
       submenu: [{
         label: 'Reload',
         accelerator: 'Command+R',
-        click() {
-          mainWindow.webContents.reload();
+        click(e, focusedWindow) {
+          if (focusedWindow) {
+            focusedWindow.webContents.reload();
+          }
         }
       }, {
         label: 'Toggle Full Screen',
         accelerator: 'Ctrl+Command+F',
-        click() {
-          mainWindow.setFullScreen(!mainWindow.isFullScreen());
+        click(e, focusedWindow) {
+          if (focusedWindow) {
+            focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+          }
         }
       }, {
         label: 'Toggle Developer Tools',
         accelerator: 'Alt+Command+I',
-        click() {
-          mainWindow.toggleDevTools();
+        click(e, focusedWindow) {
+          if (focusedWindow) {
+            focusedWindow.toggleDevTools();
+          }
         }
       }]
     }, {
       label: 'Window',
+      role: 'window',
       submenu: [{
         label: 'Minimize',
         accelerator: 'Command+M',
-        selector: 'performMiniaturize:'
+        role: 'minimize'
       }, {
         label: 'Close',
         accelerator: 'Command+W',
-        selector: 'performClose:'
+        role: 'close'
       }, {
         type: 'separator'
       }, {
@@ -172,6 +196,7 @@ app.on('ready', () => {
       }]
     }, {
       label: 'Help',
+      role: 'help',
       submenu: [{
         label: 'Learn More',
         click() {
