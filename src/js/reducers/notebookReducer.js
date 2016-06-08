@@ -42,7 +42,7 @@ export default function notebook(state = initialState, action) {
     let newState;
     switch (action.type) {
         case LOAD_MARKDOWN:
-            return parse(action.markdown, action.filename).mergeDeep(state);
+            return parse(action.markdown, action.filename).set('undoStack', state.get('undoStack'));
         case UPDATE_BLOCK:
             return handleChange(
                 state, state.setIn(['blocks', id, 'content'], text)

@@ -1,9 +1,9 @@
 import { ipcRenderer } from 'electron';
-import { openFile, saveFile, saveAsFile, openFileName } from './actions';
+import { openFile, saveFile, saveAsFile, openFileName, newFile } from './actions';
 
 export default function bindStoreToMenu(store) {
   ipcRenderer.on('new-file', (event) => {
-    console.log('todo')
+    store.dispatch(newFile())
   });
   ipcRenderer.on('open-file', (event) => {
     store.dispatch(openFile());

@@ -52,6 +52,17 @@ export function readFileName (filename) {
   });
 }
 
+export function newFile () {
+  return (dispatch, getState) => {
+      return Promise.resolve(dispatch({
+          type: LOAD_MARKDOWN,
+          markdown:
+`---
+---`
+      })).then(() => dispatch(fetchData()))
+  };
+}
+
 export function openFileName (filename) {
   return (dispatch, getState) => {
       return Promise.resolve(filename)
