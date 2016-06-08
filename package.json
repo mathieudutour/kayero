@@ -1,23 +1,23 @@
 {
-  "name": "kajero",
-  "productName": "Kajero",
+  "name": "kayero",
+  "productName": "Kayero",
   "main": "electron/index.js",
   "version": "0.2.0",
   "description": "Interactive JavaScript notebooks with clever graphing",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JoelOtter/kajero"
+    "url": "https://github.com/mathieudutour/kayero"
   },
   "keywords": [
     "notebook"
   ],
   "preferGlobal": true,
-  "author": "Joel Auterson <joel.auterson@gmail.com>",
+  "author": "Mathieu Dutour <mathieu.dutour@me.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/JoelOtter/kajero/issues"
+    "url": "https://github.com/mathieudutour/kayero/issues"
   },
-  "homepage": "https://github.com/JoelOtter/kajero",
+  "homepage": "https://github.com/mathieudutour/kayero",
   "dependencies": {
     "babel-core": "6.9.1",
     "babel-register": "^6.7.2",
@@ -55,7 +55,11 @@
     "electron-packager": "7.0.3",
     "electron-rebuild": "1.1.5",
     "eslint": "2.11.1",
+    "eslint-config-standard": "5.3.1",
+    "eslint-plugin-import": "1.8.1",
+    "eslint-plugin-promise": "1.3.2",
     "eslint-plugin-react": "5.1.1",
+    "eslint-plugin-standard": "1.3.2",
     "fetch-mock": "^4.4.0",
     "file-loader": "0.8.5",
     "gulp": "^3.9.1",
@@ -84,6 +88,6 @@
     "start": "electron .",
     "watch": "node server.js",
     "electron-rebuild": "electron-rebuild",
-    "build": "webpack --config prod.webpack.config.js -p --progress --colors && electron-packager . --all --overwrite --prune --out=release --extend-info=electron/kajero.plist"
+    "build": "webpack --config prod.webpack.config.js -p --progress --colors && electron-packager . --all --overwrite --prune --out=release --extend-info=electron/kayero.plist"
   }
 }

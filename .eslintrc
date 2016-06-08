@@ -1,15 +1,11 @@
 {
-    "parser": "babel-eslint",
-    "env": {
-        "browser": true,
-        "node": true
-    },
-    "settings": {
-        "ecmascript": 6,
-        "jsx": true
-    },
-    "plugins": [
-        "react"
-    ],
-    "ignorePath": ".gitignore"
+  "extends": ["plugin:react/recommended", "standard", "plugin:import/warnings", "plugin:import/errors"],
+  "parser": "babel-eslint",
+  "plugins": [
+    "react"
+  ],
+  "ignorePath": ".gitignore",
+  "rules" : {
+    "no-new-func": 0
+  }
 }

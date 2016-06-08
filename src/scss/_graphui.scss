@@ -1,90 +1,92 @@
 @import 'base';
 
 .graph-creator {
+  @include block-border;
+  padding: 0.5em;
+  margin: 1em 0;
+  font-family: 'Amaranth', sans-serif;
 
+  .editor-buttons {
+    margin-top: 0;
+  }
+
+  .graph-type {
     @include block-border;
-    padding: .5em;
-    margin: 1em 0;
-    font-family: 'Amaranth', sans-serif;
+    padding: 0.25em;
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 0.5em;
+    margin-right: 0.5em;
+    color: $text-light;
 
-    .editor-buttons {
-        margin-top: 0;
+    &.selected {
+      @include block-border;
+      font-weight: bold;
+      color: $text-black;
+      border: 1px dashed $text-black;
+      cursor: default;
+    }
+  }
+
+  p {
+    margin: 0.5em 0.25em;
+
+    @include respond-to($size-md) {
+      margin: 0.25em;
+    }
+  }
+
+  .hint {
+    margin: 0.5em 0;
+
+    .fa {
+      text-align: center;
+      margin-top: 0.5em;
+
+      @include respond-to($size-md) {
+        margin-top: 0.25em;
+      }
     }
 
-    .graph-type {
-        @include block-border;
-        padding: .25em;
-        cursor: pointer;
-        display: inline-block;
-        margin-bottom: .5em;
-        margin-right: .5em;
-        color: $text-light;
+    input {
+      width: 100%;
+      padding: 0.25em;
+      margin: 0.25em 0;
+      box-sizing: border-box;
 
-        &.selected {
-            font-weight: bold;
-            color: $text-black;
-            @include block-border;
-            border: 1px dashed $text-black;
-            cursor: default;
-        }
-    }
-
-    p {
-        margin:  .5em .25em;
-        @include respond-to($size-md) {
-            margin: .25em;
-        }
-    }
-
-    .hint {
-        margin: .5em 0;
-
-        .fa {
-            text-align: center;
-            margin-top: 0.5em;
-            @include respond-to($size-md) {
-                margin-top: .25em;
-            }
-        }
-
-        input {
-            width: 100%;
-            padding: .25em;
-            margin: .25em 0;
-            box-sizing: border-box;
-            @include respond-to($size-md) {
-                margin: 0;
-            }
-        }
-
-        .visualiser {
-            margin-top: .5em;
-        }
+      @include respond-to($size-md) {
+        margin: 0;
+      }
     }
 
     .visualiser {
-        background-color: $background-grey;
-        padding: .5em;
-        margin-bottom: .5em;
-
-        .visualiser-key {
-            cursor: pointer;
-        }
+      margin-top: 0.5em;
     }
+  }
 
-    pre {
-        font-family: 'Source Code Pro', monospace;
-        font-size: .8em;
-    }
+  .visualiser {
+    background-color: $background-grey;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
 
-    .graph-preview svg {
-        width: 100%;
-        &.nvd3-svg {
-            height: inherit;
-        }
-        text {
-            fill: $text-black;
-        }
+    .visualiser-key {
+      cursor: pointer;
     }
+  }
+
+  pre {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.8em;
+  }
+
+  .graph-preview svg {
+    width: 100%;
+    &.nvd3-svg {
+      height: inherit;
+    }
+    text {
+      fill: $text-black;
+    }
+  }
 
 }

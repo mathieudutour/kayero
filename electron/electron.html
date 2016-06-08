@@ -2,14 +2,14 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Kajero</title>
+    <title>Kayero</title>
   </head>
   <body>
-    <div id="kajero"></div>
+    <div id="kayero"></div>
     <script>
       (function() {
         const script = document.createElement('script');
-        script.src = (process.env.HOT) ? 'http://localhost:3002/dist/bundle.js' : '../src/dist/bundle.js';
+        script.src = (process.env.HOT) ? 'http://localhost:3002/dist/bundle.js' : '../dist/bundle.js';
         document.write(script.outerHTML);
       }());
     </script>

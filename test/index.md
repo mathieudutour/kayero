@@ -1,5 +1,5 @@
 ---
-title: "Sample Kajero notebook"
+title: "Sample Kayero notebook"
 author: "Joel Auterson"
 created: "Mon Apr 18 2016 21:48:01 GMT+0100 (BST)"
 datasources:
@@ -7,24 +7,24 @@ datasources:
     popular: "https://api.github.com/search/repositories?q=created:>2016-01-01&sort=stars&order=desc"
     extra: "https://api.github.com/search/repositories?q=created:>2016-01-01&sort=stars&order=desc&per_page=100"
 original:
-    title: "Blank Kajero notebook"
-    url: "http://www.joelotter.com/kajero/blank"
+    title: "Blank Kayero notebook"
+    url: "http://www.joelotter.com/kayero/blank"
 show_footer: true
 ---
 
-This is an example of a notebook written in **Kajero**. Hopefully it'll give you a bit of insight into what Kajero is, and what you might be able to use it for!
+This is an example of a notebook written in **Kayero**. Hopefully it'll give you a bit of insight into what Kayero is, and what you might be able to use it for!
 
-Kajero is designed to make it really easy for anyone to create good-looking, responsive, data-rich documents. They're totally viewable in a web browser - no backend necessary beyond what's needed to host the page - and can contain interactive code samples, written in JavaScript.
+Kayero is designed to make it really easy for anyone to create good-looking, responsive, data-rich documents. They're totally viewable in a web browser - no backend necessary beyond what's needed to host the page - and can contain interactive code samples, written in JavaScript.
 
 They've also got some nice graphing and data visualisation capabilities - we'll look at that in a bit.
 
-(If you were wondering, _'kajero'_ is the Esperanto word for _'notebook'_.)
+(If you were wondering, _'kayero'_ is the Esperanto word for _'notebook'_.)
 
 Let's have a look at some features.
 
 ## It's just Markdown
 
-Go ahead and take a look at the [page source](view-source:http://www.joelotter.com/kajero). You'll notice that the notebook is really just a Markdown document with some bookending HTML tags - it's the Kajero script that does all the work of rendering. You've got all the usability of Markdown to play with.
+Go ahead and take a look at the [page source](view-source:http://www.joelotter.com/kayero). You'll notice that the notebook is really just a Markdown document with some bookending HTML tags - it's the Kayero script that does all the work of rendering. You've got all the usability of Markdown to play with.
 
 - You
 - can
@@ -52,7 +52,7 @@ Because it's just Markdown, and all the work is done by a script in the browser,
 
 ## Every notebook is editable
 
-You might have noticed the little pencil icon in the top-right. Give it a poke! You'll find yourself in the editor interface. Every single Kajero notebook is fully editable right in the browser. Once you've made your changes, you can export it as a new HTML or Markdown document.
+You might have noticed the little pencil icon in the top-right. Give it a poke! You'll find yourself in the editor interface. Every single Kayero notebook is fully editable right in the browser. Once you've made your changes, you can export it as a new HTML or Markdown document.
 
 The notebooks also contain a link to their parent page. It's in the footer of this page if you want to have a look! If users don't want this footer, it can be turned off in the editor.
 
@@ -72,7 +72,7 @@ return result;
 
 Code samples are written (and run) as functions, and the function's returned value is displayed to the user in the box below the code. What if we want to share information between code samples, though?
 
-In Kajero, the keyword **this** refers to the global context, which is passed around between samples. We can assign something onto the context, and then access it in another sample.
+In Kayero, the keyword **this** refers to the global context, which is passed around between samples. We can assign something onto the context, and then access it in another sample.
 
 ```javascript; runnable
 this.number = 100;
@@ -108,7 +108,7 @@ return data.joelotter.map(function(repo) {
 });
 ```
 
-You'll notice that Kajero can visualise whatever data you throw at it - it's not just strings and numbers! Here's the whole of my repository data to demonstrate.
+You'll notice that Kayero can visualise whatever data you throw at it - it's not just strings and numbers! Here's the whole of my repository data to demonstrate.
 
 ```javascript; runnable
 return data.joelotter;
@@ -118,7 +118,7 @@ This isn't necessarily the most attractive or user-friendly way to look at data,
 
 ## Graphs
 
-Kajero gives users access to [d3](https://d3js.org/), the web's favourite graphing library.
+Kayero gives users access to [d3](https://d3js.org/), the web's favourite graphing library.
 
 ```javascript; runnable
 // Remove any old SVGs for re-running
@@ -160,7 +160,7 @@ return "Try clicking the circle!";
 
 Users get access to **d3**, which is the library itself, and **graphElement**, which is a reference to the element where the graph is drawn.
 
-d3 is incredibly powerful, but may be too complex for many users. To help out with this, Kajero also includes [NVD3](http://nvd3.org/), which provides some nice pre-built graphs for d3. The code below generates a random scatter graph - try it!
+d3 is incredibly powerful, but may be too complex for many users. To help out with this, Kayero also includes [NVD3](http://nvd3.org/), which provides some nice pre-built graphs for d3. The code below generates a random scatter graph - try it!
 
 ```javascript; runnable
 d3.select(graphElement).selectAll('*').remove();
@@ -199,11 +199,11 @@ This is useful too, but what about those users with little-to-no coding experien
 
 ## Jutsu
 
-Kajero includes Jutsu, a very simple graphing library built with support for [Smolder](https://www.github.com/JoelOtter/smolder).
+Kayero includes Jutsu, a very simple graphing library built with support for [Smolder](https://www.github.com/JoelOtter/smolder).
 
 Smolder is a 'type system' (not really, but I'm not sure what to call it) for JavaScript, which will attempt to automatically restructure arbitrary data to fit a provided schema for a function. The actual reshaping is done by a library called, predictably, [Reshaper](https://www.github.com/JoelOtter/reshaper).
 
-From a user's perspective, the details don't really matter. Let's use Jutsu (available in Kajero code samples as **graphs**) to create a pie chart, based on the most popular GitHub repositories of 2016.
+From a user's perspective, the details don't really matter. Let's use Jutsu (available in Kayero code samples as **graphs**) to create a pie chart, based on the most popular GitHub repositories of 2016.
 
 ```javascript; runnable
 // Here's what the 'popular' data looks like before it's reshaped.
@@ -240,7 +240,7 @@ return graphs.barChart(data.popular, 'Repo', 'Stargazers', ['name', 'stargazers_
 
 This is a bit more useful. We can put labels on the axes too, to make sure the graph is easy to understand.
 
-The idea is that it should be possible to use Kajero to investigate and write about trends in data. Let's conduct a toy investigation of our own - is there any relation between a repository's star count and the number of open issues it has?
+The idea is that it should be possible to use Kayero to investigate and write about trends in data. Let's conduct a toy investigation of our own - is there any relation between a repository's star count and the number of open issues it has?
 
 Let's try a line graph.
 
@@ -279,11 +279,11 @@ This is a little better. We can see there might be a slight positive correlation
 
 ## What's next?
 
-Hopefully this notebook has given you a decent explanation of what Kajero is for. Here are the next things needing done:
+Hopefully this notebook has given you a decent explanation of what Kayero is for. Here are the next things needing done:
 
 - Exporting the notebook
 - Making Reshaper smarter
 - More graphs
 - Exporting to Gist (if there's time!)
 
-Why not try making your own notebook? This one is forked from a [blank notebook](http://www.joelotter.com/kajero/blank) - have a play with the editor!
+Why not try making your own notebook? This one is forked from a [blank notebook](http://www.joelotter.com/kayero/blank) - have a play with the editor!

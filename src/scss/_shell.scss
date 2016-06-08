@@ -1,173 +1,180 @@
 @import 'base';
 
 body {
-    background: $background-col;
-    color: $text-black;
-    font-family: "Andada", serif;
-    @include respond-to($size-md) {
-        font-size: 1.2em;
-    }
+  background: $background-col;
+  color: $text-black;
+  font-family: "Andada", serif;
+
+  @include respond-to($size-md) {
+    font-size: 1.2em;
+  }
 }
 
 .metadata {
-    font-size: 1em;
-    font-family: "Amaranth", sans-serif;
+  font-size: 1em;
+  font-family: "Amaranth", sans-serif;
 
-    .metadata-sep {
-        display: none;
-        @include respond-to($size-md) {
-            display: inline;
-        }
-    }
+  .metadata-sep {
+    display: none;
 
-    .metadata-item {
-        display: block;
-        margin: .5em 0;
-        @include respond-to($size-md) {
-            display: inline;
-        }
+    @include respond-to($size-md) {
+      display: inline;
     }
+  }
+
+  .metadata-item {
+    display: block;
+    margin: 0.5em 0;
+
+    @include respond-to($size-md) {
+      display: inline;
+    }
+  }
 }
 
 .controls {
-    float: right;
-    margin: 0 .5em;
-    cursor: pointer;
-    i {
-        margin-left: .5em;
-    }
+  float: right;
+  margin: 0 0.5em;
+  cursor: pointer;
+  i {
+    margin-left: 0.5em;
+  }
 }
 
 .editor-buttons {
-    float: right;
-    margin-bottom: 1px; // Fixes overlap bug on Safari
-    margin-top: -0.2em; // Account for font size difference
-    i {
-        margin-left: .25em;
-        cursor: pointer;
-    }
+  float: right;
+  margin-bottom: 1px; // Fixes overlap bug on Safari
+  margin-top: -0.2em; // Account for font size difference
+  i {
+    margin-left: 0.25em;
+    cursor: pointer;
+  }
 }
 
 code {
-    font-family: "Source Code Pro", monospace;
-    font-size: .8em;
+  font-family: "Source Code Pro", monospace;
+  font-size: 0.8em;
 }
 
 .offset-col {
-    display: none;
-    @include respond-to($size-md) {
-        display: inline-block;
-    }
+  display: none;
+
+  @include respond-to($size-md) {
+    display: inline-block;
+  }
 }
 
 hr {
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 2px dashed $text-light;
-    margin: 1.5em 0;
-    padding: 0;
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 2px dashed $text-light;
+  margin: 1.5em 0;
+  padding: 0;
 }
 
 .top-sep {
-    border-top: 2px dashed $text-black;
-    margin: 1.5em 0;
+  border-top: 2px dashed $text-black;
+  margin: 1.5em 0;
 }
 
 h1 {
-    font-size: 2.5em;
+  font-size: 2.5em;
 }
 
 a {
-    text-decoration: none;
-    border-bottom: 1px dashed $text-light;
-    font-weight: bold;
-    color: $text-black;
+  text-decoration: none;
+  border-bottom: 1px dashed $text-light;
+  font-weight: bold;
+  color: $text-black;
 }
 
 a:visited {
-    color: inherit;
+  color: inherit;
 }
 
 img {
-    max-width: 100%;
+  max-width: 100%;
 }
 
-pre, .codeBlock, .resultBlock, .graphBlock {
-    overflow: auto;
-    padding: .5em;
-    @include block-border;
+pre,
+.codeBlock,
+.resultBlock,
+.graphBlock {
+  @include block-border;
+  overflow: auto;
+  padding: 0.5em;
 }
-
 
 .codeContainer {
-    margin: 1em 0;
-    pre {
-        padding: 0;
-        border: none;
-        overflow: auto;
-        margin: 0;
-    }
+  margin: 1em 0;
+  pre {
+    padding: 0;
+    border: none;
+    overflow: auto;
+    margin: 0;
+  }
 
-    .graphBlock, .resultBlock {
-        border-top: none;
-    }
+  .graphBlock,
+  .resultBlock {
+    border-top: none;
+  }
 
-    .graphBlock > * {
-        margin: 0 auto;
-    }
+  .graphBlock > * {
+    margin: 0 auto;
+  }
 
-    .graphBlock:empty {
-        display: none;
-    }
+  .graphBlock:empty {
+    display: none;
+  }
 
-    .graphBlock svg {
-        width: 100%;
-        &.nvd3-svg {
-            height: inherit;
-        }
-        text {
-            fill: $text-black;
-        }
+  .graphBlock svg {
+    width: 100%;
+    &.nvd3-svg {
+      height: inherit;
     }
+    text {
+      fill: $text-black;
+    }
+  }
 
-    .resultBlock {
-        background-color: $background-grey;
-    }
+  .resultBlock {
+    background-color: $background-grey;
+  }
 
 }
 
 .hiddenCode {
-    .codeBlock {
-        display: none;
-    }
+  .codeBlock {
+    display: none;
+  }
 
-    .resultBlock, .graphBlock {
-        border-top: 1px dashed $text-light;
-    }
+  .resultBlock,
+  .graphBlock {
+    border-top: 1px dashed $text-light;
+  }
 
-    .graphBlock {
-        border-bottom: none;
-    }
+  .graphBlock {
+    border-bottom: none;
+  }
 }
 
 textarea {
-    width: 100%;
-    color: $text-black;
-    padding: .5em;
-    outline: none;
-    height: 300px;
-    @include block-border;
-    font-family: 'Source Code Pro', monospace;
-    font-size: .8em;
-    resize: none;
-    margin: 1em 0;
+  @include block-border;
+  width: 100%;
+  color: $text-black;
+  padding: 0.5em;
+  outline: none;
+  height: 300px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.8em;
+  resize: none;
+  margin: 1em 0;
 }
 
-
 .footer {
-    padding-bottom: 1.5em;
-    .footer-row {
-        display: block;
-    }
+  padding-bottom: 1.5em;
+  .footer-row {
+    display: block;
+  }
 }

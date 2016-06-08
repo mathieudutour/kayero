@@ -1,0 +1,326 @@
+---
+title: "Kayero"
+author: "Joel Auterson"
+created: "Sun May 15 2016 17:56:09 GMT+0100 (BST)"
+datasources:
+    joelotter: "https://api.github.com/users/joelotter/repos"
+    popular: "https://api.github.com/search/repositories?q=created:>2016-01-01&sort=stars&order=desc"
+original:
+    title: "Blank Kayero notebook"
+    url: "http://www.joelotter.com/kayero/blank"
+show_footer: true
+---
+
+[![npm](https://img.shields.io/npm/v/kayero.svg?maxAge=2592000)](https://www.npmjs.com/package/kayero) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/mathieudutour/kayero/master/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/mathieudutour/kayero.svg)](https://github.com/mathieudutour/kayero/stargazers) [![Join the chat at https://gitter.im/mathieudutour/kayero](https://badges.gitter.im/mathieudutour/kayero.svg)](https://gitter.im/mathieudutour/kayero?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+**Kayero** is designed to make it really easy for anyone to create good-looking, responsive, interactive documents.
+
+All Kayero notebooks are editable in-line - including the one you're reading right now. Just click the pencil icon in the top-right to get started.
+
+This notebook is an interactive run-through of Kayero's features. If you'd rather just grab the source code, [it's on GitHub](https://github.com/mathieudutour/kayero).
+
+## It's just Markdown
+
+If you view the page source for this notebook, you'll notice that it's really just a Markdown document with a script attached. This is because the notebooks are fully rendered in-browser - there's no backend required, so you can host them on GitHub pages or wherever you like.
+
+Markdown is great for writing documents, and this helps create very readable notebooks.
+
+- You
+- Can
+- Write
+- Lists
+
+You can write code samples too!
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("This is some Go.")
+}
+```
+
+The Kayero package on [npm](https://www.npmjs.com/package/kayero) contains some command-line tools to create notebooks out of Markdown files. However, you might not want to create a notebook from scratch, so...
+
+## Every notebook is editable
+
+Clicking the pencil icon in the top-right puts Kayero into edit mode. Every notebook can be edited - you can move text and code blocks around, add new data sources, change the title and author, and add your own content.
+
+Once you've made your changes, clicking the save icon will allow you to export your new notebook as Markdown or HTML.
+
+Notebooks can also be exported as Gists. This saves the generated Markdown on GitHub's [Gist](https://gist.github.com/) service, and provides a unique URL which can be used to access the saved notebook. This means you don't need to host the notebook yourself.
+
+A notebook's footer will contain a link to the parent notebook - the one the notebook was forked from. This footer can be turned off in the editor if you don't want it.
+
+## Interactive code samples
+
+JavaScript code samples in Kayero notebooks can be executed by clicking the play button.
+
+```javascript; runnable
+return 1 + 2;
+```
+
+Code blocks can be set to run automatically, when the notebook is loaded.
+
+```javascript; auto
+return "Like this one.";
+```
+
+They can also be set to 'hidden' - only the result will be visible, the code itself will be hidden (though is still viewable and editable in the editor).
+
+```javascript; hidden
+return "This is a hidden code block."
+```
+
+It's possible to pass data between different code blocks by using **this**. For example, in the following blocks, the first defines a variable and the second does something with it.
+
+```javascript; auto
+this.number = 100;
+return this.number;
+```
+
+```javascript; auto
+return this.number + 100;
+```
+
+Want to run something asynchronous? No problem - return a Promise and it'll be resolved.
+
+```javascript; runnable
+return new Promise(function (resolve) {
+    setTimeout(function() {
+        resolve("This took three seconds.");
+    }, 3000);
+});
+```
+
+Kayero includes a built-in data visualiser, similar to Chrome's object inspector. This means your code blocks can return whatever data you need, not just primitives.
+
+For example, here's an array:
+
+```javascript; auto
+var toSplit = "This is a string. We're going to split it into an array.";
+return toSplit.split(' ');
+```
+
+And an object:
+
+```javascript; auto
+var person = {
+    name: 'Joel',
+    age: 22,
+    projects: {
+        termloop: 'https://github.com/JoelOtter/termloop',
+        kayero: 'https://github.com/mathieudutour/kayero'
+    }
+};
+
+return person;
+```
+
+## Working with data sources
+
+Kayero allows users to define JSON data sources in the editor. These are fetched when the notebook is first loaded, and made available in code blocks via the **data** object.
+
+```javascript; auto
+return data;
+```
+
+In this notebook, the data source **joelotter** retrieves my repository data via the GitHub API. We can write code blocks to work with this data.
+
+```javascript; runnable
+return data.joelotter.map(
+    function (repo) {
+        return repo.name;
+    }
+);
+```
+
+### Reshaper
+
+Kayero also includes [Reshaper](http://www.joelotter.com/reshaper), a library which can automatically reshape data to match a provided schema.
+
+You can read more about Reshaper by following the link above. Here are a couple of quick examples, using the GitHub data.
+
+```javascript; runnable
+var schema = ['String'];
+return reshaper(data.joelotter, schema);
+```
+
+Reshaper has correctly produced an array of strings, which is what we asked for. However, we didn't tell it exactly what data we're interested in, so it's used the first string it could find.
+
+We can give Reshaper a **hint** as to which part of the data we care about. Let's get an array of the repo names.
+
+```javascript; runnable
+var schema = ['String'];
+return reshaper(data.joelotter, schema, 'name');
+```
+
+We can provide a more complex schema for a more useful resulting data structure. Let's get the name and number of stargazers for each repo.
+
+```javascript; runnable
+// Reshaper can use object keys as hints
+var schema = [{
+    name: 'String',
+    stargazers_count: 'Number'
+}];
+
+return reshaper(data.joelotter, schema);
+```
+
+Check the [Reshaper documentation](http://www.joelotter.com/reshaper) for more examples.
+
+## Graphs
+
+When working with data sources, a very common task would be to use the data to produce graphs. Kayero provides a few options for this.
+
+### D3
+
+[D3](http://d3js.org) is the web's favourite library for creating interactive graphics. It's available for use in code blocks.
+
+Every code block has a DOM node called **graphElement**. Users can draw to this with D3.
+
+```javascript; runnable
+// Remove any old SVGs for re-running
+d3.select(graphElement).selectAll('*').remove();
+
+var sampleSVG = d3.select(graphElement)
+    .append("svg")
+    .attr("width", 100)
+    .attr("height", 100);
+
+sampleSVG.append("circle")
+    .style("stroke", "gray")
+    .style("fill", "white")
+    .attr("r", 40)
+    .attr("cx", 50)
+    .attr("cy", 50)
+    .on("mouseover", function(){d3.select(this).style("fill", "aliceblue");})
+    .on("mouseout", function(){d3.select(this).style("fill", "white");})
+    .on("mousedown", animateFirstStep);
+
+function animateFirstStep(){
+    d3.select(this)
+      .transition()
+        .delay(0)
+        .duration(1000)
+        .attr("r", 10)
+        .each("end", animateSecondStep);
+};
+
+function animateSecondStep(){
+    d3.select(this)
+      .transition()
+        .duration(1000)
+        .attr("r", 40);
+};
+
+return "Try clicking the circle!";
+```
+
+### NVD3
+
+D3 is incredibly powerful, but creating complex drawings can be daunting. [NVD3](http://nvd3.org/) provides some nice pre-built graphs, and is also included in Kayero.
+
+The following code will generate and draw a random scatter plot.
+
+```javascript; runnable
+d3.select(graphElement).selectAll('*').remove();
+d3.select(graphElement).append('svg').attr("width", "100%");
+
+nv.addGraph(function() {
+    var chart = nv.models.scatter()
+        .margin({top: 20, right: 20, bottom: 20, left: 20})
+        .pointSize(function(d) { return d.z })
+        .useVoronoi(false);
+    d3.select(graphElement).selectAll("svg")
+        .datum(randomData())
+        .transition().duration(500)
+        .call(chart);
+    nv.utils.windowResize(chart.update);
+    return chart;
+});
+
+function randomData() {
+    var data = [];
+    for (i = 0; i < 2; i++) {
+        data.push({
+            key: 'Group ' + i,
+            values: []
+        });
+        for (j = 0; j < 100; j++) {
+            data[i].values.push({x: Math.random(), y: Math.random(), z: Math.random()});
+        }
+    }
+    return data;
+}
+return "Try clicking the rerun button!";
+```
+
+### Jutsu
+
+Even NVD3 may be too difficult to use for those with little coding experience. This is why Kayero includes [Jutsu](http://www.joelotter.com/jutsu), a very simple graphing library.
+
+Jutsu uses Reshaper internally, via a library wrapper called [Smolder](https://github.com/JoelOtter/smolder). This means you can throw whatever data you like at it, and Jutsu will attempt to make a graph with that data. You can also provide hints.
+
+Additionally, the Kayero editor includes a GUI for graph creation. This makes it possible to create graphs from data without writing any code at all. Try it out!
+
+For our examples, let's look at the data provided by the **popular** data source. This contains data on the 30 most popular GitHub repos of 2016, by number of stargazers.
+
+```javascript; runnable
+return data.popular;
+```
+
+Let's create a pie chart using this data.
+
+```javascript; auto
+return graphs.pieChart(data.popular);
+```
+
+It's made a pie chart - but, like in the first Reshaper example, we didn't tell it what data we're interested in. Let's use the repo name as a label, and plot a pie chart of the number of open issues each repo has.
+
+As well as using strings as before, we can provide hints in the form of arrays or objects.
+
+```javascript; auto
+return graphs.pieChart(data.popular, {label: 'name', value: 'open_issues'});
+```
+
+Jutsu functions will return the reshaped data used in the graph.
+
+The pie chart is a little hard to read. Let's do a bar chart instead. As well as hints, we can provide axis labels:
+
+```javascript; auto
+return graphs.barChart(
+    data.popular, 'Repo', 'Number of open issues',
+    {label: 'name', value: 'open_issues'}
+);
+```
+
+Line graphs can be used to investigate trends. Is there any correlation between the number of stargazers a repo has, and the number of open issues?
+
+```javascript; auto
+return graphs.lineChart(
+    data.popular, 'Stargazers', 'Open issues',
+    {label: 'name', x: 'stargazers_count', y: 'open_issues'}
+);
+```
+
+It's a little hard to tell. Let's use a scatter plot instead.
+
+```javascript; auto
+return graphs.scatterPlot(
+    data.popular, 'Stargazers', 'Open issues',
+    {label: 'name', x: 'stargazers_count', y: 'open_issues'}
+);
+```
+
+There doesn't seem to be any correlation!
+
+## Questions? Feedback?
+
+Please feel free to file an [issue](https://github.com/mathieudutour/kayero/issues) with any you may have. If you're having a problem with the way Jutsu or Reshaper restructures your data, it's probably better to file an issue in [Reshaper](https://github.com/JoelOtter/reshaper) itself.
+
+Kayero is a part of my Master's project at Imperial College London, and as part of my evaluation I'd really love to hear any feedback you might have. Feel free to [shoot me an email](mailto:joel.auterson@gmail.com).
+
+I hope you find Kayero useful!

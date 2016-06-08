@@ -1,7 +1,7 @@
-var path = require('path');
-var webpack = require('webpack');
-var ExternalsPlugin = webpack.ExternalsPlugin;
-var WriteFilePlugin = require('write-file-webpack-plugin');
+const path = require('path')
+const webpack = require('webpack')
+const ExternalsPlugin = webpack.ExternalsPlugin
+const WriteFilePlugin = require('write-file-webpack-plugin')
 
 module.exports = {
   devtool: 'eval-source-map',
@@ -11,30 +11,30 @@ module.exports = {
     './src/js/app'
   ],
   output: {
-    path: path.join(__dirname, 'src','dist'),
+    path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
     publicPath: 'http://localhost:3002/dist/'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new ExternalsPlugin('commonjs', [
-      'monk',
+      'monk'
     ]),
     new WriteFilePlugin()
   ],
   module: {
     loaders: [
-      { test: /\.css$/, loader: "style-loader!css-loader" },
+      { test: /\.css$/, loader: 'style-loader!css-loader' },
       {
         test: /\.scss$/,
-        loaders: ["style", "css", "sass"]
+        loaders: ['style', 'css', 'sass']
       },
-      { test: /\.png$/, loader: "url-loader?limit=100000" },
-      { test: /\.jpg$/, loader: "file-loader" },
-      { test: /\.json$/, loader: "json-loader" },
+      { test: /\.png$/, loader: 'url-loader?limit=100000' },
+      { test: /\.jpg$/, loader: 'file-loader' },
+      { test: /\.json$/, loader: 'json-loader' },
       {
-        test   : /\.(ttf|eot|svg|otf|woff(2)?)(\?[a-z0-9=&.]+)?$/, // font files
-        loader : 'file-loader'
+        test: /\.(ttf|eot|svg|otf|woff(2)?)(\?[a-z0-9=&.]+)?$/, // font files
+        loader: 'file-loader'
       },
       {
         test: /\.js$/,
@@ -44,4 +44,4 @@ module.exports = {
     ]
   },
   target: 'electron-renderer'
-};
+}

@@ -1,4 +1,4 @@
-import Immutable from 'immutable';
+import Immutable from 'immutable'
 import {
     RECEIVED_DATA,
     CODE_RUNNING,
@@ -7,8 +7,8 @@ import {
     UPDATE_BLOCK,
     DELETE_BLOCK,
     DELETE_DATASOURCE,
-    UPDATE_DATASOURCE,
-} from '../actions';
+    UPDATE_DATASOURCE
+} from '../actions'
 
 /*
  * This reducer handles the state of execution of code blocks -
@@ -17,42 +17,41 @@ import {
  * where the obtained data is stored.
  */
 export const initialState = Immutable.Map({
-    executionContext: Immutable.Map(),
-    data: Immutable.Map(),
-    results: Immutable.Map(),
-    blocksExecuted: Immutable.Set(),
-    blocksRunning: Immutable.Set()
-});
+  executionContext: Immutable.Map(),
+  data: Immutable.Map(),
+  results: Immutable.Map(),
+  blocksExecuted: Immutable.Set(),
+  blocksRunning: Immutable.Set()
+})
 
-export default function execution(state = initialState, action) {
-    const { id, code, text, name, data, context } = action;
-    switch (action.type) {
-        case CODE_RUNNING:
-            return state
-                .set('blocksRunning', state.get('blocksRunning').add(id));
-        case CODE_EXECUTED:
-            return state
-                .setIn(['results', id], data)
-                .set('blocksExecuted', state.get('blocksExecuted').add(id))
-                .set('blocksRunning', state.get('blocksRunning').delete(id))
-                .set('executionContext', context);
-        case CODE_ERROR:
-            return state
-                .setIn(['results', id], data)
-                .set('blocksRunning', state.get('blocksRunning').delete(id))
-                .set('blocksExecuted', state.get('blocksExecuted').add(id));
-        case RECEIVED_DATA:
-            return state.setIn(['data', name], Immutable.fromJS(data));
-        case UPDATE_BLOCK:
-        case DELETE_BLOCK:
-            return state
-                .set('blocksRunning', state.get('blocksRunning').delete(id))
-                .set('blocksExecuted', state.get('blocksExecuted').remove(id))
-                .removeIn(['results', id]);
-        case UPDATE_DATASOURCE:
-        case DELETE_DATASOURCE:
-            return state.deleteIn(['data', id]);
-        default:
-            return state;
-    }
+export default function execution (state = initialState, action) {
+  const { id, name, data, context } = action
+  switch (action.type) {
+    case CODE_RUNNING:
+      return state.set('blocksRunning', state.get('blocksRunning').add(id))
+    case CODE_EXECUTED:
+      return state
+        .setIn(['results', id], data)
+        .set('blocksExecuted', state.get('blocksExecuted').add(id))
+        .set('blocksRunning', state.get('blocksRunning').delete(id))
+        .set('executionContext', context)
+    case CODE_ERROR:
+      return state
+        .setIn(['results', id], data)
+        .set('blocksRunning', state.get('blocksRunning').delete(id))
+        .set('blocksExecuted', state.get('blocksExecuted').add(id))
+    case RECEIVED_DATA:
+      return state.setIn(['data', name], Immutable.fromJS(data))
+    case UPDATE_BLOCK:
+    case DELETE_BLOCK:
+      return state
+        .set('blocksRunning', state.get('blocksRunning').delete(id))
+        .set('blocksExecuted', state.get('blocksExecuted').remove(id))
+        .removeIn(['results', id])
+    case UPDATE_DATASOURCE:
+    case DELETE_DATASOURCE:
+      return state.deleteIn(['data', id])
+    default:
+      return state
+  }
 }

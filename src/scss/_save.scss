@@ -2,71 +2,72 @@
 
 .save-dialog {
 
-    .close-button {
-        float: right;
-        margin-top: .75em;
-        margin-right: .25em;
-        cursor: pointer;
+  .close-button {
+    float: right;
+    margin-top: 0.75em;
+    margin-right: 0.25em;
+    cursor: pointer;
+  }
+
+  .export-option,
+  .clipboard-button {
+    @include block-border;
+    font-family: 'Amaranth', sans-serif;
+    padding: 0.25em;
+    cursor: pointer;
+    display: inline-block;
+
+    &.selected {
+      @include block-border;
+      font-weight: bold;
+      color: $text-black;
+      border: 1px dashed $text-black;
+      cursor: default;
     }
+  }
 
-    .export-option, .clipboard-button {
-        font-family: 'Amaranth', sans-serif;
-        @include block-border;
-        padding: .25em;
-        cursor: pointer;
-        display: inline-block;
+  textarea {
+    height: 400px;
+    box-sizing: border-box;
+  }
 
-        &.selected {
-            font-weight: bold;
-            color: $text-black;
-            @include block-border;
-            border: 1px dashed $text-black;
-            cursor: default;
-        }
-    }
+  .export-option {
+    margin-top: 0.5em;
+    margin-right: 0.5em;
+    color: $text-light;
+  }
 
-    textarea {
-        height: 400px;
-        box-sizing: border-box;
-    }
+  .clipboard-button {
+    font-weight: bold;
+    float: right;
+  }
 
-    .export-option {
-        margin-top: .5em;
-        margin-right: .5em;
-        color: $text-light;
-    }
+  input {
+    @include block-border;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.25em;
+    margin-top: 0.25em;
+    margin-bottom: 0.5em;
+    display: inherit;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    width: 100%;
+    outline: none;
+    cursor: text;
+  }
 
-    .clipboard-button {
-        font-weight: bold;
-        float: right;
-    }
-
-    input {
-        width: 100%;
-        @include block-border;
-        box-sizing: border-box;
-        padding: .25em;
-        margin-top: .25em;
-        margin-bottom: .5em;
-        display: inherit;
-        color: inherit;
-        font-family: inherit;
-        font-size: inherit;
-        font-weight: inherit;
-        width: 100%;
-        outline: none;
-        cursor: text;
-    }
-
-    .pure-g {
-        margin-top: .75em;
-        p {
-            font-family: 'Amaranth', sans-serif;
-        }
-    }
-
+  .pure-g {
+    margin-top: 0.75em;
     p {
-        clear: both;
+      font-family: 'Amaranth', sans-serif;
     }
+  }
+
+  p {
+    clear: both;
+  }
 
 }

@@ -1,68 +1,65 @@
-const { app, BrowserWindow, Menu, shell } = require('electron');
+const { app, BrowserWindow, Menu, shell } = require('electron')
 
-let menu;
-let template;
-let mainWindow = null;
-
+let menu
+let template
+let mainWindow = null
 
 if (process.env.NODE_ENV === 'development') {
-  require('electron-debug')(); // eslint-disable-line global-require
+  require('electron-debug')()
 }
-
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
-});
-
-function execOnMainWindow(...args) {
-  if (!mainWindow) {
-    return initNewWindow(() => {
-      mainWindow.webContents.send(...args);
-    })
-  }
-  mainWindow.webContents.send(...args);
-}
-
-app.on('open-file', function(event, pathToOpen) {
-  event.preventDefault();
-  execOnMainWindow('open-filename', pathToOpen);
+  if (process.platform !== 'darwin') app.quit()
 })
 
-function initNewWindow(callback) {
+function execOnMainWindow (...args) {
+  if (!mainWindow) {
+    return initNewWindow(() => {
+      mainWindow.webContents.send(...args)
+    })
+  }
+  mainWindow.webContents.send(...args)
+}
+
+app.on('open-file', function (event, pathToOpen) {
+  event.preventDefault()
+  execOnMainWindow('open-filename', pathToOpen)
+})
+
+function initNewWindow (callback) {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
     height: 728
-  });
+  })
 
-  mainWindow.loadURL(`file://${__dirname}/electron.html`);
+  mainWindow.loadURL(`file://${__dirname}/electron.html`)
 
   mainWindow.webContents.on('did-finish-load', () => {
-    mainWindow.show();
-    mainWindow.focus();
+    mainWindow.show()
+    mainWindow.focus()
     if (callback) {
-      callback();
+      callback()
     }
-  });
+  })
 
   mainWindow.on('closed', () => {
-    mainWindow = null;
-  });
+    mainWindow = null
+  })
 
   if (process.env.NODE_ENV === 'development') {
-    mainWindow.openDevTools();
+    mainWindow.openDevTools()
   }
 }
 
-
 app.on('ready', () => {
-  initNewWindow();
+  initNewWindow()
 
   if (process.platform === 'darwin') {
     template = [{
-      label: 'Kajero',
+      label: 'Kayero',
       submenu: [{
-        label: 'About Kajero',
+        label: 'About Kayero',
         role: 'about'
       }, {
         type: 'separator'
@@ -73,7 +70,7 @@ app.on('ready', () => {
       }, {
         type: 'separator'
       }, {
-        label: 'Hide Kajero',
+        label: 'Hide Kayero',
         accelerator: 'Command+H',
         role: 'hide'
       }, {
@@ -88,8 +85,8 @@ app.on('ready', () => {
       }, {
         label: 'Quit',
         accelerator: 'Command+Q',
-        click() {
-          app.quit();
+        click () {
+          app.quit()
         }
       }]
     }, {
@@ -97,28 +94,28 @@ app.on('ready', () => {
       submenu: [{
         label: 'New File',
         accelerator: 'Command+N',
-        click() {
-          execOnMainWindow('new-file');
+        click () {
+          execOnMainWindow('new-file')
         }
       }, {
         label: 'Open...',
         accelerator: 'Command+O',
-        click() {
-          execOnMainWindow('open-file');
+        click () {
+          execOnMainWindow('open-file')
         }
       }, {
         type: 'separator'
       }, {
         label: 'Save',
         accelerator: 'Command+S',
-        click() {
-          execOnMainWindow('save-file');
+        click () {
+          execOnMainWindow('save-file')
         }
       }, {
         label: 'Save As...',
         accelerator: 'Shift+Command+S',
-        click() {
-          execOnMainWindow('save-as-file');
+        click () {
+          execOnMainWindow('save-as-file')
         }
       }]
     }, {
@@ -155,25 +152,25 @@ app.on('ready', () => {
       submenu: [{
         label: 'Reload',
         accelerator: 'Command+R',
-        click(e, focusedWindow) {
+        click (e, focusedWindow) {
           if (focusedWindow) {
-            focusedWindow.webContents.reload();
+            focusedWindow.webContents.reload()
           }
         }
       }, {
         label: 'Toggle Full Screen',
         accelerator: 'Ctrl+Command+F',
-        click(e, focusedWindow) {
+        click (e, focusedWindow) {
           if (focusedWindow) {
-            focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+            focusedWindow.setFullScreen(!focusedWindow.isFullScreen())
           }
         }
       }, {
         label: 'Toggle Developer Tools',
         accelerator: 'Alt+Command+I',
-        click(e, focusedWindow) {
+        click (e, focusedWindow) {
           if (focusedWindow) {
-            focusedWindow.toggleDevTools();
+            focusedWindow.toggleDevTools()
           }
         }
       }]
@@ -199,29 +196,29 @@ app.on('ready', () => {
       role: 'help',
       submenu: [{
         label: 'Learn More',
-        click() {
-          shell.openExternal('https://github.com/JoelOtter/kajero');
+        click () {
+          shell.openExternal('https://github.com/mathieudutour/kayero')
         }
       }, {
         label: 'Documentation',
-        click() {
-          shell.openExternal('https://github.com/JoelOtter/kajero/tree/master/docs#readme');
+        click () {
+          shell.openExternal('https://github.com/mathieudutour/kayero/tree/master/docs#readme')
         }
       }, {
         label: 'Community Discussions',
-        click() {
-          shell.openExternal('https://github.com/JoelOtter/kajero/issues');
+        click () {
+          shell.openExternal('https://github.com/mathieudutour/kayero/issues')
         }
       }, {
         label: 'Search Issues',
-        click() {
-          shell.openExternal('https://github.com/JoelOtter/kajero/issues');
+        click () {
+          shell.openExternal('https://github.com/mathieudutour/kayero/issues')
         }
       }]
-    }];
+    }]
 
-    menu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(menu);
+    menu = Menu.buildFromTemplate(template)
+    Menu.setApplicationMenu(menu)
   } else {
     template = [{
       label: '&File',
@@ -231,8 +228,8 @@ app.on('ready', () => {
       }, {
         label: '&Close',
         accelerator: 'Ctrl+W',
-        click() {
-          mainWindow.close();
+        click () {
+          mainWindow.close()
         }
       }]
     }, {
@@ -240,53 +237,53 @@ app.on('ready', () => {
       submenu: (process.env.NODE_ENV === 'development') ? [{
         label: '&Reload',
         accelerator: 'Ctrl+R',
-        click() {
-          mainWindow.webContents.reload();
+        click () {
+          mainWindow.webContents.reload()
         }
       }, {
         label: 'Toggle &Full Screen',
         accelerator: 'F11',
-        click() {
-          mainWindow.setFullScreen(!mainWindow.isFullScreen());
+        click () {
+          mainWindow.setFullScreen(!mainWindow.isFullScreen())
         }
       }, {
         label: 'Toggle &Developer Tools',
         accelerator: 'Alt+Ctrl+I',
-        click() {
-          mainWindow.toggleDevTools();
+        click () {
+          mainWindow.toggleDevTools()
         }
       }] : [{
         label: 'Toggle &Full Screen',
         accelerator: 'F11',
-        click() {
-          mainWindow.setFullScreen(!mainWindow.isFullScreen());
+        click () {
+          mainWindow.setFullScreen(!mainWindow.isFullScreen())
         }
       }]
     }, {
       label: 'Help',
       submenu: [{
         label: 'Learn More',
-        click() {
-          shell.openExternal('https://github.com/JoelOtter/kajero');
+        click () {
+          shell.openExternal('https://github.com/mathieudutour/kayero')
         }
       }, {
         label: 'Documentation',
-        click() {
-          shell.openExternal('https://github.com/JoelOtter/kajero/tree/master/docs#readme');
+        click () {
+          shell.openExternal('https://github.com/mathieudutour/kayero/tree/master/docs#readme')
         }
       }, {
         label: 'Community Discussions',
-        click() {
-          shell.openExternal('https://github.com/JoelOtter/kajero/issues');
+        click () {
+          shell.openExternal('https://github.com/mathieudutour/kayero/issues')
         }
       }, {
         label: 'Search Issues',
-        click() {
-          shell.openExternal('https://github.com/JoelOtter/kajero/issues');
+        click () {
+          shell.openExternal('https://github.com/mathieudutour/kayero/issues')
         }
       }]
-    }];
-    menu = Menu.buildFromTemplate(template);
-    mainWindow.setMenu(menu);
+    }]
+    menu = Menu.buildFromTemplate(template)
+    mainWindow.setMenu(menu)
   }
-});
+})

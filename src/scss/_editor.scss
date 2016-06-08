@@ -1,104 +1,106 @@
 @import 'base';
 
 .editable {
-    input {
-        display: inherit;
-        color: inherit;
-        font-family: inherit;
-        font-size: inherit;
-        font-weight: inherit;
-        width: 100%;
-        outline: none;
-        @include block-border;
-    }
+  input {
+    @include block-border;
+    display: inherit;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    width: 100%;
+    outline: none;
+  }
 
-    .clickable {
+  .clickable {
+    cursor: pointer;
+  }
+
+  .edit-box {
+    @include block-border;
+    margin: 1em 0;
+    padding: 0.5em 0.5em 0.5em 0;
+
+    .CodeMirror {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 0.8em;
+    }
+  }
+
+  .text-block {
+    @include block-border;
+    padding: 0.5em;
+    .text-block-content {
+      *:first-child {
+        margin-top: 0;
+      }
+      *:last-child {
+        margin-bottom: 0;
+      }
+    }
+    margin: 1em 0;
+  }
+
+  .metadata {
+
+    .metadata-row {
+      margin: 0.5em 0;
+      span {
+        margin-left: 15px;
+      }
+      input {
+        width: 200px;
+        margin-left: 15px;
+        padding: 0.25em;
+        box-sizing: border-box;
+
+        @include respond-to($size-md) {
+          width: 400px;
+        }
+      }
+    }
+    .datasource {
+      margin: 0.5em 0;
+      .fa {
+        text-align: center;
+        margin-top: 0.5em;
         cursor: pointer;
-    }
 
-    .edit-box {
-        @include block-border;
-        margin: 1em 0;
-        padding: 0.5em 0.5em 0.5em 0;
-
-        .CodeMirror {
-            font-family: 'Source Code Pro', monospace;
-            font-size: 0.8em;
+        @include respond-to($size-md) {
+          margin-top: 0.25em;
         }
-    }
+      }
+      input {
+        width: 100%;
+        padding: 0.25em;
+        margin: 0.25em 0;
+        box-sizing: border-box;
 
-    .text-block {
-        padding: .5em;
-        @include block-border;
-        .text-block-content {
-            *:first-child {
-                margin-top: 0;
-            }
-            *:last-child {
-                margin-bottom: 0;
-            }
+        @include respond-to($size-md) {
+          margin: 0;
         }
-        margin: 1em 0;
-    }
-
-    .metadata {
-
-        .metadata-row {
-            margin: .5em 0;
-            span {
-                margin-left: 15px;
-            }
-            input {
-                width: 200px;
-                margin-left: 15px;
-                display: inline;
-                padding: .25em;
-                box-sizing: border-box;
-                @include respond-to($size-md) {
-                    width: 400px;
-                }
-            }
+      }
+      .source-name input {
+        @include respond-to($size-md) {
+          width: 95%;
         }
+      }
+      p {
+        margin: 0.5em 0.25em;
 
-        .datasource {
-            margin: 0.5em 0;
-            .fa {
-                text-align: center;
-                margin-top: 0.5em;
-                cursor: pointer;
-                @include respond-to($size-md) {
-                    margin-top: .25em;
-                }
-            }
-            input {
-                width: 100%;
-                padding: .25em;
-                margin: .25em 0;
-                box-sizing: border-box;
-                @include respond-to($size-md) {
-                    margin: 0;
-                }
-            }
-            .source-name input {
-                @include respond-to($size-md) {
-                    width: 95%;
-                }
-            }
-            p {
-                margin:  .5em .25em;
-                @include respond-to($size-md) {
-                    margin: .25em;
-                }
-            }
+        @include respond-to($size-md) {
+          margin: 0.25em;
         }
+      }
     }
+  }
 
-    .add-controls {
-        overflow: hidden;
-        i {
-            margin-left: .5em;
-            float: right;
-        }
+  .add-controls {
+    overflow: hidden;
+    i {
+      margin-left: 0.5em;
+      float: right;
     }
+  }
 
 }

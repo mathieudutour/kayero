@@ -1,23 +1,23 @@
 .visualiser {
-    font-family: 'Source Code Pro', monospace;
-    font-size: .8em;
-    white-space: pre;
-    overflow: auto;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.8em;
+  white-space: pre;
+  overflow: auto;
 
-    .visualiser-spacing {
-        cursor: default;
-    }
+  .visualiser-spacing {
+    cursor: default;
+  }
 
-    .visualiser-arrow {
-        cursor: pointer;
-    }
+  .visualiser-arrow {
+    cursor: pointer;
+  }
 
-    .visualiser-row {
-        display: inline-block;
-    }
+  .visualiser-row {
+    display: inline-block;
+  }
 
-    .export-to-csv {
-        float: right;
-        cursor: pointer;
-    }
+  .export-to-csv {
+    float: right;
+    cursor: pointer;
+  }
 }
