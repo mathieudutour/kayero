@@ -86,7 +86,7 @@ class CodeBlock extends Block {
     }
 
     renderViewerMode() {
-        const { block, hasBeenRun, result, editable } = this.props;
+        const { block, hasBeenRun, result, editable, isRunning } = this.props;
         let buttons = this.getButtons();
         const runButton = this.getRunButton();
         const optionButton = this.getOptionButton();
@@ -107,6 +107,9 @@ class CodeBlock extends Block {
                     <div onClick={this.enterEdit}
                         dangerouslySetInnerHTML={this.rawMarkup(block)}>
                     </div>
+                </div>
+                <div hidden={!isRunning} className="resultBlock">
+                    loading...
                 </div>
                 <div hidden={!hasBeenRun} className="graphBlock"
                     id={"kajero-graph-" + block.get('id')}>

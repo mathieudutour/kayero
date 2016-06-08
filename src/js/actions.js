@@ -16,6 +16,7 @@ import { render } from './markdown';
  * Action types
  */
 export const LOAD_MARKDOWN = 'LOAD_MARKDOWN';
+export const CODE_RUNNING = 'CODE_RUNNING';
 export const CODE_EXECUTED = 'CODE_EXECUTED';
 export const CODE_ERROR = 'CODE_ERROR';
 export const RECEIVED_DATA = 'RECEIVED_DATA';
@@ -88,6 +89,7 @@ export function openFile () {
 
 export function executeCodeBlock (id) {
     return (dispatch, getState) => {
+        dispatch(codeRunning(id));
         const code = getState().notebook.getIn(['blocks', id, 'content']);
         const graphElement = document.getElementById("kajero-graph-" + id);
 
@@ -120,6 +122,13 @@ export function executeCodeBlock (id) {
           console.error(err);
           dispatch(codeError(id, err));
         });
+    };
+}
+
+function codeRunning(id) {
+    return {
+        type: CODE_RUNNING,
+        id
     };
 }
 

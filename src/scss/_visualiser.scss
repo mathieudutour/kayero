@@ -10,13 +10,14 @@
 
     .visualiser-arrow {
         cursor: pointer;
-
-        .export-to-csv {
-            float: right;
-        }
     }
 
     .visualiser-row {
         display: inline-block;
+    }
+
+    .export-to-csv {
+        float: right;
+        cursor: pointer;
     }
 }

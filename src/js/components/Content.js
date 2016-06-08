@@ -10,7 +10,7 @@ class Content extends Component {
 
     render() {
         const {
-            dispatch, content, results, blocksExecuted, editable, activeBlock
+            dispatch, content, results, blocksExecuted, editable, activeBlock, blocksRunning
         } = this.props;
         let blocks = [];
         for (let i = 0; i < content.size; i++) {
@@ -33,6 +33,7 @@ class Content extends Component {
                     break;
                 default:
                     const hasBeenRun = blocksExecuted.includes(id);
+                    const isRunning = blocksRunning.includes(id);
                     const result = results.get(id);
                     const BlockClass = block.get('type') === 'code' ?
                         CodeBlock : GraphBlock;
@@ -40,7 +41,7 @@ class Content extends Component {
                         <BlockClass
                             block={block} result={result} editable={editable}
                             key={String(i)} hasBeenRun={hasBeenRun} dispatch={dispatch}
-                            isFirst={isFirst} isLast={isLast}
+                            isFirst={isFirst} isLast={isLast} isRunning={isRunning}
                             editing={id === activeBlock}
                         />
                     );

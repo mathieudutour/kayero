@@ -11,7 +11,8 @@ export const contentSelector = state => {
             num => state.notebook.getIn(['blocks', num])
         ),
         results: state.execution.get('results'),
-        blocksExecuted: state.execution.get('blocksExecuted')
+        blocksExecuted: state.execution.get('blocksExecuted'),
+        blocksRunning: state.execution.get('blocksRunning')
     };
 };
 
