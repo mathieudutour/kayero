@@ -5,7 +5,7 @@ import { saveSelector } from '../selectors';
 import { render } from '../markdown';
 import { toggleSave } from '../actions';
 import { renderHTML } from '../util';
-import { saveGist, saveFile } from '../actions';
+import { saveGist, saveAsFile } from '../actions';
 
 class SaveDialog extends Component {
 
@@ -61,7 +61,7 @@ class SaveDialog extends Component {
                 render(this.props.notebook)
             ));
         } else if (newMode === 'file') {
-            this.props.dispatch(saveFile(
+            this.props.dispatch(saveAsFile(
                 this.props.notebook.getIn(['metadata', 'path']),
                 render(this.props.notebook)
             ));

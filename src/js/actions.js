@@ -9,6 +9,7 @@ import fs from 'fs';
 
 import { extractMarkdownFromHTML, arrayToCSV } from './util';
 import { gistUrl, gistApi } from './config';
+import { render } from './markdown';
 
 /*
  * Action types
@@ -65,7 +66,8 @@ export function openFileName (filename) {
           return readFileName(filename);
       }).then((markdown) => dispatch({
           type: LOAD_MARKDOWN,
-          markdown
+          markdown,
+          filename
       })).then(() => dispatch(fetchData()))
   };
 }
@@ -82,10 +84,11 @@ export function openFile () {
             }, resolve)
         }).then((filename) => {
             if (!filename || !filename[0]) { throw new Error('no filename'); }
-            return readFileName(filename[0]);
-        }).then((markdown) => dispatch({
+            return Promise.all([readFileName(filename[0]), Promise.resolve(filename[0])]);
+        }).then(([markdown, filename]) => dispatch({
             type: LOAD_MARKDOWN,
-            markdown
+            markdown,
+            filename
         })).then(() => dispatch(fetchData()))
     };
 };
@@ -151,7 +154,10 @@ export function executeCodeBlock (id) {
         .then((result) => dispatch(
               codeExecuted(id, result, Immutable.fromJS(context))
         ))
-        .catch((err) => dispatch(codeError(id, err)));
+        .catch((err) => {
+          console.error(err);
+          dispatch(codeError(id, err));
+        });
     };
 }
 
@@ -369,7 +375,23 @@ export function saveGist (title, markdown) {
     };
 };
 
-export function saveFile (path, markdown) {
+export function saveFile () {
+    return (dispatch, getState) => {
+        const notebook = getState().notebook
+        const path = notebook.get('metadata').get('path')
+        if (!path) { return dispatch(saveAsFile()); }
+        return new Promise((resolve, reject) => {
+            fs.writeFile(path, render(notebook), 'utf8', (err) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(path);
+            });
+        }).then((path) => dispatch(fileSaved(path)))
+    };
+};
+
+export function saveAsFile () {
     return (dispatch, getState) => {
         return new Promise((resolve) => {
             electron.dialog.showSaveDialog({
@@ -382,7 +404,7 @@ export function saveFile (path, markdown) {
         }).then((filename) => {
             if (!filename) { throw new Error('no filename'); }
             return new Promise((resolve, reject) => {
-                fs.writeFile(filename, markdown, 'utf8', (err) => {
+                fs.writeFile(filename, render(getState().notebook), 'utf8', (err) => {
                     if (err) {
                         return reject(err);
                     }

@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { openFile, saveFile, openFileName } from './actions';
+import { openFile, saveFile, saveAsFile, openFileName } from './actions';
 
 export default function bindStoreToMenu(store) {
   ipcRenderer.on('new-file', (event) => {
@@ -15,6 +15,6 @@ export default function bindStoreToMenu(store) {
     store.dispatch(saveFile());
   });
   ipcRenderer.on('save-as-file', (event) => {
-    store.dispatch(saveFile());
+    store.dispatch(saveAsFile());
   });
 }

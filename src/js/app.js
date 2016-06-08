@@ -9,6 +9,8 @@ import bindStoreToMenu from './bindStoreToMenu';
 import NotebookReducer from './reducers';
 import Notebook from './Notebook';
 
+require("../scss/main.scss");
+
 const store = compose(
     applyMiddleware(thunk)
 )(createStore)(NotebookReducer);

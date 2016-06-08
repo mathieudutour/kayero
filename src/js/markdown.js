@@ -87,7 +87,7 @@ function getDate(attributes) {
     return undefined;
 }
 
-export function parse(md) {
+export function parse(md, filename) {
     // Separate front-matter and body
     const doc = fm(md);
     const {content, blocks} = extractBlocks(doc.body);
@@ -99,7 +99,8 @@ export function parse(md) {
             author: doc.attributes.author,
             datasources: doc.attributes.datasources || {},
             original: doc.attributes.original,
-            showFooter: doc.attributes.show_footer !== false
+            showFooter: doc.attributes.show_footer !== false,
+            path: filename
         },
         content,
         blocks
