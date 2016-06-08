@@ -85,6 +85,6 @@
     "start": "electron .",
     "watch": "node server.js",
     "electron-rebuild": "electron-rebuild",
-    "build": "gulp sass && webpack --config prod.webpack.config.js -p && electron-packager . --all --overwrite --prune --out=release --extend-info=electron/kajero.plist"
+    "build": "webpack --config prod.webpack.config.js -p && electron-packager . --all --overwrite --prune --out=release --extend-info=electron/kajero.plist"
   }
 }
