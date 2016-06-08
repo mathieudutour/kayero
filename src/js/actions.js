@@ -46,6 +46,31 @@ function checkStatus (response) {
     }
 }
 
+export function readFileName (filename) {
+  return new Promise((resolve, reject) => {
+      fs.readFile(filename, 'utf8', (err, markdown) => {
+          if (err) {
+              return reject(err);
+          }
+          console.log(markdown)
+          resolve(markdown);
+      });
+  });
+}
+
+export function openFileName (filename) {
+  return (dispatch, getState) => {
+      return Promise.resolve(filename)
+      .then((filename) => {
+          if (!filename) { throw new Error('no filename'); }
+          return readFileName(filename);
+      }).then((markdown) => dispatch({
+          type: LOAD_MARKDOWN,
+          markdown
+      })).then(() => dispatch(fetchData()))
+  };
+}
+
 export function openFile () {
     return (dispatch, getState) => {
         return new Promise((resolve) => {
@@ -58,14 +83,7 @@ export function openFile () {
             }, resolve)
         }).then((filename) => {
             if (!filename || !filename[0]) { throw new Error('no filename'); }
-            return new Promise((resolve, reject) => {
-                fs.readFile(filename[0], 'utf8', (err, markdown) => {
-                    if (err) {
-                        return reject(err);
-                    }
-                    resolve(markdown);
-                });
-            })
+            return readFileName(filename[0]);
         }).then((markdown) => dispatch({
             type: LOAD_MARKDOWN,
             markdown

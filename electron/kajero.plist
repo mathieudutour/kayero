@@ -1,0 +1,18 @@
+<key>CFBundleDocumentTypes</key>
+<array>
+	<dict>
+		<key>CFBundleTypeExtensions</key>
+		<array>
+			<string>md</string>
+			<string>MD</string>
+		</array>
+		<key>CFBundleTypeIconFile</key>
+		<string></string>
+		<key>CFBundleTypeName</key>
+		<string>MD</string>
+		<key>CFBundleTypeRole</key>
+		<string>Editor</string>
+		<key>LSHandlerRank</key>
+		<string>Alternate</string>
+	</dict>
+</array>

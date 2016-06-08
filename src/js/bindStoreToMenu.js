@@ -1,17 +1,20 @@
 import { ipcRenderer } from 'electron';
-import { openFile, saveFile } from './actions';
+import { openFile, saveFile, openFileName } from './actions';
 
 export default function bindStoreToMenu(store) {
-  ipcRenderer.on('new-file', (event, filename) => {
+  ipcRenderer.on('new-file', (event) => {
     console.log('todo')
   });
-  ipcRenderer.on('open-file', (event, filename) => {
+  ipcRenderer.on('open-file', (event) => {
     store.dispatch(openFile());
   });
-  ipcRenderer.on('save-file', (event, filename) => {
+  ipcRenderer.on('open-filename', (event, filename) => {
+    store.dispatch(openFileName(filename));
+  });
+  ipcRenderer.on('save-file', (event) => {
     store.dispatch(saveFile());
   });
-  ipcRenderer.on('save-as-file', (event, filename) => {
+  ipcRenderer.on('save-as-file', (event) => {
     store.dispatch(saveFile());
   });
 }

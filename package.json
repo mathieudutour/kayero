@@ -1,7 +1,7 @@
 {
   "name": "kajero",
   "productName": "Kajero",
-  "main": "electron.js",
+  "main": "electron/index.js",
   "version": "0.2.0",
   "description": "Interactive JavaScript notebooks with clever graphing",
   "repository": {
@@ -90,6 +90,6 @@
     "start": "electron .",
     "watch": "node server.js",
     "electron-rebuild": "electron-rebuild",
-    "build": "gulp sass && webpack --config prod.webpack.config.js -p && electron-packager . --all --overwrite --prune --out=release"
+    "build": "gulp sass && webpack --config prod.webpack.config.js -p && electron-packager . --all --overwrite --prune --out=release --extend-info=electron/kajero.plist"
   }
 }
