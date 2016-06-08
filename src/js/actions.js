@@ -358,7 +358,6 @@ export function saveAsFile () {
         return new Promise((resolve) => {
             electron.dialog.showSaveDialog({
                 title: 'Save notebook',
-                defaultPath: path,
                 filters: [
                     {name: 'Notebooks', extensions: ['md']}
                 ]
