@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { exportToCSV } from '../../actions';
 import { selectComponent, getSpacing } from './Visualiser';
 
-export default class ArrayVisualiser extends Component {
+class ArrayVisualiser extends Component {
 
     constructor(props) {
         super(props);
@@ -60,6 +62,9 @@ export default class ArrayVisualiser extends Component {
 
         return (
             <div className="array-visualiser">
+                <i className="fa fa-share export-to-csv"
+                    onClick={() => this.props.dispatch(exportToCSV(data))} title="Export to CSV">
+                </i>
                 <span className="visualiser-row">
                     <span className="visualiser-spacing">{spaces}</span>
                     <span className="visualiser-arrow" onClick={this.collapse}>{arrow}</span>
@@ -74,3 +79,5 @@ export default class ArrayVisualiser extends Component {
     }
 
 }
+
+export default connect()(ArrayVisualiser);

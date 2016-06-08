@@ -59,3 +59,28 @@ export function renderHTML(markdown) {
     result += '    </body>\n</html>\n';
     return result;
 }
+
+export function arrayToCSV (data) {
+    return new Promise((resolve, reject) => {
+        let CSV = '';
+        let header = '';
+        Object.keys(data[0]).forEach(colName => {
+            header += colName + ',';
+        });
+        header = header.slice(0, -1);
+        CSV += header + '\r\n';
+        data.forEach((rowData) => {
+            let row = '';
+            Object.keys(rowData).forEach(colName => {
+                row += '"' + rowData[colName] + '",';
+            });
+            row.slice(0, row.length - 1);
+            CSV += row + '\r\n';
+        });
+        if (CSV === '') {
+            return reject('Invalid data');
+        }
+
+        resolve(CSV);
+    });
+}

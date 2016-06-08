@@ -7,7 +7,7 @@ import Jutsu from 'jutsu'; // Imports d3 and nv as globals
 import {remote as electron} from 'electron';
 import fs from 'fs';
 
-import { extractMarkdownFromHTML } from './util';
+import { extractMarkdownFromHTML, arrayToCSV } from './util';
 import { gistUrl, gistApi } from './config';
 
 /*
@@ -52,7 +52,6 @@ export function readFileName (filename) {
           if (err) {
               return reject(err);
           }
-          console.log(markdown)
           resolve(markdown);
       });
   });
@@ -384,6 +383,32 @@ export function saveFile (path, markdown) {
             if (!filename) { throw new Error('no filename'); }
             return new Promise((resolve, reject) => {
                 fs.writeFile(filename, markdown, 'utf8', (err) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(filename);
+                });
+            })
+        }).then((filename) => dispatch(fileSaved(filename)))
+    };
+};
+
+export function exportToCSV (data) {
+    return (dispatch, getState) => {
+        return Promise.all([
+            new Promise((resolve) => {
+                electron.dialog.showSaveDialog({
+                    title: 'Save data as CSV',
+                    filters: [
+                        {name: 'Coma separated values', extensions: ['csv']}
+                    ]
+                }, resolve)
+            }),
+            arrayToCSV(data)
+        ]).then(([filename, csv]) => {
+            if (!filename) { throw new Error('no filename'); }
+            return new Promise((resolve, reject) => {
+                fs.writeFile(filename, csv, 'utf8', (err) => {
                     if (err) {
                         return reject(err);
                     }

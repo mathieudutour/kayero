@@ -10,6 +10,10 @@
 
     .visualiser-arrow {
         cursor: pointer;
+
+        .export-to-csv {
+            float: right;
+        }
     }
 
     .visualiser-row {
