@@ -1,4 +1,9 @@
-const { app, BrowserWindow, Menu, shell } = require('electron')
+const { app, BrowserWindow, Menu, shell, autoUpdater } = require('electron')
+
+const os = require('os')
+
+const platform = os.platform() + '_' + os.arch()
+const version = app.getVersion()
 
 let menu
 let template
@@ -61,6 +66,11 @@ app.on('ready', () => {
       submenu: [{
         label: 'About Kayero',
         role: 'about'
+      }, {
+        label: 'Check for update',
+        click () {
+          autoUpdater.checkForUpdates()
+        }
       }, {
         type: 'separator'
       }, {
@@ -285,5 +295,32 @@ app.on('ready', () => {
     }]
     menu = Menu.buildFromTemplate(template)
     mainWindow.setMenu(menu)
+
+    autoUpdater.setFeedUrl('https://getkayero.herokuapp.com/update/' + platform + '/' + version)
+    autoUpdater.checkForUpdates()
   }
+})
+
+autoUpdater.on('error', (e) => {
+  execOnMainWindow('log', 'error', e)
+})
+
+autoUpdater.on('checking-for-update', (e) => {
+  execOnMainWindow('log', 'checking-for-update', e)
+})
+
+autoUpdater.on('update-available', (e) => {
+  execOnMainWindow('log', version)
+  execOnMainWindow('log', 'update-available', e)
+})
+
+autoUpdater.on('update-available', (e) => {
+  execOnMainWindow('log', version)
+  execOnMainWindow('log', 'update-available', e)
+})
+
+autoUpdater.on('update-downloaded', (e) => {
+  execOnMainWindow('log', version)
+  execOnMainWindow('log', 'update-downloaded', e)
+  // autoUpdater.quitAndInstall()
 })

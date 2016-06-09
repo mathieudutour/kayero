@@ -57,9 +57,13 @@ export default class DefaultVisualiser extends Component {
 }
 
 DefaultVisualiser.propTypes = {
-  data: React.PropTypes.object,
+  data: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.number,
+    React.PropTypes.func
+  ]),
   indent: React.PropTypes.number,
-  useHljs: React.PropTypes.bool,
+  useHljs: React.PropTypes.string,
   name: React.PropTypes.string,
   path: React.PropTypes.string,
   click: React.PropTypes.func

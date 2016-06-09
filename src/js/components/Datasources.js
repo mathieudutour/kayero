@@ -70,6 +70,6 @@ export default class Datasources extends Component {
 }
 
 Datasources.propTypes = {
-  datasources: React.PropTypes.array,
+  datasources: React.PropTypes.object,
   dispatch: React.PropTypes.func
 }

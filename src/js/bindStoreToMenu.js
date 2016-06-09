@@ -17,4 +17,7 @@ export default function bindStoreToMenu (store) {
   ipcRenderer.on('save-as-file', (event) => {
     store.dispatch(saveAsFile())
   })
+  ipcRenderer.on('log', (...args) => {
+    console.log(...args)
+  })
 }

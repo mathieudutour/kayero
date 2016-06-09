@@ -53,7 +53,7 @@ class Notebook extends Component {
 }
 
 Notebook.propTypes = {
-  activeBlock: React.PropTypes.object,
+  activeBlock: React.PropTypes.string,
   saving: React.PropTypes.bool,
   editable: React.PropTypes.bool,
   dispatch: React.PropTypes.func

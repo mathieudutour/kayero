@@ -72,7 +72,7 @@ export default class ObjectVisualiser extends Component {
 ObjectVisualiser.propTypes = {
   data: React.PropTypes.object,
   indent: React.PropTypes.number,
-  useHljs: React.PropTypes.bool,
+  useHljs: React.PropTypes.string,
   name: React.PropTypes.string,
   path: React.PropTypes.string,
   click: React.PropTypes.func

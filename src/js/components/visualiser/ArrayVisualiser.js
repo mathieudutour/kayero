@@ -74,9 +74,9 @@ class ArrayVisualiser extends Component {
 }
 
 ArrayVisualiser.propTypes = {
-  data: React.PropTypes.object,
+  data: React.PropTypes.array,
   indent: React.PropTypes.number,
-  useHljs: React.PropTypes.bool,
+  useHljs: React.PropTypes.string,
   name: React.PropTypes.string,
   path: React.PropTypes.string,
   click: React.PropTypes.func,
