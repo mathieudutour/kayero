@@ -1,5 +1,6 @@
 import fs from 'fs'
-import monk from 'monk'
+import path from 'path'
+import Zealot from 'zealot'
 
 import Immutable from 'immutable'
 import reshaper from 'reshaper'
@@ -98,7 +99,46 @@ export function openFile () {
   }
 };
 
-export function executeCodeBlock (id) {
+function initDBs (getState) {
+  const executionState = getState().execution
+  const data = executionState.get('data').toJS()
+  const notebook = getState().notebook
+  const filePath = notebook.get('metadata').get('path')
+  const dbs = Object.keys(data)
+    .filter((k) => data[k] && data[k].__type === 'mongodb')
+    .reduce((prev, k) => {
+      if (data[k] && data[k].__type === 'mongodb') {
+        if (!data[k].__secure) {
+          prev[k] = new Zealot(data[k].url)
+          return prev
+        }
+        let uri = data[k].url.split('mongodb-secure://')[1]
+
+        if (uri.indexOf('.') === 0) { // handle relative path
+          if (filePath) {
+            const directory = path.dirname(filePath)
+            uri = path.join(directory, uri)
+          }
+        }
+
+        const secret = JSON.parse(fs.readFileSync(uri, 'utf8'))
+        if (Array.isArray(secret)) {
+          prev[k] = new Zealot(...secret)
+        } else {
+          prev[k] = new Zealot(secret)
+        }
+      }
+      return prev
+    }, {})
+  return dbs
+}
+
+function closeDBs (dbs) {
+  Object.keys(dbs).forEach((k) => dbs[k].close())
+  return
+}
+
+export function executeCodeBlock (id, dbs) {
   return (dispatch, getState) => {
     dispatch(codeRunning(id))
     const code = getState().notebook.getIn(['blocks', id, 'content'])
@@ -107,32 +147,43 @@ export function executeCodeBlock (id) {
     const executionState = getState().execution
     const context = executionState.get('executionContext').toJS()
     const data = executionState.get('data').toJS()
-    Object.keys(data).forEach((k) => {
+
+    const soloExecution = !dbs
+    if (!dbs) {
+      dbs = initDBs(getState)
+    }
+    Object.keys(dbs).forEach((k) => {
       if (data[k] && data[k].__type === 'mongodb') {
-        data[k] = monk(data[k].url.split('mongodb://')[1])
+        data[k] = dbs[k]
       }
     })
+
     const jutsu = Smolder(Jutsu(graphElement))
 
     return new Promise((resolve, reject) => {
       try {
         const result = new Function(
-                    ['d3', 'nv', 'graphs', 'data', 'reshaper', 'graphElement'], code
-                ).call(
-                    context, d3, nv, jutsu, data, reshaper, graphElement
-                )
+          ['d3', 'nv', 'graphs', 'data', 'reshaper', 'graphElement'], code
+        ).call(
+          context, d3, nv, jutsu, data, reshaper, graphElement
+        )
         resolve(result)
       } catch (err) {
         reject(err)
       }
     })
-        .then((result) => dispatch(
-              codeExecuted(id, result, Immutable.fromJS(context))
-        ))
-        .catch((err) => {
-          console.error(err)
-          dispatch(codeError(id, err))
-        })
+    .then((result) => dispatch(
+      codeExecuted(id, result, Immutable.fromJS(context))
+    ))
+    .catch((err) => {
+      console.error(err)
+      dispatch(codeError(id, err))
+    })
+    .then(() => {
+      if (soloExecution) {
+        return closeDBs(dbs)
+      }
+    })
   }
 }
 
@@ -165,17 +216,21 @@ export function executeAuto () {
     const notebook = getState().notebook
     const blocks = notebook.get('blocks')
     const order = notebook.get('content')
-        // This slightly scary Promise chaining ensures that code blocks
-        // are executed in order, even if they return Promises.
+
+    // init the database connections
+    const dbs = initDBs(getState)
+
+    // This slightly scary Promise chaining ensures that code blocks
+    // are executed in order, even if they return Promises.
     return order.reduce((p, id) => {
       return p.then(() => {
         const option = blocks.getIn([id, 'option'])
         if (option === 'auto' || option === 'hidden') {
-          return dispatch(executeCodeBlock(id))
+          return dispatch(executeCodeBlock(id, dbs))
         }
         return Promise.resolve()
       })
-    }, Promise.resolve())
+    }, Promise.resolve()).then(() => closeDBs(dbs))
   }
 }
 
@@ -191,27 +246,27 @@ export function fetchData () {
   return (dispatch, getState) => {
     let proms = []
     const currentData = getState().execution.get('data')
-    getState().notebook.getIn(['metadata', 'datasources']).forEach(
-            (url, name) => {
-              if (!currentData.has(name)) {
-                if (url.indexOf('mongodb://') === 0) {
-                  proms.push(Promise.resolve({
-                    __type: 'mongodb',
-                    url
-                  }).then(j => dispatch(receivedData(name, j))))
-                } else {
-                  proms.push(
-                    window.fetch(url, {
-                      method: 'get'
-                    })
-                    .then(response => response.json())
-                    .then(j => dispatch(receivedData(name, j)))
-                  )
-                }
-              }
-            }
-        )
-        // When all data fetched, run all the auto-running code blocks.
+    getState().notebook.getIn(['metadata', 'datasources'])
+      .forEach((url, name) => {
+        if (currentData.has(name)) { return }
+        if (url.indexOf('mongodb://') === 0 || url.indexOf('mongodb-secure://') === 0) {
+          proms.push(Promise.resolve({
+            __type: 'mongodb',
+            __secure: url.indexOf('mongodb-secure://') === 0,
+            url
+          }).then(j => dispatch(receivedData(name, j))))
+        } else {
+          proms.push(
+            window.fetch(url, {
+              method: 'get'
+            })
+            .then(response => response.json())
+            .then(j => dispatch(receivedData(name, j)))
+          )
+        }
+      }
+    )
+    // When all data fetched, run all the auto-running code blocks.
     return Promise.all(proms).then(() => dispatch(executeAuto()))
   }
 }
@@ -359,16 +414,16 @@ export function saveGist (title, markdown) {
 export function saveFile () {
   return (dispatch, getState) => {
     const notebook = getState().notebook
-    const path = notebook.get('metadata').get('path')
-    if (!path) { return dispatch(saveAsFile()) }
+    const filePath = notebook.get('metadata').get('path')
+    if (!filePath) { return dispatch(saveAsFile()) }
     return new Promise((resolve, reject) => {
-      fs.writeFile(path, render(notebook), 'utf8', (err) => {
+      fs.writeFile(filePath, render(notebook), 'utf8', (err) => {
         if (err) {
           return reject(err)
         }
-        resolve(path)
+        resolve(filePath)
       })
-    }).then((path) => dispatch(fileSaved(path)))
+    }).then((filePath) => dispatch(fileSaved(filePath)))
   }
 };
 
@@ -378,7 +433,7 @@ export function saveAsFile () {
       electron.dialog.showSaveDialog({
         title: 'Save notebook',
         filters: [
-                    {name: 'Notebooks', extensions: ['md']}
+          {name: 'Notebooks', extensions: ['md']}
         ]
       }, resolve)
     }).then((filename) => {
@@ -402,7 +457,7 @@ export function exportToCSV (data) {
         electron.dialog.showSaveDialog({
           title: 'Save data as CSV',
           filters: [
-                        {name: 'Coma separated values', extensions: ['csv']}
+            {name: 'Coma separated values', extensions: ['csv']}
           ]
         }, resolve)
       }),
@@ -443,12 +498,12 @@ export function updateGraphType (id, graph) {
   }
 }
 
-export function updateGraphDataPath (id, path) {
+export function updateGraphDataPath (id, dataPath) {
   return {
     type: UPDATE_GRAPH_BLOCK_PROPERTY,
     id: id,
     property: 'dataPath',
-    value: path
+    value: dataPath
   }
 }
 

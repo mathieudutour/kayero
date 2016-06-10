@@ -5,7 +5,7 @@ import Header from './components/Header'
 import Content from './components/Content'
 import Footer from './components/Footer'
 import SaveDialog from './components/SaveDialog'
-import { fetchData, editBlock } from './actions'
+import { fetchData, editBlock, openFile } from './actions'
 import { editorSelector } from './selectors'
 
 class Notebook extends Component {
@@ -13,6 +13,10 @@ class Notebook extends Component {
   constructor (props) {
     super(props)
     this.deselectBlocks = this.deselectBlocks.bind(this)
+  }
+
+  componentWillMount () {
+    this.props.dispatch(openFile())
   }
 
   componentDidMount () {

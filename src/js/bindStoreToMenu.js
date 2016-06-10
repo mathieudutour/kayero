@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron' // eslint-disable-line
-import { openFile, saveFile, saveAsFile, openFileName, newFile } from './actions'
+import { openFile, saveFile, saveAsFile, openFileName, newFile, toggleEdit, fetchData } from './actions'
 
 export default function bindStoreToMenu (store) {
   ipcRenderer.on('new-file', (event) => {
@@ -19,5 +19,11 @@ export default function bindStoreToMenu (store) {
   })
   ipcRenderer.on('log', (...args) => {
     console.log(...args)
+  })
+  ipcRenderer.on('toggle-edit', () => {
+    store.dispatch(toggleEdit())
+  })
+  ipcRenderer.on('re-run', () => {
+    store.dispatch(fetchData())
   })
 }

@@ -2,7 +2,7 @@
   "name": "kayero",
   "productName": "Kayero",
   "main": "electron/index.js",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Interactive JavaScript notebooks with clever graphing",
   "repository": {
     "type": "git",
@@ -29,8 +29,6 @@
     "immutable": "^3.7.6",
     "jutsu": "^0.1.1",
     "markdown-it": "^6.0.1",
-    "mongodb": "1.4.40",
-    "monk": "1.0.1",
     "query-string": "^4.1.0",
     "react": "^0.14.8",
     "react-codemirror": "^0.2.6",
@@ -41,7 +39,8 @@
     "request": "^2.72.0",
     "reshaper": "^0.3.1",
     "smolder": "^0.3.1",
-    "whatwg-fetch": "^0.11.0"
+    "whatwg-fetch": "^0.11.0",
+    "zealot": "0.1.2"
   },
   "devDependencies": {
     "babel-eslint": "6.0.4",

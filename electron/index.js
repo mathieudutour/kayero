@@ -131,6 +131,20 @@ app.on('ready', () => {
     }, {
       label: 'Edit',
       submenu: [{
+        label: 'Toggle edit mode',
+        accelerator: 'Command+E',
+        click (e, focusedWindow) {
+          execOnMainWindow('toggle-edit')
+        }
+      }, {
+        label: 'Re-run the notebook',
+        accelerator: 'Command+R',
+        click (e, focusedWindow) {
+          execOnMainWindow('re-run')
+        }
+      }, {
+        type: 'separator'
+      }, {
         label: 'Undo',
         accelerator: 'Command+Z',
         role: 'undo'
@@ -161,7 +175,7 @@ app.on('ready', () => {
       label: 'View',
       submenu: [{
         label: 'Reload',
-        accelerator: 'Command+R',
+        accelerator: 'Command+Shift+R',
         click (e, focusedWindow) {
           if (focusedWindow) {
             focusedWindow.webContents.reload()
