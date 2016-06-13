@@ -19,6 +19,9 @@
   },
   "homepage": "https://github.com/mathieudutour/kayero",
   "dependencies": {
+    "zealot": "0.1.3"
+  },
+  "devDependencies": {
     "babel-core": "^6.9.1",
     "babel-register": "^6.7.2",
     "clipboard": "^1.5.10",
@@ -41,9 +44,6 @@
     "reshaper": "^0.3.1",
     "smolder": "^0.3.1",
     "whatwg-fetch": "^1.0.0",
-    "zealot": "^0.1.2"
-  },
-  "devDependencies": {
     "ava": "^0.15.2",
     "babel-eslint": "^6.0.4",
     "babel-loader": "^6.2.4",

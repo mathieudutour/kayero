@@ -1,0 +1,84 @@
+/* The lint marker gutter */
+.CodeMirror-lint-markers {
+  width: 16px;
+}
+
+.CodeMirror-lint-tooltip {
+  color: #282c34;
+  border-radius: 4.5px;
+  border-top-left-radius: 0;
+  background: #bdc5d4;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  padding: 2px 5px;
+  position: fixed;
+  white-space: pre-wrap;
+  z-index: 100;
+  max-width: 200px;
+  max-width: 600px;
+  opacity: 0;
+  transition: opacity 0.4s;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.CodeMirror-lint-mark-error,
+.CodeMirror-lint-mark-warning {
+  background-position: left bottom;
+  background-repeat: repeat-x;
+}
+
+.CodeMirror-lint-mark-error {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAYAAAC09K7GAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJDw4cOCW1/KIAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAHElEQVQI12NggIL/DAz/GdA5/xkY/qPKMDAwAADLZwf5rvm+LQAAAABJRU5ErkJggg==");
+}
+
+.CodeMirror-lint-mark-warning {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAYAAAC09K7GAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJFhQXEbhTg7YAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAMklEQVQI12NkgIIvJ3QXMjAwdDN+OaEbysDA4MPAwNDNwMCwiOHLCd1zX07o6kBVGQEAKBANtobskNMAAAAASUVORK5CYII=");
+}
+
+.CodeMirror-lint-marker-error,
+.CodeMirror-lint-marker-warning {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  margin-left: 12px;
+  position: relative;
+  top: -2px;
+}
+
+.CodeMirror-lint-message-error::before,
+.CodeMirror-lint-message-warning::before {
+  display: inline-block;
+  border-radius: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.8em;
+  min-width: 1.6em;
+  padding: 0.4em 0.6em;
+  position: relative;
+  margin-right: 5px;
+  top: 2px;
+  line-height: 1em;
+}
+
+.CodeMirror-lint-marker-error,
+.CodeMirror-lint-message-error::before {
+  background: #d92626;
+}
+
+.CodeMirror-lint-message-error::before {
+  content: 'Error';
+  color: white;
+}
+
+.CodeMirror-lint-marker-warning,
+.CodeMirror-lint-message-warning::before {
+  background: #cc8533;
+}
+
+.CodeMirror-lint-message-warning::before {
+  content: 'Warning';
+  color: white;
+}

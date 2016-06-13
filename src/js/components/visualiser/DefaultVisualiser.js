@@ -60,7 +60,8 @@ DefaultVisualiser.propTypes = {
   data: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.number,
-    React.PropTypes.func
+    React.PropTypes.func,
+    React.PropTypes.instanceOf(Error)
   ]),
   indent: React.PropTypes.number,
   useHljs: React.PropTypes.string,

@@ -3,6 +3,8 @@ import { findDOMNode } from 'react-dom'
 import Codemirror from 'react-codemirror'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/markdown/markdown'
+import 'codemirror/addon/lint/lint'
+import '../code-mirror-linter'
 import {
     updateBlock, deleteBlock, moveBlockUp, moveBlockDown, editBlock
 } from '../actions'
@@ -101,7 +103,9 @@ export default class Block extends Component {
       mode: isCodeBlock ? 'javascript' : 'markdown',
       theme: 'base16-tomorrow-light',
       lineNumbers: true,
+      gutters: ['CodeMirror-lint-markers'],
       indentUnit: 2,
+      lint: isCodeBlock,
       extraKeys: {
         Tab: (cm) => {
           const spaces = Array(cm.getOption('indentUnit') + 1).join(' ')
