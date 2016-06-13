@@ -1,7 +1,7 @@
 ---
 title: "Sample Kayero notebook"
 author: "Joel Auterson"
-created: "Mon Apr 18 2016 21:48:01 GMT+0100 (BST)"
+created: "Mon Apr 18 2016 20:48:01 GMT+0000 (UTC)"
 datasources:
     joelotter: "https://api.github.com/users/joelotter/repos"
     popular: "https://api.github.com/search/repositories?q=created:>2016-01-01&sort=stars&order=desc"
