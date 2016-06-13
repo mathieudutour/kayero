@@ -12,7 +12,7 @@ const defaultEditor = Immutable.Map({
   activeBlock: null
 })
 
-export default function editor (state = defaultEditor, action) {
+export default function editor (state = defaultEditor, action = {}) {
   switch (action.type) {
     case TOGGLE_EDIT:
       return state.set('editable', !state.get('editable'))

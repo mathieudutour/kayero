@@ -36,7 +36,7 @@ export const initialState = Immutable.Map({
   undoStack: Immutable.List()
 })
 
-export default function notebook (state = initialState, action) {
+export default function notebook (state = initialState, action = {}) {
   const { id, text, field, blockType } = action
   const content = state.get('content')
   let newState

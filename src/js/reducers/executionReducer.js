@@ -7,7 +7,8 @@ import {
     UPDATE_BLOCK,
     DELETE_BLOCK,
     DELETE_DATASOURCE,
-    UPDATE_DATASOURCE
+    UPDATE_DATASOURCE,
+    LOAD_MARKDOWN
 } from '../actions'
 
 /*
@@ -24,9 +25,11 @@ export const initialState = Immutable.Map({
   blocksRunning: Immutable.Set()
 })
 
-export default function execution (state = initialState, action) {
+export default function execution (state = initialState, action = {}) {
   const { id, name, data, context } = action
   switch (action.type) {
+    case LOAD_MARKDOWN:
+      return initialState
     case CODE_RUNNING:
       return state.set('blocksRunning', state.get('blocksRunning').add(id))
     case CODE_EXECUTED:

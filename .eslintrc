@@ -4,6 +4,9 @@
   "plugins": [
     "react"
   ],
+  "globals": {
+    "fetch": 2
+  },
   "ignorePath": ".gitignore",
   "rules" : {
     "no-new-func": 0

@@ -23,22 +23,6 @@ export function highlight (str, lang) {
   return '' // use external default escaping
 }
 
-export function extractMarkdownFromHTML () {
-  let text = document.getElementById('kayero-md').text
-  const lines = text.split('\n')
-  let leadingSpaces
-    // Find line where front-matter starts
-  for (let line = 0; line < lines.length; line++) {
-    leadingSpaces = lines[line].indexOf('-')
-    if (leadingSpaces > -1) {
-      text = lines.splice(line).join('\n')
-      break
-    }
-  }
-  const re = new RegExp('^ {' + leadingSpaces + '}', 'gm')
-  return text.replace(re, '')
-}
-
 export function renderHTML (markdown) {
   let result = '<!DOCTYPE html>\n<html>\n    <head>\n'
   result += '        <meta name="viewport" content="width=device-width, initial-scale=1">\n'

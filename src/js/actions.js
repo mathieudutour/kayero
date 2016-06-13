@@ -42,7 +42,7 @@ export const UPDATE_GRAPH_BLOCK_LABEL = 'UPDATE_GRAPH_BLOCK_LABEL'
 export const CLEAR_GRAPH_BLOCK_DATA = 'CLEAR_GRAPH_BLOCK_DATA'
 export const FILE_SAVED = 'FILE_SAVED'
 
-export function readFileName (filename) {
+function readFileName (filename) {
   return new Promise((resolve, reject) => {
     fs.readFile(filename, 'utf8', (err, markdown) => {
       if (err) {
@@ -101,9 +101,17 @@ export function openFile () {
 
 function initDBs (getState) {
   const executionState = getState().execution
-  const data = executionState.get('data').toJS()
+  let data = {}
+  if (executionState) {
+    const immutableData = executionState.get('data')
+    data = immutableData && immutableData.toJS() || {}
+  }
   const notebook = getState().notebook
-  const filePath = notebook.get('metadata').get('path')
+  let filePath
+  if (notebook) {
+    const metadata = notebook.get('metadata')
+    filePath = metadata && metadata.get('path')
+  }
   const dbs = Object.keys(data)
     .filter((k) => data[k] && data[k].__type === 'mongodb')
     .reduce((prev, k) => {
@@ -257,7 +265,7 @@ export function fetchData () {
           }).then(j => dispatch(receivedData(name, j))))
         } else {
           proms.push(
-            window.fetch(url, {
+            fetch(url, {
               method: 'get'
             })
             .then(response => response.json())
@@ -390,7 +398,7 @@ function fileSaved (filename) {
 
 export function saveGist (title, markdown) {
   return (dispatch, getState) => {
-    return window.fetch(gistApi, {
+    return fetch(gistApi, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

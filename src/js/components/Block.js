@@ -101,10 +101,10 @@ export default class Block extends Component {
       mode: isCodeBlock ? 'javascript' : 'markdown',
       theme: 'base16-tomorrow-light',
       lineNumbers: true,
-      indentUnit: 4,
+      indentUnit: 2,
       extraKeys: {
         Tab: (cm) => {
-          var spaces = Array(cm.getOption('indentUnit') + 1).join(' ')
+          const spaces = Array(cm.getOption('indentUnit') + 1).join(' ')
           cm.replaceSelection(spaces)
         }
       }
