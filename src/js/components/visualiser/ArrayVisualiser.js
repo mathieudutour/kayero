@@ -57,7 +57,7 @@ class ArrayVisualiser extends Component {
 
     return (
       <div className='array-visualiser'>
-        <i className='fa fa-share export-to-csv'
+        <i className='fa fa-download export-to-csv'
           onClick={() => this.props.dispatch(exportToCSV(data))} title='Export to CSV'>
         </i>
         <span className='visualiser-row'>

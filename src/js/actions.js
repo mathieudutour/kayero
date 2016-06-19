@@ -494,10 +494,11 @@ export function undo () {
   }
 }
 
-export function changeCodeBlockOption (id) {
+export function changeCodeBlockOption (id, option) {
   return {
     type: CHANGE_CODE_BLOCK_OPTION,
-    id
+    id,
+    option
   }
 }
 

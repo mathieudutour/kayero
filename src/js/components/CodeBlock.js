@@ -17,6 +17,7 @@ export class CodeBlock extends Block {
     this.clickOption = this.clickOption.bind(this)
     this.getRunButton = this.getRunButton.bind(this)
     this.getOptionButton = this.getOptionButton.bind(this)
+    this.setContextMenuActions = this.setContextMenuActions.bind(this)
   }
 
   rawMarkup (codeBlock) {
@@ -80,6 +81,31 @@ export class CodeBlock extends Block {
       dispatch(clearGraphData(block.get('id')))
       dispatch(executeCodeBlock(block.get('id')))
     }
+  }
+
+  setContextMenuActions (menu, MenuItem) {
+    const { dispatch, block } = this.props
+    const option = block.get('option')
+    dispatch(changeCodeBlockOption(block.get('id')))
+    menu.append(new MenuItem({type: 'separator'}))
+    menu.append(new MenuItem({
+      label: 'Runnable',
+      type: 'checkbox',
+      checked: option === 'runnable',
+      click () { dispatch(changeCodeBlockOption(block.get('id'), 'runnable')) }
+    }))
+    menu.append(new MenuItem({
+      label: 'Autorun',
+      type: 'checkbox',
+      checked: option === 'auto',
+      click () { dispatch(changeCodeBlockOption(block.get('id'), 'auto')) }
+    }))
+    menu.append(new MenuItem({
+      label: 'Hidden autorun',
+      type: 'checkbox',
+      checked: option === 'hidden',
+      click () { dispatch(changeCodeBlockOption(block.get('id'), 'hidden')) }
+    }))
   }
 
   renderViewerMode (isDragging) {

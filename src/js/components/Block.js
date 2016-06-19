@@ -131,6 +131,9 @@ export default class Block extends Component {
         click: this.enterEdit.bind(this)
       }))
     }
+    if (this.setContextMenuActions) {
+      this.setContextMenuActions(menu, MenuItem)
+    }
     menu.append(new MenuItem({type: 'separator'}))
     menu.append(new MenuItem({
       label: 'Delete block',

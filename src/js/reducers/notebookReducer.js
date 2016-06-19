@@ -36,7 +36,7 @@ export const initialState = Immutable.Map({
 })
 
 export default function notebook (state = initialState, action = {}) {
-  const { id, text, field, blockType, nextIndex } = action
+  const { id, text, field, blockType, nextIndex, option } = action
   const content = state.get('content')
   let newState
   switch (action.type) {
@@ -129,7 +129,7 @@ export default function notebook (state = initialState, action = {}) {
     case CHANGE_CODE_BLOCK_OPTION:
       return handleChange(state, state.setIn(
         ['blocks', id, 'option'],
-        getNewOption(state.getIn(['blocks', id, 'option']))
+        option || getNewOption(state.getIn(['blocks', id, 'option']))
       ))
     case UPDATE_GRAPH_BLOCK_PROPERTY:
       newState = state.setIn(
