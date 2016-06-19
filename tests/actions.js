@@ -516,9 +516,19 @@ test('should create an action for undo', (t) => {
 test('should create an action for changing code block option', (t) => {
   const expected = {
     type: actions.CHANGE_CODE_BLOCK_OPTION,
-    id: 'testId'
+    id: 'testId',
+    option: null
   }
   t.deepEqual(actions.changeCodeBlockOption('testId'), expected)
+})
+
+test('should create an action for changing code block option with a specified option', (t) => {
+  const expected = {
+    type: actions.CHANGE_CODE_BLOCK_OPTION,
+    id: 'testId',
+    option: 'runnable'
+  }
+  t.deepEqual(actions.changeCodeBlockOption('testId', 'runnable'), expected)
 })
 
 test('should create an action for creating a graph block', (t) => {
