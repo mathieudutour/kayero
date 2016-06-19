@@ -517,7 +517,7 @@ test('should create an action for changing code block option', (t) => {
   const expected = {
     type: actions.CHANGE_CODE_BLOCK_OPTION,
     id: 'testId',
-    option: null
+    option: undefined
   }
   t.deepEqual(actions.changeCodeBlockOption('testId'), expected)
 })
