@@ -69,11 +69,15 @@ export function openFileName (filename) {
       .then((filename) => {
         if (!filename) { throw new Error('no filename') }
         return readFileName(filename)
-      }).then((markdown) => dispatch({
-        type: LOAD_MARKDOWN,
-        markdown,
-        filename
-      })).then(() => dispatch(fetchData()))
+      }).then((markdown) => {
+        electron.app.addRecentDocument(filename)
+        electron.BrowserWindow.getFocusedWindow().setRepresentedFilename(filename)
+        return dispatch({
+          type: LOAD_MARKDOWN,
+          markdown,
+          filename
+        })
+      }).then(() => dispatch(fetchData()))
   }
 }
 
@@ -83,18 +87,22 @@ export function openFile () {
       electron.dialog.showOpenDialog({
         title: 'Open notebook',
         filters: [
-                    {name: 'Notebooks', extensions: ['md']}
+          {name: 'Notebooks', extensions: ['md']}
         ],
         properties: ['openFile']
       }, resolve)
     }).then((filename) => {
       if (!filename || !filename[0]) { throw new Error('no filename') }
       return Promise.all([readFileName(filename[0]), Promise.resolve(filename[0])])
-    }).then(([markdown, filename]) => dispatch({
-      type: LOAD_MARKDOWN,
-      markdown,
-      filename
-    })).then(() => dispatch(fetchData()))
+    }).then(([markdown, filename]) => {
+      electron.app.addRecentDocument(filename)
+      electron.BrowserWindow.getFocusedWindow().setRepresentedFilename(filename)
+      return dispatch({
+        type: LOAD_MARKDOWN,
+        markdown,
+        filename
+      })
+    }).then(() => dispatch(fetchData()))
   }
 };
 
@@ -285,6 +293,7 @@ export function toggleEdit () {
 }
 
 export function updateBlock (id, text) {
+  electron.BrowserWindow.getFocusedWindow().setDocumentEdited(true)
   return {
     type: UPDATE_BLOCK,
     id,
@@ -383,6 +392,8 @@ function gistCreated (id) {
 }
 
 function fileSaved (filename) {
+  electron.BrowserWindow.getFocusedWindow().setRepresentedFilename(filename)
+  electron.BrowserWindow.getFocusedWindow().setDocumentEdited(false)
   return {
     type: FILE_SAVED,
     filename

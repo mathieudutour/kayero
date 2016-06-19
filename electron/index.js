@@ -60,6 +60,14 @@ function initNewWindow (callback) {
 app.on('ready', () => {
   initNewWindow()
 
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      BrowserWindow.addDevToolsExtension('~/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/0.14.11_0')
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   if (process.platform === 'darwin') {
     template = [{
       label: 'Kayero',
