@@ -12,6 +12,17 @@ requireMock('electron', {
       showOpenDialog (_, callback) {
         callback()
       }
+    },
+    app: {
+      addRecentDocument () {}
+    },
+    BrowserWindow: {
+      getFocusedWindow () {
+        return {
+          setRepresentedFilename () {},
+          setDocumentEdited () {}
+        }
+      }
     }
   }
 })
