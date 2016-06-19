@@ -1,7 +1,6 @@
 ---
 title: "Blank Kayero notebook"
 author: "Mathieu DUtour"
-created: "Sun Apr 17 2016 19:09:52 GMT+0100 (BST)"
 show_footer: false
 ---
 

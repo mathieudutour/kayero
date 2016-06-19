@@ -56,7 +56,7 @@ export function arrayToCSV (data) {
       Object.keys(rowData).forEach(colName => {
         row += '"' + rowData[colName] + '",'
       })
-      row.slice(0, row.length - 1)
+      row.slice(0, -1)
       CSV += row + '\r\n'
     })
     if (CSV === '') {

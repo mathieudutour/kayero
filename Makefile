@@ -26,7 +26,7 @@ clean:
 build: clean
 	echo "  $(P) Building"
 	$(BIN_DIR)/webpack --config prod.webpack.config.js -p --progress --colors
-	$(BIN_DIR)/electron-packager $(RELEASE_DIST) $(BUILD_FLAGS)
+	$(BIN_DIR)/electron-packager $(BUILD_TARGET) $(BUILD_FLAGS)
 
 build-watch: clean
 	echo "  $(P) Building forever"

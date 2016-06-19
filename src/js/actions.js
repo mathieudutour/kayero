@@ -28,8 +28,7 @@ export const UPDATE_META = 'UPDATE_META'
 export const TOGGLE_META = 'TOGGLE_META'
 export const ADD_BLOCK = 'ADD_BLOCK'
 export const DELETE_BLOCK = 'DELETE_BLOCK'
-export const MOVE_BLOCK_DOWN = 'MOVE_BLOCK_DOWN'
-export const MOVE_BLOCK_UP = 'MOVE_BLOCK_UP'
+export const MOVE_BLOCK = 'MOVE_BLOCK'
 export const DELETE_DATASOURCE = 'DELETE_DATASOURCE'
 export const UPDATE_DATASOURCE = 'UPDATE_DATASOURCE'
 export const TOGGLE_SAVE = 'TOGGLE_SAVE'
@@ -347,19 +346,13 @@ export function deleteBlock (id) {
   }
 };
 
-export function moveBlockUp (id) {
+export function moveBlock (id, nextIndex) {
   return {
-    type: MOVE_BLOCK_UP,
-    id
+    type: MOVE_BLOCK,
+    id,
+    nextIndex
   }
-};
-
-export function moveBlockDown (id) {
-  return {
-    type: MOVE_BLOCK_DOWN,
-    id
-  }
-};
+}
 
 export function deleteDatasource (id) {
   return {

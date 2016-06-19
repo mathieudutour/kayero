@@ -1,7 +1,6 @@
 ---
 title: "Kayero"
 author: "Joel Auterson"
-created: "Sun May 15 2016 17:56:09 GMT+0100 (BST)"
 datasources:
     joelotter: "https://api.github.com/users/joelotter/repos"
     popular: "https://api.github.com/search/repositories?q=created:>2016-01-01&sort=stars&order=desc"

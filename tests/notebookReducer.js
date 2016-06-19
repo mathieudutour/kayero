@@ -29,9 +29,6 @@ function handleFirstChange (state) {
   return state.set(
     'undoStack', Immutable.List([state.remove('undoStack')])
   ).setIn(
-    ['metadata', 'created'],
-    new Date()
-  ).setIn(
     ['metadata', 'original'],
     Immutable.fromJS({
       title: undefined,
@@ -44,7 +41,6 @@ const parsed = Immutable.fromJS({
   metadata: {
     title: 'Test notebook',
     author: 'Mr McTest',
-    created: new Date().toUTCString(),
     showFooter: true,
     datasources: {
       github: 'http://github.com'
@@ -170,9 +166,6 @@ test('should update the date on every change', (t) => {
   const afterState = beforeState.setIn(
     ['metadata', 'title'],
     'New Title'
-  ).setIn(
-    ['metadata', 'created'],
-    new Date()
   ).set(
     'undoStack',
     beforeState.get('undoStack').push(beforeState.remove('undoStack'))
@@ -214,47 +207,75 @@ const exampleCodeBlock = Immutable.fromJS({
   option: 'runnable'
 })
 
-test('should move a block up on MOVE_BLOCK_UP', (t) => {
-  const beforeState = initialState.set('content', Immutable.List(['1', '2', '3']))
+test('should move a block up on MOVE_BLOCK', (t) => {
+  const beforeState = initialState.set('content', Immutable.List(['1', '2', '3', '4']))
   const afterState = handleFirstChange(beforeState).set(
-    'content', Immutable.List(['2', '1', '3'])
+    'content', Immutable.List(['2', '1', '3', '4'])
   )
   const action = {
-    type: actions.MOVE_BLOCK_UP,
-    id: '2'
+    type: actions.MOVE_BLOCK,
+    id: '2',
+    nextIndex: 0
   }
   t.deepEqual(reducer(beforeState, action).toJS(), afterState.toJS())
 })
 
-test('should do nothing on MOVE_BLOCK_UP with first block', (t) => {
-  const beforeState = initialState.set('content', Immutable.List(['1', '2', '3']))
-  const action = {
-    type: actions.MOVE_BLOCK_UP,
-    id: '1'
-  }
-  t.deepEqual(reducer(beforeState, action).toJS(), beforeState.toJS())
-})
-
-test('should move a block down on MOVE_BLOCK_DOWN', (t) => {
-  const beforeState = initialState.set('content', Immutable.List(['1', '2', '3']))
+test('should move a block up on MOVE_BLOCK', (t) => {
+  const beforeState = initialState.set('content', Immutable.List(['1', '2', '3', '4']))
   const afterState = handleFirstChange(beforeState).set(
-    'content', Immutable.List(['1', '3', '2'])
+    'content', Immutable.List(['1', '3', '2', '4'])
   )
   const action = {
-    type: actions.MOVE_BLOCK_DOWN,
-    id: '2'
+    type: actions.MOVE_BLOCK,
+    id: '3',
+    nextIndex: 1
   }
   t.deepEqual(reducer(beforeState, action).toJS(), afterState.toJS())
 })
 
-test('should do nothing on MOVE_BLOCK_DOWN with last block', (t) => {
-  const beforeState = initialState.set('content', Immutable.List(['1', '2', '3']))
+test('should move a block down on MOVE_BLOCK', (t) => {
+  const beforeState = initialState.set('content', Immutable.List(['1', '2', '3', '4']))
+  const afterState = handleFirstChange(beforeState).set(
+    'content', Immutable.List(['1', '3', '2', '4'])
+  )
   const action = {
-    type: actions.MOVE_BLOCK_DOWN,
-    id: '3'
+    type: actions.MOVE_BLOCK,
+    id: '2',
+    nextIndex: 2
   }
-  t.deepEqual(reducer(beforeState, action).toJS(), beforeState.toJS())
+  t.deepEqual(reducer(beforeState, action).toJS(), afterState.toJS())
 })
+
+//
+// test('should do nothing on MOVE_BLOCK_UP with first block', (t) => {
+//   const beforeState = initialState.set('content', Immutable.List(['1', '2', '3']))
+//   const action = {
+//     type: actions.MOVE_BLOCK_UP,
+//     id: '1'
+//   }
+//   t.deepEqual(reducer(beforeState, action).toJS(), beforeState.toJS())
+// })
+//
+// test('should move a block down on MOVE_BLOCK_DOWN', (t) => {
+//   const beforeState = initialState.set('content', Immutable.List(['1', '2', '3']))
+//   const afterState = handleFirstChange(beforeState).set(
+//     'content', Immutable.List(['1', '3', '2'])
+//   )
+//   const action = {
+//     type: actions.MOVE_BLOCK_DOWN,
+//     id: '2'
+//   }
+//   t.deepEqual(reducer(beforeState, action).toJS(), afterState.toJS())
+// })
+//
+// test('should do nothing on MOVE_BLOCK_DOWN with last block', (t) => {
+//   const beforeState = initialState.set('content', Immutable.List(['1', '2', '3']))
+//   const action = {
+//     type: actions.MOVE_BLOCK_DOWN,
+//     id: '3'
+//   }
+//   t.deepEqual(reducer(beforeState, action).toJS(), beforeState.toJS())
+// })
 
 test('should delete a block with given id on DELETE_BLOCK', (t) => {
   const beforeState = initialState

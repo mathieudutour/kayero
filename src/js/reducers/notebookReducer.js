@@ -9,8 +9,7 @@ import {
     TOGGLE_META,
     ADD_BLOCK,
     DELETE_BLOCK,
-    MOVE_BLOCK_UP,
-    MOVE_BLOCK_DOWN,
+    MOVE_BLOCK,
     DELETE_DATASOURCE,
     UPDATE_DATASOURCE,
     GIST_CREATED,
@@ -37,7 +36,7 @@ export const initialState = Immutable.Map({
 })
 
 export default function notebook (state = initialState, action = {}) {
-  const { id, text, field, blockType } = action
+  const { id, text, field, blockType, nextIndex } = action
   const content = state.get('content')
   let newState
   switch (action.type) {
@@ -95,14 +94,26 @@ export default function notebook (state = initialState, action = {}) {
           'content', content.delete(content.indexOf(id))
         )
       )
-    case MOVE_BLOCK_UP:
-      return handleChange(
-        state, state.set('content', moveItem(content, id, true))
-      )
-    case MOVE_BLOCK_DOWN:
-      return handleChange(
-        state, state.set('content', moveItem(content, id, false))
-      )
+    case MOVE_BLOCK:
+      const index = content.indexOf(id)
+      if (index === nextIndex || typeof nextIndex === 'undefined') {
+        return state
+      }
+      if (index > nextIndex) { // going up
+        return handleChange(
+          state, state.set('content', content.slice(0, Math.max(nextIndex, 0))
+            .push(id)
+            .concat(content.slice(nextIndex, index))
+            .concat(content.slice(index + 1)))
+        )
+      } else { // going down
+        return handleChange(
+          state, state.set('content', content.slice(0, Math.max(index, 0))
+            .concat(content.slice(index + 1, nextIndex + 1))
+            .push(id)
+            .concat(content.slice(nextIndex + 1)))
+        )
+      }
     case DELETE_DATASOURCE:
       return handleChange(
         state, state.deleteIn(['metadata', 'datasources', id])
@@ -206,23 +217,6 @@ function getNewOption (option) {
   return options[(i + 1) % options.length]
 }
 
-function moveItem (content, id, up) {
-  const index = content.indexOf(id)
-  if ((index === 0 && up) || (index === content.size - 1 && !up)) {
-    return content
-  }
-  if (up) {
-    return content.slice(0, index - 1)
-      .push(id)
-      .push(content.get(index - 1))
-      .concat(content.slice(index + 1))
-  }
-  return content.slice(0, index)
-    .push(content.get(index + 1))
-    .push(id)
-    .concat(content.slice(index + 2))
-}
-
 /*
  * Handles changes, if they exist, by pushing to the undo stack.
  */
@@ -235,9 +229,6 @@ function handleChange (currentState, newState) {
     newState.get('undoStack').push(currentState.remove('undoStack'))
   ).deleteIn(
     ['metadata', 'gistUrl']
-  ).setIn(
-    ['metadata', 'created'],
-    new Date()
   )
 
     // If it's the first change, update the parent link.

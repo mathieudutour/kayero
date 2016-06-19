@@ -1,8 +1,8 @@
 import React from 'react'
 import Immutable from 'immutable'
 import { connect } from 'react-redux'
-
-import CodeBlock from './CodeBlock'
+import { dragAndDropWrapper } from './Block'
+import {CodeBlock} from './CodeBlock'
 import Visualiser from './visualiser/Visualiser'
 import { dataSelector } from '../selectors'
 import { highlight } from '../util'
@@ -177,18 +177,19 @@ class GraphBlock extends CodeBlock {
   }
 
   render () {
+    const { block, connectDragSource, connectDropTarget, isDragging } = this.props
     if (!this.props.editable) {
-      return this.renderViewerMode()
+      return connectDropTarget(this.renderViewerMode())
     }
-    const id = this.props.block.get('id')
+    const id = block.get('id')
     const buttons = this.getButtons()
     buttons.push(
       <i className='fa fa-check-circle-o' title='Done - save as code block'
         onClick={this.saveAsCode} key='done' />
     )
     /* eslint-disable react/no-danger */
-    return (
-      <div className='graph-creator'>
+    return connectDragSource(connectDropTarget(
+      <div className={'graph-creator' + (isDragging ? ' dragging' : '')}>
         <div className='editor-buttons'>
           {buttons}
         </div>
@@ -220,9 +221,9 @@ class GraphBlock extends CodeBlock {
         } />
         <div className='graph-preview' id={'kayero-graph-' + id} />
       </div>
-    )
+    ))
   }
 
 }
 
-export default connect(dataSelector)(GraphBlock)
+export default dragAndDropWrapper(connect(dataSelector)(GraphBlock))

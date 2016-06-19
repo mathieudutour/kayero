@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 import { contentSelector } from '../selectors'
 import TextBlock from './TextBlock'
 import CodeBlock from './CodeBlock'
@@ -26,8 +28,8 @@ class Content extends Component {
         case 'text':
           blocks.push(
             <TextBlock editable={editable} dispatch={dispatch}
-              block={block} key={String(i)} isFirst={isFirst}
-              isLast={isLast} editing={id === activeBlock} />
+              block={block} key={id} isFirst={isFirst}
+              isLast={isLast} editing={id === activeBlock} index={i} id={id} />
           )
           break
         default:
@@ -38,9 +40,9 @@ class Content extends Component {
           blocks.push(
             <BlockClass
                 block={block} result={result} editable={editable}
-                key={String(i)} hasBeenRun={hasBeenRun} dispatch={dispatch}
+                key={id} hasBeenRun={hasBeenRun} dispatch={dispatch}
                 isFirst={isFirst} isLast={isLast} isRunning={isRunning}
-                editing={id === activeBlock} />
+                editing={id === activeBlock} index={i} id={id} />
           )
       }
     }
@@ -62,4 +64,4 @@ Content.propTypes = {
   dispatch: React.PropTypes.func
 }
 
-export default connect(contentSelector)(Content)
+export default DragDropContext(HTML5Backend)(connect(contentSelector)(Content))

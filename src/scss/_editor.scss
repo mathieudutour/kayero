@@ -12,6 +12,10 @@
     outline: none;
   }
 
+  .dragging {
+    opacity: 0;
+  }
+
   .clickable {
     cursor: pointer;
   }

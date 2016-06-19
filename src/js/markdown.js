@@ -80,13 +80,6 @@ function extractBlocks (md) {
   }
 }
 
-function getDate (attributes) {
-  if (attributes.created) {
-    return new Date(Date.parse(attributes.created))
-  }
-  return undefined
-}
-
 export function parse (md, filename) {
     // Separate front-matter and body
   const doc = fm(md)
@@ -95,7 +88,6 @@ export function parse (md, filename) {
   return Immutable.fromJS({
     metadata: {
       title: doc.attributes.title,
-      created: getDate(doc.attributes),
       author: doc.attributes.author,
       datasources: doc.attributes.datasources || {},
       original: doc.attributes.original,
@@ -126,9 +118,6 @@ function renderMetadata (metadata) {
   }
   if (metadata.get('author') !== undefined) {
     rendered += 'author: "' + metadata.get('author') + '"\n'
-  }
-  if (metadata.get('created') !== undefined) {
-    rendered += 'created: "' + metadata.get('created').toString() + '"\n'
   }
   const datasources = metadata.get('datasources')
   if (datasources && datasources.size > 0) {

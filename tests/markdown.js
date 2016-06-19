@@ -16,7 +16,6 @@ global.nv = {}
 const sampleNotebook = Immutable.fromJS({
   metadata: {
     title: 'A sample notebook',
-    created: new Date('2016-04-18T20:48:01.000Z'),
     author: 'Joel Auterson',
     datasources: {},
     original: undefined,
@@ -53,7 +52,6 @@ test('uses placeholders for a blank document', (t) => {
     metadata: {
       title: undefined,
       author: undefined,
-      created: undefined,
       showFooter: true,
       original: undefined,
       datasources: {},

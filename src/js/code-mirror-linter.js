@@ -130,7 +130,6 @@ const defaultConfig = {
 
 function validator (text, options) {
   text = 'exports = function(d3, nv, graphs, data, reshaper, graphElement) {\n  ' + text.replace(/\n/g, '\n  ') + '\n}'
-  console.log(text)
   const config = defaultConfig
   const errors = window.eslint && eslint.verify(text, config) || []
   return errors.map((error) => {

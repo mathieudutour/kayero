@@ -457,22 +457,15 @@ test('should create an action for toggling the footer', (t) => {
   t.deepEqual(actions.toggleFooter(), expected)
 })
 
-test('should create an action for moving a block up', (t) => {
+test('should create an action for moving a block', (t) => {
   const id = '12'
+  const nextIndex = 3
   const expected = {
-    type: actions.MOVE_BLOCK_UP,
-    id
+    type: actions.MOVE_BLOCK,
+    id,
+    nextIndex
   }
-  t.deepEqual(actions.moveBlockUp(id), expected)
-})
-
-test('should create an action for moving a block down', (t) => {
-  const id = '12'
-  const expected = {
-    type: actions.MOVE_BLOCK_DOWN,
-    id
-  }
-  t.deepEqual(actions.moveBlockDown(id), expected)
+  t.deepEqual(actions.moveBlock(id, nextIndex), expected)
 })
 
 test('should create an action for updating a datasource', (t) => {

@@ -1,6 +1,6 @@
 import React from 'react'
 import MarkdownIt from 'markdown-it'
-import Block from './Block'
+import Block, { dragAndDropWrapper } from './Block'
 import Visualiser from './visualiser/Visualiser'
 import { codeToText, highlight } from '../util'
 import {
@@ -9,7 +9,7 @@ import {
 
 const md = new MarkdownIt({highlight})
 
-class CodeBlock extends Block {
+export class CodeBlock extends Block {
 
   constructor (props) {
     super(props)
@@ -82,13 +82,14 @@ class CodeBlock extends Block {
     }
   }
 
-  renderViewerMode () {
+  renderViewerMode (isDragging) {
     const { block, hasBeenRun, result, editable, isRunning } = this.props
     let buttons = this.getButtons()
     const runButton = this.getRunButton()
     const optionButton = this.getOptionButton()
     const hideBlock = !editable && block.get('option') === 'hidden'
     const containerClass = hideBlock ? ' hiddenCode' : ''
+    const draggingClass = isDragging ? ' dragging' : ''
     if (buttons == null) {
       buttons = [runButton, optionButton]
     } else {
@@ -98,7 +99,7 @@ class CodeBlock extends Block {
 
     /* eslint-disable react/no-danger */
     return (
-      <div className={'codeContainer' + containerClass}>
+      <div className={'codeContainer' + containerClass + draggingClass} onContextMenu={this.handleContextMenu}>
         <div className='codeBlock'>
           <div className='editor-buttons'>
               {buttons}
@@ -121,4 +122,4 @@ class CodeBlock extends Block {
 
 }
 
-export default CodeBlock
+export default dragAndDropWrapper(CodeBlock)

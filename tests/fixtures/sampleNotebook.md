@@ -1,7 +1,6 @@
 ---
 title: "A sample notebook"
 author: "Joel Auterson"
-created: "Mon Apr 18 2016 20:48:01 GMT+0000 (UTC)"
 show_footer: true
 ---
 

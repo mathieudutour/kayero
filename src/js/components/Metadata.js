@@ -21,7 +21,6 @@ export default class Metadata extends Component {
   render () {
     const { editable, metadata, dispatch } = this.props
     const author = metadata.get('author')
-    const date = metadata.get('created')
     if (editable) {
       const iconFooter = metadata.get('showFooter') ? 'check-circle' : 'circle-o'
       return (
@@ -47,10 +46,6 @@ export default class Metadata extends Component {
       <div className='metadata'>
         <span className='metadata-item'>
             <i className='fa fa-user' />{'\u00a0' + author}
-        </span>
-        <span className='metadata-sep'>{'\u00a0//\u00a0'}</span>
-        <span className='metadata-item'>
-          <i className='fa fa-clock-o' />{'\u00a0' + date}
         </span>
       </div>
     )
