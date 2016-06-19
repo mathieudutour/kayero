@@ -1,9 +1,11 @@
 import React from 'react'
 import MarkdownIt from 'markdown-it'
+import latex from 'markdown-it-katex'
 import Block, { dragAndDropWrapper } from './Block'
 import { highlight } from '../util'
 
 const md = new MarkdownIt({highlight, html: true})
+md.use(latex)
 
 class TextBlock extends Block {
 
