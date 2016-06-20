@@ -59,9 +59,6 @@ export function arrayToCSV (data) {
       row.slice(0, -1)
       CSV += row + '\r\n'
     })
-    if (CSV === '') {
-      return reject('Invalid data')
-    }
 
     resolve(CSV)
   })

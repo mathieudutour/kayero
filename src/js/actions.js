@@ -122,26 +122,24 @@ function initDBs (getState) {
   const dbs = Object.keys(data)
     .filter((k) => data[k] && data[k].__type === 'mongodb')
     .reduce((prev, k) => {
-      if (data[k] && data[k].__type === 'mongodb') {
-        if (!data[k].__secure) {
-          prev[k] = new Zealot(data[k].url)
-          return prev
-        }
-        let uri = data[k].url.split('mongodb-secure://')[1]
+      if (!data[k].__secure) {
+        prev[k] = new Zealot(data[k].url)
+        return prev
+      }
+      let uri = data[k].url.split('mongodb-secure://')[1]
 
-        if (uri.indexOf('.') === 0) { // handle relative path
-          if (filePath) {
-            const directory = path.dirname(filePath)
-            uri = path.join(directory, uri)
-          }
+      if (uri.indexOf('.') === 0) { // handle relative path
+        if (filePath) {
+          const directory = path.dirname(filePath)
+          uri = path.join(directory, uri)
         }
+      }
 
-        const secret = JSON.parse(fs.readFileSync(uri, 'utf8'))
-        if (Array.isArray(secret)) {
-          prev[k] = new Zealot(...secret)
-        } else {
-          prev[k] = new Zealot(secret)
-        }
+      const secret = JSON.parse(fs.readFileSync(uri, 'utf8'))
+      if (Array.isArray(secret)) {
+        prev[k] = new Zealot(...secret)
+      } else {
+        prev[k] = new Zealot(secret)
       }
       return prev
     }, {})
