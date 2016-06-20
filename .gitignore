@@ -37,3 +37,6 @@ dist
 
 # Electron release directory
 release
+
+coverage
+.nyc_output
