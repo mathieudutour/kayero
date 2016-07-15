@@ -13,7 +13,7 @@ module.exports = {
   },
   plugins: [
     new ExternalsPlugin('commonjs', [
-      'zealot'
+      'monk'
     ]),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"'

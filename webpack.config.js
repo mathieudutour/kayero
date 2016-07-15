@@ -18,7 +18,7 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new ExternalsPlugin('commonjs', [
-      'zealot'
+      'monk'
     ]),
     new WriteFilePlugin()
   ],

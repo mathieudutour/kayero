@@ -4,6 +4,7 @@ import { parse } from '../markdown'
 import { kayeroHomepage } from '../config' // eslint-disable-line
 import {
     LOAD_MARKDOWN,
+    FILE_SAVED,
     UPDATE_BLOCK,
     UPDATE_META,
     TOGGLE_META,
@@ -42,6 +43,8 @@ export default function notebook (state = initialState, action = {}) {
   switch (action.type) {
     case LOAD_MARKDOWN:
       return parse(action.markdown, action.filename).set('undoStack', state.get('undoStack'))
+    case FILE_SAVED:
+      return state.setIn(['metadata', 'path'], action.filename)
     case UPDATE_BLOCK:
       return handleChange(
         state, state.setIn(['blocks', id, 'content'], text)

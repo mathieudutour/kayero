@@ -1,4 +1,5 @@
 const { app, BrowserWindow, Menu, shell, autoUpdater } = require('electron')
+const windowStateKeeper = require('electron-window-state')
 
 const os = require('os')
 
@@ -31,12 +32,30 @@ app.on('open-file', function (event, pathToOpen) {
   execOnMainWindow('open-filename', pathToOpen)
 })
 
+app.on('activate', function (event, hasVisibleWindows) {
+  event.preventDefault()
+  if (!hasVisibleWindows) {
+    initNewWindow(() => app.focus())
+  } else {
+    app.focus()
+  }
+})
+
 function initNewWindow (callback) {
-  mainWindow = new BrowserWindow({
-    show: false,
-    width: 1024,
-    height: 728
+  // Load the previous state with fallback to defaults
+  const mainWindowState = windowStateKeeper({
+    defaultWidth: 1024,
+    defaultHeight: 728
   })
+
+  mainWindow = new BrowserWindow({
+    'x': mainWindowState.x,
+    'y': mainWindowState.y,
+    'width': mainWindowState.width,
+    'height': mainWindowState.height
+  })
+
+  mainWindowState.manage(mainWindow)
 
   mainWindow.loadURL(`file://${__dirname}/electron.html`)
 

@@ -1,4 +1,4 @@
-# Kayero
+![Kayero](./assets/kayero-logo.svg)
 
 [![Build Status](https://travis-ci.org/mathieudutour/kayero.svg?branch=master)](https://travis-ci.org/mathieudutour/kayero)
 [![Dependency Status](https://david-dm.org/mathieudutour/kayero.svg)](https://david-dm.org/mathieudutour/kayero)
@@ -19,7 +19,6 @@ You can view an online sample notebook [here](http://www.joelotter.com/kajero).
 - Data sources can be defined. These will be automatically fetched when the notebook is loaded, and made available for use inside code blocks. A datasource can be either:
     - a url returning a json object
     - a mongodb URL (the db will be available as a [monk](https://github.com/Automattic/monk) instance)
-- Includes [Reshaper](https://github.com/JoelOtter/reshaper), for automatic reshaping of structured data.
 - Includes D3, NVD3 and [Jutsu](https://github.com/JoelOtter/jutsu), a very simple graphing library which uses Reshaper to transform arbitrary data into a form that can be graphed.
 
 

@@ -4,7 +4,7 @@ SRC_DIR ?= src
 BUILD_DIST ?= dist
 BUILD_TARGET ?= .
 RELEASE_DIST ?= release
-BUILD_FLAGS ?= --all --overwrite --prune --out=$(RELEASE_DIST) --extend-info=electron/kayero.plist
+BUILD_FLAGS ?= --all --overwrite --prune --out=$(RELEASE_DIST) --extend-info=electron/kayero.plist --icon "./assets/icon" --app-category-type=public.app-category.developer-tools --app-bundle-id=me.dutour.mathieu.kayero
 
 TEST_TARGET ?= tests/
 TEST_FLAGS ?= --require babel-register
@@ -47,6 +47,15 @@ test: lint
 test-watch:
 	echo "  $(P) Testing forever"
 	NODE_ENV=test $(BIN_DIR)/ava --watch $(TEST_TARGET) $(TEST_FLAGS)
+
+#
+# SIGN
+#
+
+sign:
+	echo "  $(P) Signing"
+	$(BIN_DIR)/electron-osx-sign "release/Kayero-mas-x64/Kayero.app" --identity="3rd Party Mac Developer Application: Mathieu Dutour (8SEPFSC7S3)" --entitlements=electron/parent.plist --verbose
+	$(BIN_DIR)/electron-osx-flat "release/Kayero-mas-x64/Kayero.app" --identity="3rd Party Mac Developer Installer: Mathieu Dutour (8SEPFSC7S3)"
 
 #
 # MAKEFILE

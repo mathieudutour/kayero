@@ -1,9 +1,8 @@
 import fs from 'fs'
 import path from 'path'
-import Zealot from 'zealot'
+import monk from 'monk'
 
 import Immutable from 'immutable'
-import reshaper from 'reshaper'
 import Smolder from 'smolder'
 /* global d3, nv */
 import Jutsu from 'jutsu' // Imports d3 and nv as globals
@@ -123,7 +122,7 @@ function initDBs (getState) {
     .filter((k) => data[k] && data[k].__type === 'mongodb')
     .reduce((prev, k) => {
       if (!data[k].__secure) {
-        prev[k] = new Zealot(data[k].url)
+        prev[k] = monk(data[k].url)
         return prev
       }
       let uri = data[k].url.split('mongodb-secure://')[1]
@@ -137,9 +136,9 @@ function initDBs (getState) {
 
       const secret = JSON.parse(fs.readFileSync(uri, 'utf8'))
       if (Array.isArray(secret)) {
-        prev[k] = new Zealot(...secret)
+        prev[k] = monk(...secret)
       } else {
-        prev[k] = new Zealot(secret)
+        prev[k] = monk(secret)
       }
       return prev
     }, {})
@@ -176,9 +175,9 @@ export function executeCodeBlock (id, dbs) {
     return new Promise((resolve, reject) => {
       try {
         const result = new Function(
-          ['d3', 'nv', 'graphs', 'data', 'reshaper', 'graphElement'], code
+          ['d3', 'nv', 'graphs', 'data', 'graphElement'], code
         ).call(
-          context, d3, nv, jutsu, data, reshaper, graphElement
+          context, d3, nv, jutsu, data, graphElement
         )
         resolve(result)
       } catch (err) {
