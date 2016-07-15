@@ -13,7 +13,6 @@ You can view an online sample notebook [here](http://www.joelotter.com/kajero).
 
 - It's just Markdown - a Kayero notebook is just a Markdown document with a script attached.
 - Every notebook is fully editable and can be saved as a Markdown file.
-- Notebooks can also be published as Gists, generating a unique URL for your notebook.
 - JavaScript code blocks can be executed. They're treated as functions, with their return value visualised. Kayero can visualise arrays and objects, similar to the Chrome object inspector.
     - Code blocks can be set to run automatically when the notebook loads. They can also be set to hidden, so that only the result is visible.
 - Data sources can be defined. These will be automatically fetched when the notebook is loaded, and made available for use inside code blocks. A datasource can be either:
@@ -26,48 +25,15 @@ You can view an online sample notebook [here](http://www.joelotter.com/kajero).
 
 ### OS X
 
-Download the latest [Kayero release](https://github.com/mathieudutour/kayero/releases/latest).
+[![mac app store logo](https://devimages.apple.com.edgekey.net/app-store/marketing/guidelines/mac/images/badge-download-on-the-mac-app-store.svg)](https://itunes.apple.com/us/app/kayero/id1134758887?ls=1&mt=12)
 
-Atom will automatically update when a new release is available.
+or
+
+Download the latest [Kayero release](https://github.com/mathieudutour/kayero/releases/latest).
 
 ### Windows
 
 Download the latest [KayeroSetup.exe installer](https://github.com/mathieudutour/kayero/releases/latest).
-
-Atom will automatically update when a new release is available.
-
-### Debian Linux (Ubuntu)
-
-Currently only a 64-bit version is available.
-
-1. Download `kayero-amd64.deb` from the [Kayero releases page](https://github.com/mathieudutour/kayero/releases/latest).
-2. Run `sudo dpkg --install kayero-amd64.deb` on the downloaded package.
-3. Launch Atom using the installed `kayero` command.
-
-The Linux version does not currently automatically update so you will need to
-repeat these steps to upgrade to future releases.
-
-### Red Hat Linux (Fedora 21 and under, CentOS, Red Hat)
-
-Currently only a 64-bit version is available.
-
-1. Download `kayero.x86_64.rpm` from the [Kayero releases page](https://github.com/mathieudutour/kayero/releases/latest).
-2. Run `sudo yum localinstall kayero.x86_64.rpm` on the downloaded package.
-3. Launch Atom using the installed `kayero` command.
-
-The Linux version does not currently automatically update so you will need to
-repeat these steps to upgrade to future releases.
-
-### Fedora 22+
-
-Currently only a 64-bit version is available.
-
-1. Download `kayero.x86_64.rpm` from the [Atom releases page](https://github.com/mathieudutour/kayero/releases/latest).
-2. Run `sudo dnf install ./kayero.x86_64.rpm` on the downloaded package.
-3. Launch Atom using the installed `kayero` command.
-
-The Linux version does not currently automatically update so you will need to
-repeat these steps to upgrade to future releases.
 
 ## Building your own version
 

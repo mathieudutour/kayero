@@ -9,9 +9,12 @@
     "url": "https://github.com/mathieudutour/kayero"
   },
   "keywords": [
-    "notebook"
+    "interactive",
+    "javscript",
+    "markdown",
+    "notebook",
+    "mongodb"
   ],
-  "preferGlobal": true,
   "author": "Mathieu Dutour <mathieu.dutour@me.com>",
   "license": "MIT",
   "bugs": {
