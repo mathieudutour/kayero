@@ -1,4 +1,4 @@
-![Kayero](https://raw.githubusercontent.com/mathieudutour/kayero/master/assets/kayero-logo.svg)
+![Kayero](https://cdn.rawgit.com/mathieudutour/kayero/master/assets/kayero-logo.svg)
 
 [![Build Status](https://travis-ci.org/mathieudutour/kayero.svg?branch=master)](https://travis-ci.org/mathieudutour/kayero)
 [![Dependency Status](https://david-dm.org/mathieudutour/kayero.svg)](https://david-dm.org/mathieudutour/kayero)
