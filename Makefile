@@ -4,7 +4,8 @@ SRC_DIR ?= src
 BUILD_DIST ?= dist
 BUILD_TARGET ?= .
 RELEASE_DIST ?= release
-BUILD_FLAGS ?= --all --overwrite --prune --out=$(RELEASE_DIST) --extend-info=electron/kayero.plist --icon "./assets/icon" --app-category-type=public.app-category.developer-tools --app-bundle-id=me.dutour.mathieu.kayero
+APP_VERSION ?= $(shell node -e "console.log(require('./package.json').version)")
+BUILD_FLAGS ?= --all --overwrite --prune --out=$(RELEASE_DIST) --extend-info=electron/kayero.plist --icon "./assets/icon" --app-category-type=public.app-category.developer-tools --app-bundle-id=me.dutour.mathieu.kayero --app-version=$(APP_VERSION)
 
 TEST_TARGET ?= tests/
 TEST_FLAGS ?= --require babel-register
