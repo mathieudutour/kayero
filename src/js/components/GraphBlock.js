@@ -179,7 +179,7 @@ class GraphBlock extends CodeBlock {
   render () {
     const { block, connectDragSource, connectDropTarget, isDragging } = this.props
     if (!this.props.editable) {
-      return connectDropTarget(this.renderViewerMode())
+      return this.renderViewerMode()
     }
     const id = block.get('id')
     const buttons = this.getButtons()

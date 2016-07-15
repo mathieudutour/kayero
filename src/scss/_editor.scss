@@ -53,14 +53,11 @@
         margin-left: 15px;
       }
       input {
-        width: 200px;
         margin-left: 15px;
         padding: 0.25em;
         box-sizing: border-box;
-
-        @include respond-to($size-md) {
-          width: 400px;
-        }
+        display: inline-block;
+        width: calc(100% - 100px);
       }
     }
     .datasource {

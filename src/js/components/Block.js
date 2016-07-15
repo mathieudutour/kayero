@@ -116,15 +116,15 @@ export default class Block extends Component {
     e.preventDefault()
     const { dispatch, id, index, editable } = this.props
     const menu = new Menu()
-    menu.append(new MenuItem({
-      label: 'Move block up',
-      click () { dispatch(moveBlock(id, index - 1)) }
-    }))
-    menu.append(new MenuItem({
-      label: 'Move block down',
-      click () { dispatch(moveBlock(id, index + 1)) }
-    }))
     if (editable) {
+      menu.append(new MenuItem({
+        label: 'Move block up',
+        click () { dispatch(moveBlock(id, index - 1)) }
+      }))
+      menu.append(new MenuItem({
+        label: 'Move block down',
+        click () { dispatch(moveBlock(id, index + 1)) }
+      }))
       menu.append(new MenuItem({type: 'separator'}))
       menu.append(new MenuItem({
         label: 'Edit block',
@@ -132,13 +132,15 @@ export default class Block extends Component {
       }))
     }
     if (this.setContextMenuActions) {
-      this.setContextMenuActions(menu, MenuItem)
+      this.setContextMenuActions(menu, MenuItem, editable)
     }
-    menu.append(new MenuItem({type: 'separator'}))
-    menu.append(new MenuItem({
-      label: 'Delete block',
-      click () { dispatch(deleteBlock(id)) }
-    }))
+    if (editable) {
+      menu.append(new MenuItem({type: 'separator'}))
+      menu.append(new MenuItem({
+        label: 'Delete block',
+        click () { dispatch(deleteBlock(id)) }
+      }))
+    }
 
     menu.popup(remote.getCurrentWindow())
   }
@@ -157,6 +159,9 @@ export default class Block extends Component {
   render () {
     const { block, editable, editing, connectDragSource, connectDropTarget, isDragging } = this.props
     if (!(editable && editing)) {
+      if (!editable) {
+        return this.renderViewerMode()
+      }
       return connectDragSource(connectDropTarget(this.renderViewerMode(isDragging)))
     }
     const isCodeBlock = block.get('type') === 'code'

@@ -61,7 +61,8 @@ DefaultVisualiser.propTypes = {
     React.PropTypes.string,
     React.PropTypes.number,
     React.PropTypes.func,
-    React.PropTypes.instanceOf(Error)
+    React.PropTypes.instanceOf(Error),
+    React.PropTypes.instanceOf(Date)
   ]),
   indent: React.PropTypes.number,
   useHljs: React.PropTypes.string,

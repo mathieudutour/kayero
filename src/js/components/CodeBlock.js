@@ -86,7 +86,6 @@ export class CodeBlock extends Block {
   setContextMenuActions (menu, MenuItem) {
     const { dispatch, block } = this.props
     const option = block.get('option')
-    dispatch(changeCodeBlockOption(block.get('id')))
     menu.append(new MenuItem({type: 'separator'}))
     menu.append(new MenuItem({
       label: 'Runnable',
@@ -128,7 +127,7 @@ export class CodeBlock extends Block {
       <div className={'codeContainer' + containerClass + draggingClass} onContextMenu={this.handleContextMenu}>
         <div className='codeBlock'>
           <div className='editor-buttons'>
-              {buttons}
+            {buttons}
           </div>
           <div onClick={this.enterEdit} dangerouslySetInnerHTML={this.rawMarkup(block)} />
         </div>
