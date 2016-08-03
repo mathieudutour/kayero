@@ -34,7 +34,8 @@ test('should return the inital state', (t) => {
   t.deepEqual(reducer(), Immutable.Map({
     editable: false,
     saving: false,
-    activeBlock: null
+    activeBlock: null,
+    unsavedChanges: false
   }))
 })
 
