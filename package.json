@@ -2,7 +2,7 @@
   "name": "kayero",
   "productName": "Kayero",
   "main": "electron/index.js",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Interactive JavaScript notebooks with clever graphing",
   "repository": {
     "type": "git",
