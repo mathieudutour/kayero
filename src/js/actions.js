@@ -261,7 +261,16 @@ export function fetchData () {
     getState().notebook.getIn(['metadata', 'datasources'])
       .forEach((url, name) => {
         if (currentData.has(name)) { return }
-        if (url.indexOf('mongodb://') === 0 || url.indexOf('mongodb-secure://') === 0) {
+        if (url.indexOf('file://') === 0) {
+          const filePath = getState().notebook.get('metadata').get('path')
+          let directory = filePath.split('/')
+          directory.pop()
+          directory = directory.join('/')
+          proms.push(Promise.resolve(window.require(
+            path.join(directory, url.replace('file://', ''))
+          ))
+            .then(j => dispatch(receivedData(name, j))))
+        } else if (url.indexOf('mongodb://') === 0 || url.indexOf('mongodb-secure://') === 0) {
           proms.push(Promise.resolve({
             __type: 'mongodb',
             __secure: url.indexOf('mongodb-secure://') === 0,
@@ -269,9 +278,7 @@ export function fetchData () {
           }).then(j => dispatch(receivedData(name, j))))
         } else {
           proms.push(
-            fetch(url, {
-              method: 'get'
-            })
+            fetch(url)
             .then(response => response.json())
             .then(j => dispatch(receivedData(name, j)))
           )
