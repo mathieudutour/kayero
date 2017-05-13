@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import CodeMirror from 'codemirror'
 
 // make paste great again
@@ -41,7 +42,7 @@ function escape (str) {
  * @return {{start?:string, end?:string, skip?:boolean, lead?:string}}
  */
 function getDecoration (ele) {
-  if (ele.nodeType != 1) return {}
+  if (ele.nodeType !== 1) return {}
   var tagName = ele.tagName.toLowerCase()
 
   var LI_ATTR_INDENT = 'data-paste-indent'
@@ -75,7 +76,7 @@ function getDecoration (ele) {
   if (/^(?:b|strong)$/.test(tagName)) return { start: '**', end: '**' }
   if (/^h\d$/.test(tagName)) return { start: '\n######'.substr(0, 1 + ~~tagName.charAt(1)) + ' ', end: '\n\n' }
   if (tagName === 'pre') {
-    var childClassName = ele.firstElementChild && ele.firstElementChild.className || ''
+    var childClassName = (ele.firstElementChild || {}).className || ''
     let lang =
       /\b(?:highlight-source|language)-(\w+)/.exec(ele.parentElement.className) ||
       /\b(?:highlight-source|language)-(\w+)/.exec(ele.className) ||
@@ -242,7 +243,7 @@ function html2md (html) {
  */
 Paste.prototype.pasteHandle = function (cm, ev) {
   var cd = ev.clipboardData || window.clipboardData
-  if (!cd || cd.types.indexOf('text/html') == -1) return
+  if (!cd || cd.types.indexOf('text/html') === -1) return
   var result = html2md(cd.getData('text/html'))
 
   cm.operation(cm.replaceSelection.bind(cm, result))

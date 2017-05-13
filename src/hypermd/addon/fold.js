@@ -1,3 +1,4 @@
+/* eslint-disable camelcase, no-sequences */
 import CodeMirror from 'codemirror'
 
 // Folding images & links
@@ -43,19 +44,6 @@ function processLine (cm, curpos, line) {
   if (!s) {
     if (DEBUG) console.log('fold: empty style at line', lineNo)
     return
-    // s = [1], lastchStyle = null, ch = 0
-    // //FIXME: too slow. shall do this when need (eg. after mode parsing ?)
-    // console.log('oopsLine', lineNo)
-    // cm.getLineTokens(lineNo).forEach(function (token) {
-    //   ch++
-    //   if (token.type !== lastchStyle) {
-    //     lastchStyle = token.type
-    //     s.push(ch, lastchStyle)
-    //   }
-    // })
-    // s.push(ch, lastchStyle)
-    // ch = 0
-    // lastchStyle = ''
   }
 
   var insertSince = -1
@@ -77,8 +65,6 @@ function processLine (cm, curpos, line) {
       chStyle = s[s$i++] || ''
       if (typeof sEnd !== 'number') break // all char are itered
     }
-
-    // if (DEBUG) console.log('fold: iter to ', ch, chStyle)
 
     // check if current char is in a markedSpans
     // chMarked = false
@@ -278,8 +264,8 @@ function initFoldFor (cm) {
 CodeMirror.defineInitHook(function (cm) { initFoldFor(cm) })
 
 CodeMirror.defineOption('hmdAutoFold', 200, function (cm, newVal, oldVal) {
-  var fold = cm.hmd && cm.hmd.fold || initFoldFor(cm)
-  if (oldVal == 'CodeMirror.Init') oldVal = 0
+  var fold = (cm.hmd && cm.hmd.fold) || initFoldFor(cm)
+  if (oldVal === 'CodeMirror.Init') oldVal = 0
   if ((newVal = ~~newVal) < 0) newVal = 0
 
   if (oldVal && !newVal) { // close this feature
@@ -292,32 +278,3 @@ CodeMirror.defineOption('hmdAutoFold', 200, function (cm, newVal, oldVal) {
   }
   fold.delay = newVal
 })
-
-// CodeMirror.defineInitHook(function (cm) {
-//   var fold = new Fold(cm)
-
-//   if (!cm.hmd) cm.hmd = {}
-//   cm.hmd.fold = fold
-//   fold._doFold()
-
-//   // //old failed codes
-//   // cm.on('changes', function (cm, changes) {
-//   //   var change = changes[0]
-//   //   cm.operation(processRange.bind(this, cm, change.from.line, change.to.line))
-//   // })
-//   // cm.on('cursorActivity', function (cm) {
-//   //   var pos = cm.getCursor()
-//   //   setTimeout(function () {
-//   //     // cm.operation(function () {
-//   //     if (lastCursorPos && lastCursorPos.line !== pos.line) {
-//   //       processLine(cm, pos, cm.getLineHandle(lastCursorPos.line))
-//   //     }
-
-//   //     lastCursorPos = pos
-//   //     processLine(cm, pos, cm.getLineHandle(pos.line))
-//   //     if (DEBUG) console.log('fold: cursor to', pos.line, pos.ch, cm.getLineHandle(pos.line).styles && '(line has styles)')
-//   //     // })
-//   //   }, 200)
-//   // })
-
-// })

@@ -230,7 +230,6 @@ CodeMirror.defineOption('hmdPasteImage', false, function (cm, newVal) {
   }
 })
 
-
 /** exports, for test */
 export default {
   ajaxUpload,

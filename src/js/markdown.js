@@ -4,8 +4,6 @@ import fm from 'front-matter'
 import Immutable from 'immutable'
 import hash from 'string-hash'
 
-import { codeToText } from './util'
-
 const markdownIt = new MarkdownIt()
 markdownIt.use(mathjax)
 

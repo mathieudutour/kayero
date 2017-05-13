@@ -32,8 +32,8 @@ import '../../hypermd/addon/readlink'
 // import 'codemirror/addon/lint/lint'
 // import '../code-mirror-linter'
 import { updateContent } from '../actions'
-import {remote} from 'electron'
-const {Menu, MenuItem} = remote
+// import {remote} from 'electron'
+// const {Menu, MenuItem} = remote
 
 const CODE_MIRROR_CONFIG = {
   mode: 'text/x-hypermd',

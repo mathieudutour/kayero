@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import { parse } from '../markdown'
-import { kayeroHomepage } from '../config' // eslint-disable-line
+import { kayeroHomepage } from '../config'
 import {
     LOAD_MARKDOWN,
     FILE_SAVED,

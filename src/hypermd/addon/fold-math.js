@@ -1,3 +1,4 @@
+/* eslint-disable camelcase, no-sequences */
 import CodeMirror from 'codemirror'
 
 var DEBUG = false
@@ -8,38 +9,6 @@ function processRange (cm, fromLine, toLine) {
   toLine = typeof toLine === 'number' ? Math.min(~~toLine, cm.lineCount() - 1) : cm.lineCount() - 1
   cm.eachLine(fromLine, toLine + 1, processLine.bind(this, cm, curpos))
 }
-
-// /**
-//  * get the count of masked chars before the (beforeCh)th char
-//  *
-//  * assuming `beforeCh` is not masked!
-//  *
-//  * @param {object} line the lineHandle
-//  * @returns {number}
-//  */
-// function getMaskedCharCount(line, beforeCh) {
-//   if (!line.markedSpans) return 0
-//   var ret = 0
-//   /** @type {{from:number,to:number}[]} */
-//   var markedSpans = line.markedSpans.map(function (ms) { return ({ from: ms.from, to: ms.to }) })
-//   markedSpans = markedSpans.sort(function (a, b) { return (a.from > b.from) })  // sort: small -> big
-//   for (var i = 0; i < markedSpans.length; i++) {
-//     var cur = markedSpans[i]
-//     if (cur.from > beforeCh) return ret
-//     ret += cur.to - cur.from
-
-//     // remove 'subsets'
-//     //  +-----------------+ cur
-//     //  |   +-----------+-+
-//     //  |   | subset(s) | |
-//     while (++i < markedSpans.length) {
-//       var next = markedSpans[i]
-//       if (!(next.from >= cur.from && next.to <= cur.to)) break
-//     }
-//     i--
-//   }
-//   return ret
-// }
 
 /**
  * Compare two positions, return 0 if they are the same, a negative
@@ -235,7 +204,6 @@ function insertMathMark (cm, line1, ch1, line2, ch2, expression, className) {
     var jax = window.MathJax.Hub.getJaxFor(script)
     if (jax) jax.Remove()
   })
-
 
   setTimeout(function () {
     // FIXME sometimes failed to render.

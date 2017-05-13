@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import CodeMirror from 'codemirror'
 
 // hover on a link, showing related footnote
@@ -70,7 +71,7 @@ function mouseenter (ev) {
 /** if `marked` exists, use it; else, return safe html */
 function text2html (text) {
   if (window.marked) return marked(text)
-  return '<pre>' + text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/  /g, ' &nbsp;') + '</pre>'
+  return '<pre>' + text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/ {2}/g, ' &nbsp;') + '</pre>'
 }
 
 HMDHover.prototype = {

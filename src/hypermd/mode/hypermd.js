@@ -1,3 +1,4 @@
+/* eslint-disable camelcase, no-sequences, no-useless-escape */
 import CodeMirror from 'codemirror'
 
 // This is a patch to GFM mode. Supports:
@@ -5,7 +6,6 @@ import CodeMirror from 'codemirror'
 // 2. bare link: e.g. 'please visit [page1] to continue', forwarding to footnote named as 'page1'
 
 CodeMirror.defineMode('hypermd', function (config, modeConfig) {
-  var codeDepth = 0
   var hypermdOverlay = {
     startState () {
       return {
@@ -45,7 +45,7 @@ CodeMirror.defineMode('hypermd', function (config, modeConfig) {
         state.thisLine = stream
       }
 
-      if (state.inside === 'math' && state.extra.length == 2) {
+      if (state.inside === 'math' && state.extra.length === 2) {
         let tmp = stream.string.indexOf(state.extra, start)
         if (tmp === start) {
           stream.pos += 2
@@ -98,7 +98,7 @@ CodeMirror.defineMode('hypermd', function (config, modeConfig) {
       }
 
       if (state.inside) {
-        if (state.inside == 'link' || state.inside === 'footref') {
+        if (state.inside === 'link' || state.inside === 'footref') {
           if (stream.eatWhile(/^[^\]]/)) {
             return (state.inside === 'footref')
               ? 'footref url'
@@ -184,11 +184,6 @@ CodeMirror.defineMode('hypermd', function (config, modeConfig) {
     }
   }
 
-  function f_quick_link1 (stream, state) {
-    stream.match(/^[^\]]+/, true)
-    state.f = f_quick_link_end
-  }
-
   var gfmConfig = {
     highlightFormatting: true,
     tokenTypeOverrides: {
@@ -203,7 +198,7 @@ CodeMirror.defineMode('hypermd', function (config, modeConfig) {
     gfmConfig[attr] = modeConfig[attr]
   }
   gfmConfig.name = 'gfm'
-  return CodeMirror.overlayMode(CodeMirror.getMode(config, gfmConfig), hypermdOverlay);
+  return CodeMirror.overlayMode(CodeMirror.getMode(config, gfmConfig), hypermdOverlay)
 }, 'gfm')
 
 CodeMirror.defineMIME('text/x-hypermd', 'hypermd')

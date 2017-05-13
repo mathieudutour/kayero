@@ -1,3 +1,4 @@
+/* eslint-disable camelcase, no-sequences */
 import CodeMirror from 'codemirror'
 
 // Auto show/hide markdown tokens like `##` or `*`
@@ -32,37 +33,6 @@ function arrayContainsArray (bigarray, search) {
 }
 
 /**
- * check if there is nonempty intersection of `A` and `B` (, optionally, get the intersection)
- *
- * ( A ∩ B ≠ ∅ )
- *
- * [EDGE CASE] if `A` or `B` is empty, return `false`
- *
- * @param {any[]} A
- * @param {any[]} B
- * @param {boolean} [returns_intersection]   true if you need the content of the intersection. slower
- * @returns {boolean|any[]}
- */
-function arrayIntersection (A, B, returns_intersection) {
-  if (!A.length || !B.length) return false
-
-  var search2 = B.slice(0)
-  var intersection = []
-  for (var i = 0; i < A.length; i++) {
-    var cmp1 = A[i]
-    for (var j = 0; j < search2.length; j++) {
-      var cmp2 = search2[j]
-      if (cmp1 === cmp2) {
-        if (!returns_intersection) return true
-        intersection.push(search2.splice(j--, 1))
-      }
-    }
-  }
-
-  return (intersection.length && intersection) || false
-}
-
-/**
  * get class name list
  *
  * @param {Element} ele
@@ -80,21 +50,6 @@ function getClassList (ele) {
  * @returns {object}
  */
 function getLineView (cm, line) {
-  // since some lines might be folded, the following method is unreliable:
-  //    return cm.display.view[line - cm.display.viewFrom]
-  // thus, use Bisection method to find the line
-  // initial: (p2 + p1)/2 = line - p1
-  // var p1 = cm.display.viewFrom, p2 = line * 2 - p1 * 3, v, dbgg = 0
-  // while (p1 != p2) {
-  //   v = ~~((p1 + p2) / 2) //floor
-  //   var ret = cm.display.view[v], lno = ret && ret.line.lineNo() || line //dont know what am i doing
-  //   if (lno == line) return ret
-  //   if (lno > line) p2 = v
-  //   if (lno < line) p1 = v
-  //   if (dbgg++ == 20) {
-  //     debugger
-  //   }
-  // }
   var i = line - cm.display.viewFrom
   var vl
   if (i >= cm.display.view.length) i = cm.display.view.length - 1
@@ -129,7 +84,6 @@ function _IsIndentCodeBlock (spans) {
   return true
 }
 
-
 /**
  * adding/removing `cm-formatting-hidden` to/from the <span>s that contain Markdown tokens (eg. `### ` or `~~`)
  *
@@ -157,17 +111,6 @@ function patchFormattingSpan (cm, line, pos, rebuildCache) {
   /** @type {{[index:number]: any}} */
   var visible_span_indices = {}
 
-  // // fix setextHeader problem
-  // if (spans.length === 1 &&
-  //     /\scm-formatting-header\s/.test(spans[0].className) &&
-  //     /^\s*(?:\={3,}|-{3,})\s*$/.test(spans[0].textContent)
-  // ) {
-  //     // turn last line into header
-  //     //TODO: use more elegant way to implement this
-  //     var last_line = line.parentElement.previousElementSibling.lastElementChild
-  //     last_line.firstElementChild.classList.add('cm-header', /cm-header-\d/.exec(spans[0].className))
-  // }
-
   var lineView = getLineView(cm, pos.line)
   var tokenState = (lineView && lineView.line.stateAfter) ||  // use cached data is much faster
     cm.getTokenAt({ line: pos.line + 1, ch: 0 }).state      // but sometimes the data does not exists.
@@ -187,7 +130,6 @@ function patchFormattingSpan (cm, line, pos, rebuildCache) {
 
   // adding cm-quote indent placeholder
   if (
-    // !firstSpanHasClass('hmd-quote-indent') &&
     tokenStateBase.quote
   ) {
     line.classList.add('hmd-quote-indent')
@@ -304,8 +246,6 @@ function patchFormattingSpan (cm, line, pos, rebuildCache) {
     }
   }
 
-  // ~~TODO: cache status~~  not necessary
-  // console.time('hide/show tokens')
   for (var i = 0; i < spans.length; i++) {
     span = spans[i]
     if (
@@ -319,16 +259,9 @@ function patchFormattingSpan (cm, line, pos, rebuildCache) {
       }
     }
   }
-  // console.timeEnd('hide/show tokens')
 
-  if (rebuildCache /* && visible_span_indices_changed */) {
-    // remove caches of the chars after the current cursor
+  if (rebuildCache) {
     getLineView(cm, pos.line).measure.cache = {}
-    // var cache = getLineView(cm, pos.line).measure.cache
-    // for (var key in cache) {
-    //     var ch = parseInt(key)
-    //     if (ch >= pos.ch) delete cache[key]
-    // }
   }
 }
 

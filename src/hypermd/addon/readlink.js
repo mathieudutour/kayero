@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import CodeMirror from 'codemirror'
 
 // trace the footnote, finding the url
@@ -16,7 +17,7 @@ import CodeMirror from 'codemirror'
 function readlink (footNoteName, line) {
   var defs = getCacheDB(this)[footNoteName.trim().toLowerCase()] || []
   var def = null
-  if (typeof line != 'number') line = 1e9
+  if (typeof line !== 'number') line = 1e9
   for (var i = 0; i < defs.length; i++) {
     def = defs[i]
     if (def.line > line) break

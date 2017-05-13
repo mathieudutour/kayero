@@ -27,7 +27,6 @@ class Header extends Component {
       </div>
     )
   }
-
 }
 
 Header.propTypes = {

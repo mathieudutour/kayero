@@ -7,10 +7,10 @@ import Immutable from 'immutable'
 import Smolder from 'smolder'
 /* global d3, nv */
 import Jutsu from 'jutsu' // Imports d3 and nv as globals
-import {remote as electron} from 'electron' // eslint-disable-line
+import {remote as electron} from 'electron'
 
 import { arrayToCSV } from './util'
-import { gistUrl, gistApi } from './config' // eslint-disable-line
+import { gistApi } from './config'
 import { render, extractBlocks } from './markdown'
 
 /*
@@ -168,7 +168,7 @@ function closeDBs (dbs) {
 export function executeAuto () {
   return (dispatch, getState) => {
     const notebook = getState().notebook
-    const blocks = notebook.get('blocks')
+    // const blocks = notebook.get('blocks')
     const order = notebook.get('blockOrder')
 
     // init the database connections
@@ -178,11 +178,11 @@ export function executeAuto () {
     // are executed in order, even if they return Promises.
     return order.reduce((p, id) => {
       return p.then(() => {
-        const option = blocks.getIn([id, 'option'])
+        // const option = blocks.getIn([id, 'option'])
         // if (option === 'auto' || option === 'hidden') {
-          return dispatch(executeCodeBlock(String(id), dbs))
+        return dispatch(executeCodeBlock(String(id), dbs))
         // }
-        return Promise.resolve()
+        // return Promise.resolve()
       })
     }, Promise.resolve()).then(() => closeDBs(dbs))
   }

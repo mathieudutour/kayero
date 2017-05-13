@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Clipboard from 'clipboard'
 import { saveSelector } from '../selectors'
@@ -7,7 +8,6 @@ import { toggleSave, saveGist, saveAsFile } from '../actions'
 import { renderHTML } from '../util'
 
 class SaveDialog extends Component {
-
   constructor (props) {
     super(props)
     this.close = this.close.bind(this)
@@ -118,12 +118,11 @@ class SaveDialog extends Component {
       </div>
     )
   }
-
 }
 
 SaveDialog.propTypes = {
-  notebook: React.PropTypes.object,
-  dispatch: React.PropTypes.func
+  notebook: PropTypes.object,
+  dispatch: PropTypes.func
 }
 
 export default connect(saveSelector)(SaveDialog)
