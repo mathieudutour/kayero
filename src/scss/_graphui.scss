@@ -2,9 +2,9 @@
 
 .graph-creator {
   @include block-border;
+
   padding: 0.5em;
   margin: 1em 0;
-  font-family: 'Amaranth', sans-serif;
 
   .editor-buttons {
     margin-top: 0;
@@ -12,6 +12,7 @@
 
   .graph-type {
     @include block-border;
+
     padding: 0.25em;
     cursor: pointer;
     display: inline-block;
@@ -21,6 +22,7 @@
 
     &.selected {
       @include block-border;
+
       font-weight: bold;
       color: $text-black;
       border: 1px dashed $text-black;
@@ -75,15 +77,17 @@
   }
 
   pre {
-    font-family: 'Source Code Pro', monospace;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
     font-size: 0.8em;
   }
 
   .graph-preview svg {
     width: 100%;
+
     &.nvd3-svg {
       height: inherit;
     }
+
     text {
       fill: $text-black;
     }

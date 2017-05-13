@@ -1,7 +1,6 @@
 @import 'base';
 
 .save-dialog {
-
   .close-button {
     float: right;
     margin-top: 0.75em;
@@ -12,13 +11,14 @@
   .export-option,
   .clipboard-button {
     @include block-border;
-    font-family: 'Amaranth', sans-serif;
+
     padding: 0.25em;
     cursor: pointer;
     display: inline-block;
 
     &.selected {
       @include block-border;
+
       font-weight: bold;
       color: $text-black;
       border: 1px dashed $text-black;
@@ -44,6 +44,7 @@
 
   input {
     @include block-border;
+
     width: 100%;
     box-sizing: border-box;
     padding: 0.25em;
@@ -54,20 +55,15 @@
     font-family: inherit;
     font-size: inherit;
     font-weight: inherit;
-    width: 100%;
     outline: none;
     cursor: text;
   }
 
   .pure-g {
     margin-top: 0.75em;
-    p {
-      font-family: 'Amaranth', sans-serif;
-    }
   }
 
   p {
     clear: both;
   }
-
 }

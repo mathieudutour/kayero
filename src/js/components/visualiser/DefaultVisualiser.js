@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { typeString, getSpacing } from './Visualiser'
 
 function buildCssClass (type, useHljs) {
@@ -23,7 +24,6 @@ function buildCssClass (type, useHljs) {
 }
 
 export default class DefaultVisualiser extends Component {
-
   render () {
     const { data, indent, name, useHljs, path, click = () => {} } = this.props
     const type = typeString(data)
@@ -53,20 +53,19 @@ export default class DefaultVisualiser extends Component {
       </div>
     )
   }
-
 }
 
 DefaultVisualiser.propTypes = {
-  data: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
-    React.PropTypes.func,
-    React.PropTypes.instanceOf(Error),
-    React.PropTypes.instanceOf(Date)
+  data: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.func,
+    PropTypes.instanceOf(Error),
+    PropTypes.instanceOf(Date)
   ]),
-  indent: React.PropTypes.number,
-  useHljs: React.PropTypes.string,
-  name: React.PropTypes.string,
-  path: React.PropTypes.string,
-  click: React.PropTypes.func
+  indent: PropTypes.number,
+  useHljs: PropTypes.string,
+  name: PropTypes.string,
+  path: PropTypes.string,
+  click: PropTypes.func
 }

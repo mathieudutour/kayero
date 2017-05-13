@@ -3,12 +3,11 @@
 @import '../../node_modules/nvd3/build/nv.d3';
 @import '../../node_modules/codemirror/lib/codemirror';
 @import '../../node_modules/katex/dist/katex.min.css';
-@import 'base16-tomorrow-light';
 @import 'grids';
 @import 'base';
 @import 'shell';
 @import 'visualiser';
-@import 'editor';
+@import 'datasource';
 @import 'save';
 @import 'graphui';
 @import 'linter';

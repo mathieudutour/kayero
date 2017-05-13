@@ -1,15 +1,13 @@
 export const metadataSelector = state => {
   return {
-    metadata: state.notebook.get('metadata'),
-    undoSize: state.notebook.get('undoStack').size
+    metadata: state.notebook.get('metadata')
   }
 }
 
 export const contentSelector = state => {
   return {
-    content: state.notebook.get('content').map(
-      num => state.notebook.getIn(['blocks', num])
-    ),
+    content: state.notebook.get('content'),
+    blocks: state.notebook.get('blocks'),
     results: state.execution.get('results'),
     blocksExecuted: state.execution.get('blocksExecuted'),
     blocksRunning: state.execution.get('blocksRunning')

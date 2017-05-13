@@ -2,10 +2,33 @@ import React, { Component } from 'react'
 import { findDOMNode } from 'react-dom'
 import Codemirror from 'react-codemirror'
 import { DragSource, DropTarget } from 'react-dnd'
-import 'codemirror/mode/javascript/javascript'
+import 'codemirror/addon/mode/overlay'
+import 'codemirror/addon/edit/continuelist'
+
+// import 'codemirror/mode/meta/meta'
+import 'codemirror/mode/xml/xml'
 import 'codemirror/mode/markdown/markdown'
-import 'codemirror/addon/lint/lint'
-import '../code-mirror-linter'
+import 'codemirror/mode/gfm/gfm'
+import 'codemirror/mode/javascript/javascript'
+
+import '../../hypermd/mode/hypermd'
+import '../../hypermd/mode/hypermd.css'
+import '../../hypermd/mode/hypermd.scss'
+
+import '../../hypermd/theme/hypermd-light.scss'
+
+import '../../hypermd/addon/click'
+import '../../hypermd/addon/cursor-debounce'
+import '../../hypermd/addon/fold-math'
+import '../../hypermd/addon/fold'
+import '../../hypermd/addon/hide-token'
+import '../../hypermd/addon/hover'
+import '../../hypermd/addon/paste-image'
+import '../../hypermd/addon/paste'
+import '../../hypermd/addon/readlink'
+
+// import 'codemirror/addon/lint/lint'
+// import '../code-mirror-linter'
 import {
     updateBlock, deleteBlock, moveBlock, editBlock
 } from '../actions'
@@ -63,7 +86,6 @@ const dragTarget = {
 }
 
 export default class Block extends Component {
-
   constructor (props) {
     super(props)
     this.enterEdit = this.enterEdit.bind(this)
@@ -166,18 +188,26 @@ export default class Block extends Component {
     }
     const isCodeBlock = block.get('type') === 'code'
     const options = {
-      mode: isCodeBlock ? 'javascript' : 'markdown',
-      theme: 'base16-tomorrow-light',
+      mode: 'text/x-hypermd',
+      theme: 'hypermd-light',
       lineNumbers: true,
-      gutters: ['CodeMirror-lint-markers'],
+      lineWrapping: true,
+      gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'HyperMD-goback'],
       indentUnit: 2,
       lint: isCodeBlock,
       extraKeys: {
-        Tab: (cm) => {
-          const spaces = Array(cm.getOption('indentUnit') + 1).join(' ')
-          cm.replaceSelection(spaces)
-        }
-      }
+        Enter: 'newlineAndIndentContinueMarkdownList'
+        // Tab: (cm) => {
+        //   const spaces = Array(cm.getOption('indentUnit') + 1).join(' ')
+        //   cm.replaceSelection(spaces)
+        // }
+      },
+      hmdHideToken: '(profile-1)',
+      hmdCursorDebounce: true,
+      hmdAutoFold: 200,
+      hmdPaste: true,
+      hmdPasteImage: true,
+      hmdFoldMath: { interval: 200, preview: true }
     }
     return (
       <div className='edit-box' onClick={(e) => { e.stopPropagation() }}>

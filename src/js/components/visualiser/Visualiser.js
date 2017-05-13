@@ -3,6 +3,7 @@
  */
 
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import DefaultVisualiser from './DefaultVisualiser'
 import ObjectVisualiser from './ObjectVisualiser'
 import ArrayVisualiser from './ArrayVisualiser'
@@ -39,7 +40,6 @@ export function getSpacing (indent) {
 }
 
 export default class Visualiser extends Component {
-
   render () {
     const { data, useHljs, click, path, name } = this.props
     const VisualiserComponent = selectComponent(data)
@@ -58,10 +58,10 @@ export default class Visualiser extends Component {
 }
 
 Visualiser.propTypes = {
-  data: React.PropTypes.any,
-  indent: React.PropTypes.number,
-  useHljs: React.PropTypes.string,
-  name: React.PropTypes.string,
-  path: React.PropTypes.string,
-  click: React.PropTypes.func
+  data: PropTypes.any,
+  indent: PropTypes.number,
+  useHljs: PropTypes.string,
+  name: PropTypes.string,
+  path: PropTypes.string,
+  click: PropTypes.func
 }

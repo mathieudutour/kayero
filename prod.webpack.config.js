@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const ExternalsPlugin = webpack.ExternalsPlugin
 
 module.exports = {
+  devtool: 'source-map',
   entry: [
     './src/js/app'
   ],
@@ -24,10 +25,10 @@ module.exports = {
       { test: /\.css$/, loader: 'style-loader!css-loader' },
       {
         test: /\.scss$/,
-        loaders: ['style', 'css', 'sass']
+        loaders: ['style-loader', 'css-loader', 'sass-loader']
       },
       { test: /\.png$/, loader: 'url-loader?limit=100000' },
-      { test: /\.jpg$/, loader: 'file-loader' },
+      { test: /\.(jpg|gif|png)$/, loader: 'file-loader' },
       { test: /\.json$/, loader: 'json-loader' },
       {
         test: /\.(ttf|eot|svg|otf|woff(2)?)(\?[a-z0-9=&.]+)?$/, // font files
@@ -35,7 +36,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loaders: ['react-hot', 'babel'],
+        loaders: ['babel-loader'],
         include: path.join(__dirname, 'src')
       }
     ]

@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import monk from 'monk'
+import {batchActions} from 'redux-batched-actions'
 
 import Immutable from 'immutable'
 import Smolder from 'smolder'
@@ -10,7 +11,7 @@ import {remote as electron} from 'electron' // eslint-disable-line
 
 import { arrayToCSV } from './util'
 import { gistUrl, gistApi } from './config' // eslint-disable-line
-import { render } from './markdown'
+import { render, extractBlocks } from './markdown'
 
 /*
  * Action types
@@ -20,14 +21,11 @@ export const CODE_RUNNING = 'CODE_RUNNING'
 export const CODE_EXECUTED = 'CODE_EXECUTED'
 export const CODE_ERROR = 'CODE_ERROR'
 export const RECEIVED_DATA = 'RECEIVED_DATA'
-export const TOGGLE_EDIT = 'TOGGLE_EDIT'
-export const UPDATE_BLOCK = 'UPDATE_BLOCK'
-export const EDIT_BLOCK = 'EDIT_BLOCK'
+export const UPDATE_CONTENT = 'UPDATE_CONTENT'
 export const UPDATE_META = 'UPDATE_META'
 export const TOGGLE_META = 'TOGGLE_META'
 export const ADD_BLOCK = 'ADD_BLOCK'
 export const DELETE_BLOCK = 'DELETE_BLOCK'
-export const MOVE_BLOCK = 'MOVE_BLOCK'
 export const DELETE_DATASOURCE = 'DELETE_DATASOURCE'
 export const UPDATE_DATASOURCE = 'UPDATE_DATASOURCE'
 export const TOGGLE_SAVE = 'TOGGLE_SAVE'
@@ -103,14 +101,32 @@ export function openFile () {
       })
     }).then(() => dispatch(fetchData()))
   }
-};
+}
+
+export function updateContent (content) {
+  electron.BrowserWindow.getFocusedWindow().setDocumentEdited(true)
+  const {blocks, blockOrder} = extractBlocks(content)
+  return (dispatch, getState) => {
+    const oldBlockOrder = getState().notebook.get('blockOrder').toJS()
+    dispatch(batchActions([
+      {
+        type: UPDATE_CONTENT,
+        content,
+        blocks: Immutable.fromJS(blocks),
+        blockOrder: Immutable.fromJS(blockOrder)
+      },
+      ...oldBlockOrder.filter(old => blockOrder.indexOf(old) === -1).map(id => deleteBlock(id)),
+      ...blockOrder.filter(newBlock => oldBlockOrder.indexOf(newBlock) === -1).map(id => addCodeBlock(id))
+    ]))
+  }
+}
 
 function initDBs (getState) {
   const executionState = getState().execution
   let data = {}
   if (executionState) {
     const immutableData = executionState.get('data')
-    data = immutableData && immutableData.toJS() || {}
+    data = (immutableData && immutableData.toJS()) || {}
   }
   const notebook = getState().notebook
   let filePath
@@ -147,7 +163,29 @@ function initDBs (getState) {
 
 function closeDBs (dbs) {
   Object.keys(dbs).forEach((k) => dbs[k].close())
-  return
+}
+
+export function executeAuto () {
+  return (dispatch, getState) => {
+    const notebook = getState().notebook
+    const blocks = notebook.get('blocks')
+    const order = notebook.get('blockOrder')
+
+    // init the database connections
+    const dbs = initDBs(getState)
+
+    // This slightly scary Promise chaining ensures that code blocks
+    // are executed in order, even if they return Promises.
+    return order.reduce((p, id) => {
+      return p.then(() => {
+        const option = blocks.getIn([id, 'option'])
+        // if (option === 'auto' || option === 'hidden') {
+          return dispatch(executeCodeBlock(String(id), dbs))
+        // }
+        return Promise.resolve()
+      })
+    }, Promise.resolve()).then(() => closeDBs(dbs))
+  }
 }
 
 export function executeCodeBlock (id, dbs) {
@@ -223,29 +261,6 @@ function codeError (id, err) {
   }
 }
 
-export function executeAuto () {
-  return (dispatch, getState) => {
-    const notebook = getState().notebook
-    const blocks = notebook.get('blocks')
-    const order = notebook.get('content')
-
-    // init the database connections
-    const dbs = initDBs(getState)
-
-    // This slightly scary Promise chaining ensures that code blocks
-    // are executed in order, even if they return Promises.
-    return order.reduce((p, id) => {
-      return p.then(() => {
-        const option = blocks.getIn([id, 'option'])
-        if (option === 'auto' || option === 'hidden') {
-          return dispatch(executeCodeBlock(id, dbs))
-        }
-        return Promise.resolve()
-      })
-    }, Promise.resolve()).then(() => closeDBs(dbs))
-  }
-}
-
 function receivedData (name, data) {
   return {
     type: RECEIVED_DATA,
@@ -290,21 +305,6 @@ export function fetchData () {
   }
 }
 
-export function toggleEdit () {
-  return {
-    type: TOGGLE_EDIT
-  }
-}
-
-export function updateBlock (id, text) {
-  electron.BrowserWindow.getFocusedWindow().setDocumentEdited(true)
-  return {
-    type: UPDATE_BLOCK,
-    id,
-    text
-  }
-};
-
 export function updateTitle (text) {
   return {
     type: UPDATE_META,
@@ -336,36 +336,12 @@ export function addCodeBlock (id) {
   }
 };
 
-export function addTextBlock (id) {
-  return {
-    type: ADD_BLOCK,
-    blockType: 'text',
-    id
-  }
-};
-
-export function addGraphBlock (id) {
-  return {
-    type: ADD_BLOCK,
-    blockType: 'graph',
-    id
-  }
-};
-
 export function deleteBlock (id) {
   return {
     type: DELETE_BLOCK,
     id
   }
 };
-
-export function moveBlock (id, nextIndex) {
-  return {
-    type: MOVE_BLOCK,
-    id,
-    nextIndex
-  }
-}
 
 export function deleteDatasource (id) {
   return {
@@ -375,10 +351,16 @@ export function deleteDatasource (id) {
 };
 
 export function updateDatasource (id, url) {
-  return {
-    type: UPDATE_DATASOURCE,
-    id,
-    text: url
+  return (dispatch, getState) => {
+    return Promise.resolve().then(() =>
+      dispatch({
+        type: UPDATE_DATASOURCE,
+        id,
+        text: url
+      })
+    ).then(() =>
+      dispatch(fetchData())
+    )
   }
 };
 
@@ -554,13 +536,6 @@ export function compileGraphBlock (id) {
 export function clearGraphData (id) {
   return {
     type: CLEAR_GRAPH_BLOCK_DATA,
-    id
-  }
-}
-
-export function editBlock (id) {
-  return {
-    type: EDIT_BLOCK,
     id
   }
 }

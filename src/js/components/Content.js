@@ -9,7 +9,6 @@ import GraphBlock from './GraphBlock'
 import AddControls from './AddControls'
 
 class Content extends Component {
-
   render () {
     const {
       dispatch, content, results, blocksExecuted, editable, activeBlock, blocksRunning

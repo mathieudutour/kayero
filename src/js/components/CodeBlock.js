@@ -10,7 +10,6 @@ import {
 const md = new MarkdownIt({highlight})
 
 export class CodeBlock extends Block {
-
   constructor (props) {
     super(props)
     this.clickPlay = this.clickPlay.bind(this)
@@ -144,7 +143,6 @@ export class CodeBlock extends Block {
       </div>
     )
   }
-
 }
 
 export default dragAndDropWrapper(CodeBlock)

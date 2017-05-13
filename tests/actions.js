@@ -393,13 +393,6 @@ test('should auto execute auto and hidden code blocks', (t) => {
     })
 })
 
-test('should create an action for toggling the editor', (t) => {
-  const expected = {
-    type: actions.TOGGLE_EDIT
-  }
-  t.deepEqual(actions.toggleEdit(), expected)
-})
-
 test('should create an action for updating a block', (t) => {
   const id = '12'
   const text = '## some markdown'
