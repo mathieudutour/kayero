@@ -15,7 +15,6 @@ import 'codemirror/mode/gfm/gfm'
 import 'codemirror/mode/javascript/javascript'
 
 import '../../hypermd/mode/hypermd'
-import '../../hypermd/mode/hypermd.css'
 import '../../hypermd/mode/hypermd.scss'
 
 import '../../hypermd/theme/hypermd-light.scss'

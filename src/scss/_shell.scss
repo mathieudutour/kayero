@@ -11,11 +11,15 @@ body {
 }
 
 .title-field {
-  border: 0;
-  width: 100%;
-  font-weight: normal;
+  font-weight: 400;
   font-size: 40px;
   line-height: 48px;
+  margin-bottom: 32px;
+  border: 0;
+  outline: none;
+  color: $text-black;
+  width: 100%;
+  margin-top: 40px;
 }
 
 .editor-buttons {
@@ -41,24 +45,6 @@ code {
   }
 }
 
-hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 2px dashed $text-light;
-  margin: 1.5em 0;
-  padding: 0;
-}
-
-.top-sep {
-  border-top: 2px dashed $text-black;
-  margin: 1.5em 0;
-}
-
-h1 {
-  font-size: 2.5em;
-}
-
 a {
   text-decoration: none;
   border-bottom: 1px dashed $text-light;
@@ -78,8 +64,6 @@ pre,
 .codeBlock,
 .resultBlock,
 .graphBlock {
-  @include block-border;
-
   overflow: auto;
   padding: 0.5em;
 }
@@ -93,64 +77,6 @@ pre,
     overflow: auto;
     margin: 0;
   }
-
-  .graphBlock,
-  .resultBlock {
-    border-top: none;
-  }
-
-  .graphBlock > * {
-    margin: 0 auto;
-  }
-
-  .graphBlock:empty {
-    display: none;
-  }
-
-  .graphBlock svg {
-    width: 100%;
-
-    &.nvd3-svg {
-      height: inherit;
-    }
-
-    text {
-      fill: $text-black;
-    }
-  }
-
-  .resultBlock {
-    background-color: $background-grey;
-  }
-}
-
-.hiddenCode {
-  .codeBlock {
-    display: none;
-  }
-
-  .resultBlock,
-  .graphBlock {
-    border-top: 1px dashed $text-light;
-  }
-
-  .graphBlock {
-    border-bottom: none;
-  }
-}
-
-textarea {
-  @include block-border;
-
-  width: 100%;
-  color: $text-black;
-  padding: 0.5em;
-  outline: none;
-  height: 300px;
-  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
-  font-size: 0.8em;
-  resize: none;
-  margin: 1em 0;
 }
 
 .footer {

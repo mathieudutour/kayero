@@ -2,13 +2,16 @@
 
 .controls {
   position: absolute;
-  top: 30px;
-  right: 30px;
-  margin: 0 0.5em;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
 
   i {
-    margin-left: 0.5em;
+    margin: 2px;
+    font-size: 30px;
+    color: #637282;
   }
 }
 

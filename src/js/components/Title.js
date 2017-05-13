@@ -6,6 +6,15 @@ class Title extends Component {
   constructor (props) {
     super(props)
     this.exitEdit = this.exitEdit.bind(this)
+    this.state = {
+      title: this.props.title
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.title !== this.props.title) {
+      this.setState({title: nextProps.title})
+    }
   }
 
   exitEdit () {
@@ -13,16 +22,12 @@ class Title extends Component {
   }
 
   render () {
-    const { title } = this.props
-    return (
-      <h1>
-        <input type='text' className='title-field'
-            placeholder='Notebook title'
-            defaultValue={title}
+    return <input type='text' className='title-field'
+            placeholder='Give me a name'
+            value={this.state.title}
+            onInput={(e) => this.setState({title: e.target.value})}
             ref={c => { this.field = c }} title='Notebook title'
             onBlur={this.exitEdit} />
-      </h1>
-    )
   }
 }
 
