@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { exportToCSV } from '../../actions'
 import { selectComponent, getSpacing } from './Visualiser'
 
 class ArrayVisualiser extends Component {
-
   constructor (props) {
     super(props)
     this.collapse = this.collapse.bind(this)
@@ -74,13 +74,13 @@ class ArrayVisualiser extends Component {
 }
 
 ArrayVisualiser.propTypes = {
-  data: React.PropTypes.array,
-  indent: React.PropTypes.number,
-  useHljs: React.PropTypes.string,
-  name: React.PropTypes.string,
-  path: React.PropTypes.string,
-  click: React.PropTypes.func,
-  dispatch: React.PropTypes.func
+  data: PropTypes.array,
+  indent: PropTypes.number,
+  useHljs: PropTypes.string,
+  name: PropTypes.string,
+  path: PropTypes.string,
+  click: PropTypes.func,
+  dispatch: PropTypes.func
 }
 
 export default connect()(ArrayVisualiser)

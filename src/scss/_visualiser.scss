@@ -1,6 +1,40 @@
+.graphBlock,
+.resultBlock {
+  border-top: none;
+}
+
+.graphBlock > * {
+  margin: 0 auto;
+}
+
+.graphBlock:empty {
+  display: none;
+}
+
+.graphBlock svg {
+  width: 100%;
+
+  &.nvd3-svg {
+    height: inherit;
+  }
+
+  text {
+    fill: $text-black;
+  }
+}
+
+.graphBlock {
+  border-left: 2px solid $background-grey;
+  border-right: 2px solid $background-grey;
+}
+
+.resultBlock {
+  background-color: $background-grey;
+}
+
 .visualiser {
-  font-family: 'Source Code Pro', monospace;
-  font-size: 0.8em;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 1em;
   white-space: pre;
   overflow: auto;
 
@@ -10,6 +44,8 @@
 
   .visualiser-arrow {
     cursor: pointer;
+    color: #637282;
+    opacity: 0.8;
   }
 
   .visualiser-row {
@@ -19,5 +55,10 @@
   .export-to-csv {
     float: right;
     cursor: pointer;
+    color: #637282;
+  }
+
+  .visualiser-error {
+    color: #d92626;
   }
 }

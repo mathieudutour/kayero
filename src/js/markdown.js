@@ -1,102 +1,80 @@
 import MarkdownIt from 'markdown-it'
-import latex from 'markdown-it-katex'
+import mathjax from 'markdown-it-mathjax'
 import fm from 'front-matter'
 import Immutable from 'immutable'
-
-import { codeToText } from './util'
+import hash from 'string-hash'
 
 const markdownIt = new MarkdownIt()
-markdownIt.use(latex)
+markdownIt.use(mathjax)
 
 /*
- * Extracts a code block (Immutable Map) from the
+ * Extracts a code block from the
  * block-parsed Markdown.
  */
-function extractCodeBlock (token) {
+function extractCodeBlock (token, lineOffset) {
   const info = token.info.split(';').map(s => s.trim())
   const language = info[0] || undefined
   const option = info[1] || undefined
   if (['runnable', 'auto', 'hidden'].indexOf(option) < 0) {
-        // If not an executable block, we just want to represent as Markdown.
+    // If not an executable block, we just want to represent as Markdown.
     return null
   }
-  return Immutable.fromJS({
+  const content = token.content.trim()
+  return {
     type: 'code',
-    content: token.content.trim(),
+    content,
     language,
-    option
-  })
-}
-
-function flushTextBlock (counter, blocks, blockOrder, text) {
-  if (!text.match(/\S+/)) {
-    return
+    option,
+    line: token.map[1] + lineOffset,
+    hash: hash(content)
   }
-  const id = String(counter)
-  blockOrder.push(id)
-  blocks[id] = Immutable.fromJS({
-    type: 'text',
-    id: id,
-    content: text.trim()
-  })
 }
 
-function extractBlocks (md) {
+export function extractBlocks (md, existingBlocks) {
   const rgx = /(```\w+;\s*?(?:runnable|auto|hidden)\s*?[\n\r]+[\s\S]*?^\s*?```\s*?$)/gm
   const parts = md.split(rgx)
 
-  let blockCounter = 0
-  let currentString = ''
+  let lineOffset = 0
   const blockOrder = []
   const blocks = {}
 
   for (let i = 0; i < parts.length; i++) {
-    const part = parts[i]
     const tokens = markdownIt.parse(parts[i])
     if (tokens.length === 1 && tokens[0].type === 'fence') {
-      const block = extractCodeBlock(tokens[0])
-            // If it's an executable block
+      const block = extractCodeBlock(tokens[0], lineOffset)
+      // If it's an executable block
       if (block) {
-                // Flush the current text to a text block
-        flushTextBlock(blockCounter, blocks, blockOrder, currentString)
-        currentString = ''
-        blockCounter++
-
-                // Then add the code block
-        const id = String(blockCounter)
-        blockOrder.push(id)
-        blocks[id] = block.set('id', id)
-        blockCounter++
-        continue
+        blockOrder.push(block.hash)
+        blocks[block.hash] = block
+        lineOffset += parts[i].split('\n').length
+      } else {
+        lineOffset += parts[i].split('\n').length - 2
       }
+    } else {
+      lineOffset += parts[i].split('\n').length - 2
     }
-        // If it isn't an executable code block, just add
-        // to the current text block;
-    currentString += part
   }
-  flushTextBlock(blockCounter, blocks, blockOrder, currentString)
 
   return {
-    content: blockOrder,
+    blockOrder,
     blocks
   }
 }
 
 export function parse (md, filename) {
-    // Separate front-matter and body
+  // Separate front-matter and body
   const doc = fm(md)
-  const {content, blocks} = extractBlocks(doc.body)
+  const {blockOrder, blocks} = extractBlocks(doc.body)
 
   return Immutable.fromJS({
     metadata: {
       title: doc.attributes.title,
-      author: doc.attributes.author,
+      path: filename,
       datasources: doc.attributes.datasources || {},
-      original: doc.attributes.original,
-      showFooter: doc.attributes.show_footer !== false,
-      path: filename
+      libraries: doc.attributes.libraries || {}
     },
-    content,
+    content: doc.body,
+    blockOrder,
     blocks
   })
 }
@@ -105,9 +83,9 @@ export function parse (md, filename) {
  * Functions for rendering blocks back into Markdown
  */
 
-function renderDatasources (datasources) {
-  let rendered = 'datasources:\n'
-  datasources.map((url, name) => {
+function renderDependencies (dependencies, field) {
+  let rendered = field + ':\n'
+  dependencies.map((url, name) => {
     rendered += '    ' + name + ': "' + url + '"\n'
   })
   return rendered
@@ -118,42 +96,20 @@ function renderMetadata (metadata) {
   if (metadata.get('title') !== undefined) {
     rendered += 'title: "' + metadata.get('title') + '"\n'
   }
-  if (metadata.get('author') !== undefined) {
-    rendered += 'author: "' + metadata.get('author') + '"\n'
-  }
   const datasources = metadata.get('datasources')
   if (datasources && datasources.size > 0) {
-    rendered += renderDatasources(datasources)
+    rendered += renderDependencies(datasources, 'datasources')
   }
-  const original = metadata.get('original')
-  if (original && original.get('title') && original.get('url')) {
-    rendered += 'original:\n'
-    rendered += '    title: "' + original.get('title') + '"\n'
-    rendered += '    url: "' + original.get('url') + '"\n'
-  }
-  if (metadata.get('showFooter') !== undefined) {
-    rendered += 'show_footer: ' + metadata.get('showFooter') + '\n'
+  const libraries = metadata.get('libraries')
+  if (libraries && libraries.size > 0) {
+    rendered += renderDependencies(libraries, 'libraries')
   }
   return rendered + '---\n\n'
-}
-
-function renderBlock (block) {
-  if (block.get('type') === 'text') {
-    return block.get('content')
-  }
-  return codeToText(block, true)
-}
-
-function renderBody (blocks, blockOrder) {
-  return blockOrder
-        .map((id) => blocks.get(id))
-        .map(renderBlock)
-        .join('\n\n') + '\n'
 }
 
 export function render (notebook) {
   let rendered = ''
   rendered += renderMetadata(notebook.get('metadata'))
-  rendered += renderBody(notebook.get('blocks'), notebook.get('content'))
+  rendered += notebook.get('content')
   return rendered
 }

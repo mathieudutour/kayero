@@ -4,7 +4,6 @@ import {
     CODE_RUNNING,
     CODE_EXECUTED,
     CODE_ERROR,
-    UPDATE_BLOCK,
     DELETE_BLOCK,
     DELETE_DATASOURCE,
     UPDATE_DATASOURCE,
@@ -45,7 +44,6 @@ export default function execution (state = initialState, action = {}) {
         .set('blocksExecuted', state.get('blocksExecuted').add(id))
     case RECEIVED_DATA:
       return state.setIn(['data', name], Immutable.fromJS(data))
-    case UPDATE_BLOCK:
     case DELETE_BLOCK:
       return state
         .set('blocksRunning', state.get('blocksRunning').delete(id))

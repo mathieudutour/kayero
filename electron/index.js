@@ -10,9 +10,7 @@ let menu
 let template
 let mainWindow = null
 
-if (process.env.NODE_ENV === 'development') {
-  require('electron-debug')()
-}
+require('electron-debug')()
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
@@ -154,16 +152,17 @@ app.on('ready', () => {
         click () {
           execOnMainWindow('save-as-file')
         }
+      }, {
+        type: 'separator'
+      }, {
+        label: 'Export',
+        click () {
+          execOnMainWindow('export')
+        }
       }]
     }, {
       label: 'Edit',
       submenu: [{
-        label: 'Toggle edit mode',
-        accelerator: 'Command+E',
-        click (e, focusedWindow) {
-          execOnMainWindow('toggle-edit')
-        }
-      }, {
         label: 'Re-run the notebook',
         accelerator: 'Command+R',
         click (e, focusedWindow) {

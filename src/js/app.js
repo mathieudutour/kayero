@@ -6,14 +6,22 @@ import { createStore, compose, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import bindStoreToMenu from './bindStoreToMenu'
 
-import NotebookReducer from './reducers'
+import reducer from './reducers'
 import Notebook from './Notebook'
 
 require('../scss/main.scss')
 
+const middlewares = [
+  thunk
+]
+
+if (process.env.NODE_ENV !== 'production') {
+  middlewares.push(require('redux-logger').default)
+}
+
 const store = compose(
-    applyMiddleware(thunk)
-)(createStore)(NotebookReducer)
+    applyMiddleware(...middlewares)
+)(createStore)(reducer)
 
 bindStoreToMenu(store)
 

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { getSpacing, selectComponent } from './Visualiser'
 
 export default class ObjectVisualiser extends Component {
-
   constructor (props) {
     super(props)
     this.collapse = this.collapse.bind(this)
@@ -66,14 +66,13 @@ export default class ObjectVisualiser extends Component {
       </div>
     )
   }
-
 }
 
 ObjectVisualiser.propTypes = {
-  data: React.PropTypes.object,
-  indent: React.PropTypes.number,
-  useHljs: React.PropTypes.string,
-  name: React.PropTypes.string,
-  path: React.PropTypes.string,
-  click: React.PropTypes.func
+  data: PropTypes.object,
+  indent: PropTypes.number,
+  useHljs: PropTypes.string,
+  name: PropTypes.string,
+  path: PropTypes.string,
+  click: PropTypes.func
 }

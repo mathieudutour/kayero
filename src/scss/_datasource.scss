@@ -1,0 +1,72 @@
+@import 'base';
+
+.controls {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+
+  i {
+    margin: 2px;
+    font-size: 30px;
+    color: #637282;
+  }
+}
+
+.datasource-portal {
+  box-sizing: border-box;
+  position: fixed;
+  min-height: 300px;
+  max-height: 100vh;
+  overflow: auto;
+  width: 550px;
+  max-width: 100vw;
+  top: 50vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+  background: white;
+  z-index: 10;
+  padding: 15px;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+}
+
+.datasource {
+  margin: 0.5em 0;
+
+  .fa {
+    text-align: center;
+    margin-top: 0.5em;
+    cursor: pointer;
+
+    @include respond-to($size-md) {
+      margin-top: 0.25em;
+    }
+  }
+
+  input {
+    width: 100%;
+    padding: 0.25em;
+    margin: 0.25em 0;
+    box-sizing: border-box;
+
+    @include respond-to($size-md) {
+      margin: 0;
+    }
+  }
+
+  .source-name input {
+    @include respond-to($size-md) {
+      width: 95%;
+    }
+  }
+
+  p {
+    margin: 0.5em 0.25em;
+
+    @include respond-to($size-md) {
+      margin: 0.25em;
+    }
+  }
+}

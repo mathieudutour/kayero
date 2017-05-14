@@ -1,18 +1,5 @@
 import hljs from 'highlight.js'
-import config from './config' // eslint-disable-line
-
-export function codeToText (codeBlock, includeOption) {
-  let result = '```'
-  result += codeBlock.get('language')
-  const option = codeBlock.get('option')
-  if (includeOption && option) {
-    result += '; ' + option
-  }
-  result += '\n'
-  result += codeBlock.get('content')
-  result += '\n```'
-  return result
-}
+import config from './config'
 
 export function highlight (str, lang) {
   if (lang && hljs.getLanguage(lang)) {

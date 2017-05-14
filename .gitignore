@@ -40,3 +40,4 @@ release
 
 coverage
 .nyc_output
+.vscode
