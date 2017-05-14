@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 import monk from 'monk'
-import {batchActions} from 'redux-batched-actions'
 
 import Immutable from 'immutable'
 import Smolder from 'smolder'
@@ -110,16 +109,19 @@ export function updateContent (content) {
   const {blocks, blockOrder} = extractBlocks(content)
   return (dispatch, getState) => {
     const oldBlockOrder = getState().notebook.get('blockOrder').toJS()
-    dispatch(batchActions([
-      {
+    return Promise.resolve().then(() =>
+      dispatch({
         type: UPDATE_CONTENT,
         content,
         blocks: Immutable.fromJS(blocks),
         blockOrder: Immutable.fromJS(blockOrder)
-      },
-      ...oldBlockOrder.filter(old => blockOrder.indexOf(old) === -1).map(id => deleteBlock(id)),
-      ...blockOrder.filter(newBlock => oldBlockOrder.indexOf(newBlock) === -1).map(id => addCodeBlock(id))
-    ]))
+      })
+    ).then(() =>
+      Promise.all([
+        ...oldBlockOrder.filter(old => blockOrder.indexOf(old) === -1).map(id => deleteBlock(id)),
+        ...blockOrder.filter(newBlock => oldBlockOrder.indexOf(newBlock) === -1).map(id => addCodeBlock(id))
+      ])
+    )
   }
 }
 

@@ -4,7 +4,6 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore, compose, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import {enableBatching} from 'redux-batched-actions'
 import bindStoreToMenu from './bindStoreToMenu'
 
 import reducer from './reducers'
@@ -22,7 +21,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const store = compose(
     applyMiddleware(...middlewares)
-)(createStore)(enableBatching(reducer))
+)(createStore)(reducer)
 
 bindStoreToMenu(store)
 
