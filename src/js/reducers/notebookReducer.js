@@ -22,6 +22,7 @@ import {
  */
 export const initialState = Immutable.Map({
   metadata: Immutable.fromJS({
+    path: '',
     datasources: {},
     libraries: {}
   }),

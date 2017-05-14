@@ -44,6 +44,8 @@
 
   .visualiser-arrow {
     cursor: pointer;
+    color: #637282;
+    opacity: 0.8;
   }
 
   .visualiser-row {
@@ -53,5 +55,10 @@
   .export-to-csv {
     float: right;
     cursor: pointer;
+    color: #637282;
+  }
+
+  .visualiser-error {
+    color: #d92626;
   }
 }

@@ -179,7 +179,7 @@ export function executeAuto () {
     // This slightly scary Promise chaining ensures that code blocks are executed in order.
     return order.reduce((p, id) => {
       return p.then(() => {
-        const option = blocks.getIn([id, 'option'])
+        const option = blocks.getIn([String(id), 'option'])
         if (option === 'auto' || option === 'hidden') {
           return dispatch(executeCodeBlock(String(id), dbs))
         }

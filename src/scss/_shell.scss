@@ -31,16 +31,6 @@ input {
   margin-top: 40px;
 }
 
-.editor-buttons {
-  float: right;
-  margin-bottom: 1px; // Fixes overlap bug on Safari
-  margin-top: -0.2em; // Account for font size difference
-  i {
-    margin-left: 0.25em;
-    cursor: pointer;
-  }
-}
-
 .CodeMirror-dialog-top {
   position: fixed;
   top: 0;

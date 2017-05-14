@@ -69,6 +69,7 @@ export function parse (md, filename) {
   return Immutable.fromJS({
     metadata: {
       title: doc.attributes.title,
+      path: filename,
       datasources: doc.attributes.datasources || {},
       libraries: doc.attributes.libraries || {}
     },

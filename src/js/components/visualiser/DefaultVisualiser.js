@@ -11,6 +11,8 @@ function buildCssClass (type, useHljs) {
       cssSuffix = 'number'; break
     case 'Boolean':
       cssSuffix = 'literal'; break
+    case 'Error':
+      cssSuffix = 'error'; break
     case 'Function':
       cssSuffix = 'keyword'; break
     default:
@@ -27,8 +29,10 @@ export default class DefaultVisualiser extends Component {
   render () {
     const { data, indent, name, useHljs, path, click = () => {} } = this.props
     const type = typeString(data)
-    const repr = (type === 'String') ? "'" + String(data) + "'"
-      : (type === 'Function') ? 'function()' : String(data)
+    const repr =
+      (type === 'String') ? "'" + String(data) + "'"
+      : (type === 'Function') ? 'function()'
+      : (type === 'Error') ? (data.stack || String(data)) : String(data)
     const cssClass = buildCssClass(type, useHljs)
     let key = <span className='visualiser-spacing'></span>
     if (name) {
