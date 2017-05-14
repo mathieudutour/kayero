@@ -4,8 +4,6 @@ import CodeMirror from 'codemirror'
 // Auto show/hide markdown tokens like `##` or `*`
 // Works with `hypermd` mode
 
-var DEBUG_PATCHING = false
-
 /**
  * check if every element in `search` can be found in `bigarray`
  *
@@ -177,8 +175,6 @@ function patchFormattingSpan (cm, line, pos, rebuildCache) {
   /// Find the span where cursor is on, then hide/show spans
 
   if (typeof pos.ch === 'number') {
-    if (DEBUG_PATCHING) console.log('[PATCH] pos = ', pos)
-
     for (span_i = 0; span_i < spans.length; span_i++) {
       span = spans[span_i]
       if (span.classList && span.classList.contains('CodeMirror-widget')) {
@@ -194,12 +190,8 @@ function patchFormattingSpan (cm, line, pos, rebuildCache) {
       if (char_itered >= pos.ch) break
     }
 
-    if (DEBUG_PATCHING) console.log('[PATCH] span = ', span, span_i)
-
     if (span && span.nodeType === window.Node.ELEMENT_NODE) {
       var classList1 = getClassList(span)
-
-      if (DEBUG_PATCHING) console.log('current span is ', span, '\n with classList: ', classList1.join(', '))
 
       // if current cursor is on a token, set `span` to the content and re-retrive its class string[]
       if (span.classList.contains('cm-formatting')) {
@@ -214,7 +206,6 @@ function patchFormattingSpan (cm, line, pos, rebuildCache) {
         }
 
         classList1 = getClassList(span)
-        if (DEBUG_PATCHING) console.log('rewind to', span, '\n with classList: ', classList1.join(', '))
       }
 
       // a trick
@@ -227,8 +218,6 @@ function patchFormattingSpan (cm, line, pos, rebuildCache) {
         let classList2 = getClassList(span_tmp)
         visible_span_indices[span_tmp_i] = true
 
-        if (DEBUG_PATCHING) console.log('forward:  adding ', span_tmp, '(' + span_tmp_i + ')')
-
         if (arrayContainsArray(classList2, classList1)) break
       }
 
@@ -238,8 +227,6 @@ function patchFormattingSpan (cm, line, pos, rebuildCache) {
       while (span_tmp_i--, span_tmp = span_tmp.previousSibling) {
         let classList2 = getClassList(span_tmp)
         visible_span_indices[span_tmp_i] = true
-
-        if (DEBUG_PATCHING) console.log('backward: adding ', span_tmp, '(' + span_tmp_i + ')')
 
         if (arrayContainsArray(classList2, classList1)) break
       }
@@ -316,7 +303,6 @@ HideToken.prototype.cursorHandler = function (cm) {
     this.patchFormattingSpan(cm, line.text, pos, true)
   }
   this.lastCursorPos = pos
-  if (DEBUG_PATCHING) console.log('cursor fly to ', pos)
 }
 
 HideToken.prototype.patchFormattingSpan = patchFormattingSpan

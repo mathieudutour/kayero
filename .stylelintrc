@@ -1,7 +1,6 @@
 {
   "extends": "stylelint-config-standard",
   "rules": {
-    "no-extra-semicolons": null,
     "value-no-vendor-prefix": true,
     "property-no-vendor-prefix": true
   }

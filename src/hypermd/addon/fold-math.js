@@ -1,8 +1,6 @@
 /* eslint-disable camelcase, no-sequences */
 import CodeMirror from 'codemirror'
 
-var DEBUG = false
-
 function processRange (cm, fromLine, toLine) {
   var curpos = cm.getCursor()
   fromLine = ~~fromLine
@@ -116,8 +114,6 @@ function processLine (cm, curpos, line) {
           insertMathMark(cm, lineNo, chFrom, closing.line, closing.ch + 2, expr, 'math-2')
         }
         continue
-        // } else {
-        //   debugger
       }
     }
 
@@ -129,7 +125,6 @@ function processLine (cm, curpos, line) {
 
     if (/\bmath-1\b/.test(chStyle) && !/formatting/.test(chStyle)) {
       var expr = line.text.substr(chFrom, chTo - chFrom)
-      if (DEBUG) console.log('wow such math', expr)
       chFrom = s[s$i - 4] || 0
       chTo = s[s$i + 2] || chTo + 1
     } else {
@@ -188,7 +183,6 @@ function insertMathMark (cm, line1, ch1, line2, ch2, expression, className) {
 
   var p1 = { line: line1, ch: ch1 }
   var p2 = { line: line2, ch: ch2 }
-  if (DEBUG) console.log('insert', p1, p2, expression)
 
   var marker = cm.markText(p1, p2, {
     className: 'hmd-fold-math',
@@ -229,8 +223,6 @@ function insertMathMark (cm, line1, ch1, line2, ch2, expression, className) {
 function updatePreview (cm, line, expr) {
   var hostAddon = cm.hmd.foldMath
   var last = hostAddon._lastPreview
-
-  if (DEBUG) console.log('math-preview: ', expr)
 
   if (last && last.line !== line) {
     last.jax.Remove()

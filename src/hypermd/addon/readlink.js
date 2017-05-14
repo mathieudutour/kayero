@@ -30,7 +30,6 @@ function readlink (footNoteName, line) {
  */
 function recache () {
   var cm = this
-  // debugger
   if (!cm.hmd) cm.hmd = {}
   var cache = cm.hmd.linkCache = {}
   cm.eachLine(function (line) {

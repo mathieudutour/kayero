@@ -3,8 +3,6 @@ import CodeMirror from 'codemirror'
 
 // Folding images & links
 
-var DEBUG = false
-
 function processRange (cm, fromLine, toLine) {
   var curpos = cm.getCursor()
   fromLine = ~~fromLine
@@ -17,8 +15,6 @@ function processLine (cm, curpos, line) {
   var chStyle = ''//, chMarked = false
 
   if (!line) return
-
-  // const DEBUG = line.lineNo() === 4
 
   var lineNo = line.lineNo()
   var avoid_ch = (curpos && (lineNo === curpos.line)) ? curpos.ch : -1
@@ -33,16 +29,10 @@ function processLine (cm, curpos, line) {
   if (line.markedSpans) {
     markedSpans = line.markedSpans.map(function (ms) { return ({ from: ms.from || 0, to: ms.to || line.text.length }) })
     markedSpans = markedSpans.sort(function (a, b) { return (a.from > b.from) })  // sort: small -> big
-    if (DEBUG) console.log(JSON.stringify(markedSpans))
   }
   var mask = markedSpans[0]
 
-  if (DEBUG) {
-    console.log('fold: process line #', lineNo)
-  }
-
   if (!s) {
-    if (DEBUG) console.log('fold: empty style at line', lineNo)
     return
   }
 
@@ -76,7 +66,6 @@ function processLine (cm, curpos, line) {
         insertSince = -1
         insertSince2 = -1
         // ch = mask.to
-        if (DEBUG) console.log('  fold: met mask ', mask.from, mask.to)
         continue
       } else {
         while (mask && ch > mask.to) {
@@ -89,7 +78,6 @@ function processLine (cm, curpos, line) {
     if (ch === avoid_ch) {
       insertSince = -1
       insertSince2 = -1
-      if (DEBUG) console.log('  fold: met avoid ch ', avoid_ch)
       continue
     }
 
@@ -222,11 +210,6 @@ function insertImageMark (cm, line, ch1, ch2, alt, url) {
     replacedWith: img,
     clearOnEnter: true
   })
-
-  // if (DEBUG) {
-  //   // console.log('INSERT IMAGE', JSON.stringify(cm.getLineHandle(line).markedSpans.map(o => ({ from: o.from, to: o.to }))))
-  //   // debugger
-  // }
 }
 
 function Fold (cm) {
@@ -244,7 +227,6 @@ Fold.prototype = {
     self.timeoutHandle = setTimeout(function () {
       self.timeoutHandle = 0
       cm.operation(function () {
-        if (DEBUG) console.log('fold: rerender range', cm.display.viewFrom, cm.display.viewTo)
         processRange(cm, cm.display.viewFrom, cm.display.viewTo)
       })
     }, self.delay)
