@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Title from './Title'
-import Datasources from './Datasources'
+import Dependencies from './Dependencies'
 import { metadataSelector } from '../selectors'
 import { toggleSave } from '../actions'
 
@@ -23,7 +23,7 @@ class Header extends Component {
     return (
       <div>
         <Title title={title} dispatch={dispatch} />
-        <Datasources dispatch={dispatch} datasources={metadata.get('datasources')} />
+        <Dependencies dispatch={dispatch} datasources={metadata.get('datasources')} libraries={metadata.get('libraries')} />
       </div>
     )
   }

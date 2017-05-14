@@ -9,6 +9,8 @@ import {
     TOGGLE_META,
     DELETE_DATASOURCE,
     UPDATE_DATASOURCE,
+    DELETE_LIBRARY,
+    UPDATE_LIBRARY,
     GIST_CREATED,
     UNDO
 } from '../actions'
@@ -20,7 +22,8 @@ import {
  */
 export const initialState = Immutable.Map({
   metadata: Immutable.fromJS({
-    datasources: {}
+    datasources: {},
+    libraries: {}
   }),
   content: '',
   blocks: Immutable.Map(),
@@ -57,6 +60,14 @@ export default function notebook (state = initialState, action = {}) {
     case UPDATE_DATASOURCE:
       return handleChange(
         state, state.setIn(['metadata', 'datasources', id], text)
+      )
+    case DELETE_LIBRARY:
+      return handleChange(
+        state, state.deleteIn(['metadata', 'libraries', id])
+      )
+    case UPDATE_LIBRARY:
+      return handleChange(
+        state, state.setIn(['metadata', 'libraries', id], text)
       )
     case GIST_CREATED:
       return state.setIn(['metadata', 'gistUrl'], kayeroHomepage + '?id=' + id)

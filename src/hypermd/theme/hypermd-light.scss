@@ -19,6 +19,11 @@
     font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   }
 
+  .CodeMirror-selectedtext {
+    background: #521c75;
+    color: white;
+  }
+
   /// CodeMirror
 
   .cm-header,

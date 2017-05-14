@@ -69,11 +69,8 @@ export function parse (md, filename) {
   return Immutable.fromJS({
     metadata: {
       title: doc.attributes.title,
-      author: doc.attributes.author,
       datasources: doc.attributes.datasources || {},
-      original: doc.attributes.original,
-      showFooter: doc.attributes.show_footer !== false,
-      path: filename
+      libraries: doc.attributes.libraries || {}
     },
     content: doc.body,
     blockOrder,
@@ -85,9 +82,9 @@ export function parse (md, filename) {
  * Functions for rendering blocks back into Markdown
  */
 
-function renderDatasources (datasources) {
-  let rendered = 'datasources:\n'
-  datasources.map((url, name) => {
+function renderDependencies (dependencies, field) {
+  let rendered = field + ':\n'
+  dependencies.map((url, name) => {
     rendered += '    ' + name + ': "' + url + '"\n'
   })
   return rendered
@@ -100,7 +97,11 @@ function renderMetadata (metadata) {
   }
   const datasources = metadata.get('datasources')
   if (datasources && datasources.size > 0) {
-    rendered += renderDatasources(datasources)
+    rendered += renderDependencies(datasources, 'datasources')
+  }
+  const libraries = metadata.get('libraries')
+  if (libraries && libraries.size > 0) {
+    rendered += renderDependencies(libraries, 'libraries')
   }
   return rendered + '---\n\n'
 }

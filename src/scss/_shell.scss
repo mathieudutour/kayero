@@ -10,6 +10,15 @@ body {
   }
 }
 
+input {
+  outline-color: #521c75;
+}
+
+::selection {
+  background: #521c75;
+  color: white;
+}
+
 .title-field {
   font-weight: 400;
   font-size: 40px;

@@ -28,6 +28,8 @@ export const ADD_BLOCK = 'ADD_BLOCK'
 export const DELETE_BLOCK = 'DELETE_BLOCK'
 export const DELETE_DATASOURCE = 'DELETE_DATASOURCE'
 export const UPDATE_DATASOURCE = 'UPDATE_DATASOURCE'
+export const DELETE_LIBRARY = 'DELETE_LIBRARY'
+export const UPDATE_LIBRARY = 'UPDATE_LIBRARY'
 export const TOGGLE_SAVE = 'TOGGLE_SAVE'
 export const GIST_CREATED = 'GIST_CREATED'
 export const UNDO = 'UNDO'
@@ -168,21 +170,20 @@ function closeDBs (dbs) {
 export function executeAuto () {
   return (dispatch, getState) => {
     const notebook = getState().notebook
-    // const blocks = notebook.get('blocks')
+    const blocks = notebook.get('blocks')
     const order = notebook.get('blockOrder')
 
     // init the database connections
     const dbs = initDBs(getState)
 
-    // This slightly scary Promise chaining ensures that code blocks
-    // are executed in order, even if they return Promises.
+    // This slightly scary Promise chaining ensures that code blocks are executed in order.
     return order.reduce((p, id) => {
       return p.then(() => {
-        // const option = blocks.getIn([id, 'option'])
-        // if (option === 'auto' || option === 'hidden') {
-        return dispatch(executeCodeBlock(String(id), dbs))
-        // }
-        // return Promise.resolve()
+        const option = blocks.getIn([id, 'option'])
+        if (option === 'auto' || option === 'hidden') {
+          return dispatch(executeCodeBlock(String(id), dbs))
+        }
+        return Promise.resolve()
       })
     }, Promise.resolve()).then(() => closeDBs(dbs))
   }
@@ -191,15 +192,16 @@ export function executeAuto () {
 export function executeCodeBlock (id, dbs) {
   return (dispatch, getState) => {
     dispatch(codeRunning(id))
-    const code = getState().notebook.getIn(['blocks', id, 'content'])
+    const {notebook, execution} = getState()
+    const code = notebook.getIn(['blocks', id, 'content'])
     const graphElement = document.getElementById('kayero-graph-' + id)
 
-    const executionState = getState().execution
-    const context = executionState.get('executionContext').toJS()
-    const data = executionState.get('data').toJS()
+    const context = execution.get('executionContext').toJS()
+    const data = execution.get('data').toJS()
 
-    const soloExecution = !dbs
+    let shouldCloseDbs = false
     if (!dbs) {
+      shouldCloseDbs = true
       dbs = initDBs(getState)
     }
     Object.keys(dbs).forEach((k) => {
@@ -208,14 +210,19 @@ export function executeCodeBlock (id, dbs) {
       }
     })
 
+    const libs = notebook.getIn(['metadata', 'libraries']).reduce((prev, url, name) => {
+      prev[name] = window[name]
+      return prev
+    }, {})
+
     const jutsu = Smolder(Jutsu(graphElement))
 
     return new Promise((resolve, reject) => {
       try {
         const result = new Function(
-          ['d3', 'nv', 'graphs', 'data', 'graphElement'], code
+          ['d3', 'nv', 'graphs', 'data', 'graphElement', 'libs'], code
         ).call(
-          context, d3, nv, jutsu, data, graphElement
+          context, d3, nv, jutsu, data, graphElement, libs
         )
         resolve(result)
       } catch (err) {
@@ -230,7 +237,7 @@ export function executeCodeBlock (id, dbs) {
       dispatch(codeError(id, err))
     })
     .then(() => {
-      if (soloExecution) {
+      if (shouldCloseDbs) {
         return closeDBs(dbs)
       }
     })
@@ -269,6 +276,25 @@ function receivedData (name, data) {
   }
 }
 
+function importScript (url) {
+  return new Promise((resolve, reject) => {
+    var scripts = document.getElementsByTagName('script')
+    for (var i = scripts.length; i--;) {
+      if (scripts[i].src === url) { // check if already imported
+        resolve()
+        return
+      }
+    }
+    // otherwise import it
+    const oScript = document.createElement('script')
+    oScript.type = 'text/javascript'
+    oScript.onerror = reject
+    oScript.onload = resolve
+    oScript.src = url
+    document.head.appendChild(oScript)
+  })
+}
+
 export function fetchData () {
   return (dispatch, getState) => {
     let proms = []
@@ -300,6 +326,11 @@ export function fetchData () {
         }
       }
     )
+
+    getState().notebook.getIn(['metadata', 'libraries']).forEach((url) => {
+      proms.push(importScript(url))
+    })
+
     // When all data fetched, run all the auto-running code blocks.
     return Promise.all(proms).then(() => dispatch(executeAuto()))
   }
@@ -329,10 +360,19 @@ export function toggleFooter () {
 };
 
 export function addCodeBlock (id) {
-  return {
-    type: ADD_BLOCK,
-    blockType: 'code',
-    id
+  return (dispatch, getState) => {
+    return Promise.resolve().then(() =>
+      dispatch({
+        type: ADD_BLOCK,
+        blockType: 'code',
+        id
+      })
+    ).then(() => {
+      const option = getState().notebook.getIn(['blocks', id, 'option'])
+      if (option === 'auto') {
+        return dispatch(executeCodeBlock(String(id)))
+      }
+    })
   }
 };
 
@@ -351,6 +391,27 @@ export function deleteDatasource (id) {
 };
 
 export function updateDatasource (id, url) {
+  return (dispatch, getState) => {
+    return Promise.resolve().then(() =>
+      dispatch({
+        type: UPDATE_DATASOURCE,
+        id,
+        text: url
+      })
+    ).then(() =>
+      dispatch(fetchData())
+    )
+  }
+};
+
+export function deleteLibrary (id) {
+  return {
+    type: DELETE_DATASOURCE,
+    id
+  }
+};
+
+export function updateLibrary (id, url) {
   return (dispatch, getState) => {
     return Promise.resolve().then(() =>
       dispatch({

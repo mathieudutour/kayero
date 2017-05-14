@@ -23,6 +23,11 @@
   }
 }
 
+.graphBlock {
+  border-left: 2px solid $background-grey;
+  border-right: 2px solid $background-grey;
+}
+
 .resultBlock {
   background-color: $background-grey;
 }

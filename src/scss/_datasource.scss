@@ -18,7 +18,7 @@
 .datasource-portal {
   box-sizing: border-box;
   position: fixed;
-  height: 300px;
+  min-height: 300px;
   max-height: 100vh;
   width: 550px;
   max-width: 100vw;

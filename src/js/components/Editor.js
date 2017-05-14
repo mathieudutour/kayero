@@ -8,7 +8,8 @@ import debounce from 'lodash.debounce'
 import Visualiser from './visualiser/Visualiser'
 import 'codemirror/addon/mode/overlay'
 import 'codemirror/addon/edit/continuelist'
-
+import 'codemirror/addon/selection/mark-selection'
+import 'codemirror/addon/display/placeholder'
 import 'codemirror/addon/search/search'
 import 'codemirror/addon/search/searchcursor'
 
@@ -44,6 +45,8 @@ const CODE_MIRROR_CONFIG = {
   lineNumbers: false,
   viewportMargin: Infinity,
   lineWrapping: true,
+  placeholder: 'And start taking notes here...',
+  styleSelectedText: true,
   gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'HyperMD-goback'],
   indentUnit: 2,
   // lint: isCodeBlock,
