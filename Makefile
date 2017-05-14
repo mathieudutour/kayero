@@ -43,7 +43,7 @@ lint:
 
 test: lint
 	echo "  $(P) Testing"
-  echo "no tests yet"
+	echo "no tests yet"
 	# NODE_ENV=test $(BIN_DIR)/nyc $(BIN_DIR)/ava $(TEST_TARGET) $(TEST_FLAGS)
 
 test-watch:
