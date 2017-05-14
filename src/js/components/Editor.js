@@ -9,6 +9,9 @@ import Visualiser from './visualiser/Visualiser'
 import 'codemirror/addon/mode/overlay'
 import 'codemirror/addon/edit/continuelist'
 
+import 'codemirror/addon/search/search'
+import 'codemirror/addon/search/searchcursor'
+
 import 'codemirror/mode/xml/xml'
 import 'codemirror/mode/markdown/markdown'
 import 'codemirror/mode/gfm/gfm'
